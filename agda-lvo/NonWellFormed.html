@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Agda大序数(1-0) 第1卷目录</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+</head>
+<body>
+
+<header>
+<h1 class="title">Agda大序数(1-0) 第1卷目录</h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <strong>Contents</strong><label for="contents">⊕</label>
+  <input type="checkbox" id="contents">
+  <ul>
+  <li><a href="#agda大序数1-0-第1卷目录" id="toc-agda大序数1-0-第1卷目录">Agda大序数(1-0) 第1卷目录</a></li>
+  </ul>
+</nav>
+
+<main>
+<h1 id="agda大序数1-0-第1卷目录">Agda大序数(1-0) 第1卷目录</h1>
+<blockquote>
+<p>交流Q群: 893531731<br />
+本文源码: <a href="https://github.com/choukh/agda-lvo/blob/main/src/NonWellFormed.lagda.md">NonWellFormed.lagda.md</a><br />
+高亮渲染: <a href="https://choukh.github.io/agda-lvo/NonWellFormed.html">NonWellFormed.html</a><br />
+如果你在知乎看到本文: 知乎对Agda语法高亮的支持非常有限, 建议跳转到以上网站阅读</p>
+</blockquote>
+<pre class="Agda"><a id="405" class="Symbol">{-#</a> <a id="409" class="Keyword">OPTIONS</a> <a id="417" class="Pragma">--without-K</a> <a id="429" class="Pragma">--safe</a> <a id="436" class="Symbol">#-}</a>
+
+<a id="441" class="Keyword">module</a> <a id="448" href="NonWellFormed.html" class="Module">NonWellFormed</a> <a id="462" class="Keyword">where</a>
+</pre>
+<pre class="Agda"><a id="481" class="Keyword">open</a> <a id="486" class="Keyword">import</a> <a id="493" href="NonWellFormed.Ordinal.html" class="Module">NonWellFormed.Ordinal</a> <a id="515" class="Keyword">public</a>
+</pre>
+<ul>
+<li>Brouwer 序数的归纳定义</li>
+<li>非严格序 <code>_≤_</code> 的归纳定义</li>
+<li>外延等词 <code>_≈_</code> 与严格序 <code>_&lt;_</code> 由 <code>_≤_</code> 定义</li>
+<li>证明了 <code>_≤_</code> 是偏序, <code>_&lt;_</code> 是严格序</li>
+<li>没有线序, 但不影响后续构筑</li>
+</ul>
+<pre class="Agda"><a id="653" class="Keyword">open</a> <a id="658" class="Keyword">import</a> <a id="665" href="NonWellFormed.WellFormed.html" class="Module">NonWellFormed.WellFormed</a> <a id="690" class="Keyword">public</a>
+</pre>
+<ul>
+<li>定义良构序数为由单调序列递归构造的序数</li>
+<li>证明了有限序数与 <code>ω</code> 是良构序数</li>
+</ul>
+<pre class="Agda"><a id="754" class="Keyword">open</a> <a id="759" class="Keyword">import</a> <a id="766" href="NonWellFormed.Function.html" class="Module">NonWellFormed.Function</a> <a id="789" class="Keyword">public</a>
+</pre>
+<ul>
+<li>定义了序数函数的常用性质</li>
+<li>对序数嵌入 (normal function) 的定义做了一些改造, 使之不依赖良构条件</li>
+</ul>
+<pre class="Agda"><a id="872" class="Keyword">open</a> <a id="877" class="Keyword">import</a> <a id="884" href="NonWellFormed.Recursion.html" class="Module">NonWellFormed.Recursion</a> <a id="908" class="Keyword">public</a>
+</pre>
+<ul>
+<li>定义了一般形式的序数递归函数 (超限递归), 并证明了它的一般性质</li>
+</ul>
+<pre class="Agda"><a id="965" class="Keyword">open</a> <a id="970" class="Keyword">import</a> <a id="977" href="NonWellFormed.Arithmetic.html" class="Module">NonWellFormed.Arithmetic</a> <a id="1002" class="Keyword">public</a>
+</pre>
+<ul>
+<li>由超限递归定义了 <code>_+_</code>, <code>_*_</code> 和 <code>_^_</code> 并证明了它们的保良构性</li>
+<li>结合律, 分配律, 等等</li>
+</ul>
+<pre class="Agda"><a id="1082" class="Keyword">open</a> <a id="1087" class="Keyword">import</a> <a id="1094" href="NonWellFormed.Tetration.html" class="Module">NonWellFormed.Tetration</a> <a id="1118" class="Keyword">public</a>
+</pre>
+<ul>
+<li>我们展示第四级运算被锁死, 即 <code>α ^^ β ≈ α ^^ ω</code> 对任意 <code>β ≥ ω</code></li>
+</ul>
+<pre class="Agda"><a id="1187" class="Keyword">open</a> <a id="1192" class="Keyword">import</a> <a id="1199" href="NonWellFormed.Fixpoint.html" class="Module">NonWellFormed.Fixpoint</a> <a id="1222" class="Keyword">public</a>
+</pre>
+<ul>
+<li>定义了无穷迭代 <code>_⋱_</code></li>
+<li>如果 <code>F</code> 是序数嵌入那么 <code>F ⋱ α</code> 是不小于 <code>α</code> 的不动点</li>
+<li>递归 <code>F ⋱_ ∘ suc</code> 即得 <code>F</code> 的不动点枚举函数, 记作 <code>F ′</code></li>
+<li>我们证明了高阶函数 <code>_′</code> 保持序数嵌入且保持保良序性</li>
+</ul>
+<pre class="Agda"><a id="1373" class="Keyword">open</a> <a id="1378" class="Keyword">import</a> <a id="1385" href="NonWellFormed.Fixpoint.Lower.html" class="Module">NonWellFormed.Fixpoint.Lower</a> <a id="1414" class="Keyword">public</a>
+</pre>
+<ul>
+<li>关于不动点的一些平凡的例子</li>
+</ul>
+<pre class="Agda"><a id="1451" class="Keyword">open</a> <a id="1456" class="Keyword">import</a> <a id="1463" href="NonWellFormed.Epsilon.html" class="Module">NonWellFormed.Epsilon</a> <a id="1485" class="Keyword">public</a>
+</pre>
+<ul>
+<li>ε函数定义为 <code>(ω ^_) ′</code></li>
+<li>对任意 <code>α</code> 有 <code>ε (suc α) ≡ ω ^^[ suc (ε α) ] ω</code></li>
+<li>ζ 定义为 <code>ε ′</code> 且 η 为 <code>ζ ′</code></li>
+<li><code>ε</code>, <code>ζ</code>, <code>η</code>, … 都是序数嵌入且保良构</li>
+</ul>
+<pre class="Agda"><a id="1630" class="Keyword">open</a> <a id="1635" class="Keyword">import</a> <a id="1642" href="NonWellFormed.Epsilon.Alternative.html" class="Module">NonWellFormed.Epsilon.Alternative</a> <a id="1676" class="Keyword">public</a>
+</pre>
+<ul>
+<li>我们证明了对任意良构 <code>α</code> 有 <code>ε (suc α) ≈ ε α ^^ ω</code></li>
+</ul>
+<pre class="Agda"><a id="1739" class="Keyword">open</a> <a id="1744" class="Keyword">import</a> <a id="1751" href="NonWellFormed.VeblenFunction.html" class="Module">NonWellFormed.VeblenFunction</a> <a id="1780" class="Keyword">public</a>
+</pre>
+<ul>
+<li>定义了二元 Veblen 函数 <code>φ α β</code></li>
+<li>证明了 <code>φ</code> 的嵌入性, 单调性, 合同性, 不动点性和保良构性</li>
+<li>Γ₀ 定义为 <code>(λ α → φ α zero) ⋱ zero</code></li>
+</ul>
+<p><a href="https://github.com/choukh/agda-lvo/blob/main/src/WellFormed.lagda.md">第2卷</a></p>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>

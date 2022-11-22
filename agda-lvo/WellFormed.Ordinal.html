@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Agda大序数(2-1) 良构序数</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+</head>
+<body>
+
+<header>
+<h1 class="title">Agda大序数(2-1) 良构序数</h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <strong>Contents</strong><label for="contents">⊕</label>
+  <input type="checkbox" id="contents">
+  <ul>
+  <li><a href="#agda大序数2-1-良构序数" id="toc-agda大序数2-1-良构序数">Agda大序数(2-1) 良构序数</a>
+  <ul>
+  <li><a href="#前置" id="toc-前置">前置</a></li>
+  <li><a href="#良构序数" id="toc-良构序数">良构序数</a></li>
+  </ul></li>
+  </ul>
+</nav>
+
+<main>
+<h1 id="agda大序数2-1-良构序数">Agda大序数(2-1) 良构序数</h1>
+<blockquote>
+<p>交流Q群: 893531731<br />
+目录: <a href="https://choukh.github.io/agda-lvo/WellFormed.html">WellFormed.html</a><br />
+本文源码: <a href="https://github.com/choukh/agda-lvo/blob/main/src/WellFormed/Ordinal.lagda.md">Ordinal.lagda.md</a><br />
+高亮渲染: <a href="https://choukh.github.io/agda-lvo/WellFormed.Ordinal.html">Ordinal.html</a><br />
+如果你在知乎看到本文: 知乎对Agda语法高亮的支持非常有限, 建议跳转到以上网站阅读</p>
+</blockquote>
+<pre class="Agda"><a id="428" class="Symbol">{-#</a> <a id="432" class="Keyword">OPTIONS</a> <a id="440" class="Pragma">--without-K</a> <a id="452" class="Pragma">--safe</a> <a id="459" class="Symbol">#-}</a>
+<a id="463" class="Symbol">{-#</a> <a id="467" class="Keyword">OPTIONS</a> <a id="475" class="Pragma">--overlapping-instances</a> <a id="499" class="Symbol">#-}</a>
+
+<a id="504" class="Keyword">module</a> <a id="511" href="WellFormed.Ordinal.html" class="Module">WellFormed.Ordinal</a> <a id="530" class="Keyword">where</a>
+</pre>
+<h2 id="前置">前置</h2>
+<pre class="Agda"><a id="556" class="Keyword">open</a> <a id="561" class="Keyword">import</a> <a id="568" href="NonWellFormed.Ordinal.html" class="Module">NonWellFormed.Ordinal</a> <a id="590" class="Symbol">as</a> <a id="593" class="Module">ord</a> <a id="597" class="Keyword">using</a> <a id="603" class="Symbol">(</a><a id="604" href="NonWellFormed.Ordinal.html#3153" class="InductiveConstructor">zero</a><a id="608" class="Symbol">;</a> <a id="610" href="NonWellFormed.Ordinal.html#3166" class="InductiveConstructor">suc</a><a id="613" class="Symbol">;</a> <a id="615" href="NonWellFormed.Ordinal.html#3185" class="InductiveConstructor">lim</a><a id="618" class="Symbol">)</a> <a id="620" class="Keyword">renaming</a> <a id="629" class="Symbol">(</a><a id="630" href="NonWellFormed.Ordinal.html#3135" class="Datatype">Ord</a> <a id="634" class="Symbol">to</a> <a id="637" class="Datatype">ord</a><a id="640" class="Symbol">)</a>
+<a id="642" class="Keyword">open</a> <a id="647" class="Keyword">import</a> <a id="654" href="NonWellFormed.WellFormed.html" class="Module">NonWellFormed.WellFormed</a> <a id="679" class="Symbol">as</a> <a id="682" class="Module">ord</a> <a id="686" class="Keyword">using</a> <a id="692" class="Symbol">(</a><a id="693" href="NonWellFormed.WellFormed.html#1913" class="Function">WellFormed</a><a id="703" class="Symbol">)</a>
+
+<a id="706" class="Keyword">open</a> <a id="711" class="Keyword">import</a> <a id="718" href="Data.Unit.html" class="Module">Data.Unit</a> <a id="728" class="Keyword">using</a> <a id="734" class="Symbol">(</a><a id="735" href="Agda.Builtin.Unit.html#201" class="InductiveConstructor">tt</a><a id="737" class="Symbol">)</a>
+<a id="739" class="Keyword">open</a> <a id="744" class="Keyword">import</a> <a id="751" href="Data.Nat.html" class="Module">Data.Nat</a> <a id="760" class="Symbol">as</a> <a id="763" class="Module">ℕ</a> <a id="765" class="Keyword">using</a> <a id="771" class="Symbol">(</a><a id="772" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a><a id="773" class="Symbol">)</a>
+<a id="775" class="Keyword">open</a> <a id="780" class="Keyword">import</a> <a id="787" href="Data.Product.html" class="Module">Data.Product</a> <a id="800" class="Keyword">using</a> <a id="806" class="Symbol">(</a><a id="807" href="Agda.Builtin.Sigma.html#166" class="Record">Σ</a><a id="808" class="Symbol">;</a> <a id="810" href="Data.Product.html#1167" class="Function Operator">_×_</a><a id="813" class="Symbol">;</a> <a id="815" href="Agda.Builtin.Sigma.html#236" class="InductiveConstructor Operator">_,_</a><a id="818" class="Symbol">;</a> <a id="820" href="Agda.Builtin.Sigma.html#252" class="Field">proj₁</a><a id="825" class="Symbol">;</a> <a id="827" href="Agda.Builtin.Sigma.html#264" class="Field">proj₂</a><a id="832" class="Symbol">)</a>
+<a id="834" class="Keyword">open</a> <a id="839" class="Keyword">import</a> <a id="846" href="Function.html" class="Module">Function</a> <a id="855" class="Keyword">using</a> <a id="861" class="Symbol">(</a><a id="862" href="Function.Base.html#1106" class="Function Operator">_∘_</a><a id="865" class="Symbol">)</a>
+<a id="867" class="Keyword">open</a> <a id="872" class="Keyword">import</a> <a id="879" href="Level.html" class="Module">Level</a> <a id="885" class="Keyword">using</a> <a id="891" class="Symbol">(</a><a id="892" href="Level.html#512" class="Function">0ℓ</a><a id="894" class="Symbol">)</a>
+<a id="896" class="Keyword">open</a> <a id="901" class="Keyword">import</a> <a id="908" href="Relation.Binary.html" class="Module">Relation.Binary</a> <a id="924" class="Keyword">using</a> <a id="930" class="Symbol">(</a><a id="931" href="Relation.Binary.Definitions.html#3756" class="Function">Monotonic₁</a><a id="941" class="Symbol">)</a>
+<a id="943" class="Keyword">open</a> <a id="948" class="Keyword">import</a> <a id="955" href="Relation.Binary.html" class="Module">Relation.Binary</a> <a id="971" class="Keyword">using</a> <a id="977" class="Symbol">(</a><a id="978" href="Relation.Binary.Core.html#882" class="Function">Rel</a><a id="981" class="Symbol">;</a> <a id="983" href="Relation.Binary.Core.html#1254" class="Function Operator">_⇒_</a><a id="986" class="Symbol">)</a>
+</pre>
+<h2 id="良构序数">良构序数</h2>
+<pre class="Agda"><a id="1010" class="Keyword">record</a> <a id="Ord"></a><a id="1017" href="WellFormed.Ordinal.html#1017" class="Record">Ord</a> <a id="1021" class="Symbol">:</a> <a id="1023" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="1027" class="Keyword">where</a>
+  <a id="1035" class="Keyword">constructor</a> <a id="wf"></a><a id="1047" href="WellFormed.Ordinal.html#1047" class="InductiveConstructor">wf</a>
+  <a id="1052" class="Keyword">field</a>
+    <a id="Ord.nwf"></a><a id="1062" href="WellFormed.Ordinal.html#1062" class="Field">nwf</a> <a id="1066" class="Symbol">:</a> <a id="1068" href="WellFormed.Ordinal.html#637" class="Datatype">ord</a>
+    <a id="1076" class="Symbol">⦃</a> <a id="Ord.wellFormed"></a><a id="1078" href="WellFormed.Ordinal.html#1078" class="Field">wellFormed</a> <a id="1089" class="Symbol">⦄</a> <a id="1091" class="Symbol">:</a> <a id="1093" href="NonWellFormed.WellFormed.html#1913" class="Function">WellFormed</a> <a id="1104" href="WellFormed.Ordinal.html#1062" class="Field">nwf</a>
+
+<a id="1109" class="Keyword">open</a> <a id="1114" href="WellFormed.Ordinal.html#1017" class="Module">Ord</a>
+
+<a id="_≤_"></a><a id="1119" href="WellFormed.Ordinal.html#1119" class="Function Operator">_≤_</a> <a id="1123" class="Symbol">:</a> <a id="1125" href="Relation.Binary.Core.html#882" class="Function">Rel</a> <a id="1129" href="WellFormed.Ordinal.html#1017" class="Record">Ord</a> <a id="1133" href="Level.html#512" class="Function">0ℓ</a>
+<a id="1136" href="WellFormed.Ordinal.html#1047" class="InductiveConstructor">wf</a> <a id="1139" href="WellFormed.Ordinal.html#1139" class="Bound">α</a> <a id="1141" href="WellFormed.Ordinal.html#1119" class="Function Operator">≤</a> <a id="1143" href="WellFormed.Ordinal.html#1047" class="InductiveConstructor">wf</a> <a id="1146" href="WellFormed.Ordinal.html#1146" class="Bound">β</a> <a id="1148" class="Symbol">=</a> <a id="1150" href="WellFormed.Ordinal.html#1139" class="Bound">α</a> <a id="1152" href="NonWellFormed.Ordinal.html#4738" class="Datatype Operator">ord.≤</a> <a id="1158" href="WellFormed.Ordinal.html#1146" class="Bound">β</a>
+
+<a id="_&lt;_"></a><a id="1161" href="WellFormed.Ordinal.html#1161" class="Function Operator">_&lt;_</a> <a id="1165" class="Symbol">:</a> <a id="1167" href="Relation.Binary.Core.html#882" class="Function">Rel</a> <a id="1171" href="WellFormed.Ordinal.html#1017" class="Record">Ord</a> <a id="1175" href="Level.html#512" class="Function">0ℓ</a>
+<a id="1178" href="WellFormed.Ordinal.html#1047" class="InductiveConstructor">wf</a> <a id="1181" href="WellFormed.Ordinal.html#1181" class="Bound">α</a> <a id="1183" href="WellFormed.Ordinal.html#1161" class="Function Operator">&lt;</a> <a id="1185" href="WellFormed.Ordinal.html#1047" class="InductiveConstructor">wf</a> <a id="1188" href="WellFormed.Ordinal.html#1188" class="Bound">β</a> <a id="1190" class="Symbol">=</a> <a id="1192" href="WellFormed.Ordinal.html#1181" class="Bound">α</a> <a id="1194" href="NonWellFormed.Ordinal.html#10365" class="Function Operator">ord.&lt;</a> <a id="1200" href="WellFormed.Ordinal.html#1188" class="Bound">β</a>
+
+<a id="_≈_"></a><a id="1203" href="WellFormed.Ordinal.html#1203" class="Function Operator">_≈_</a> <a id="1207" class="Symbol">:</a> <a id="1209" href="Relation.Binary.Core.html#882" class="Function">Rel</a> <a id="1213" href="WellFormed.Ordinal.html#1017" class="Record">Ord</a> <a id="1217" href="Level.html#512" class="Function">0ℓ</a>
+<a id="1220" href="WellFormed.Ordinal.html#1047" class="InductiveConstructor">wf</a> <a id="1223" href="WellFormed.Ordinal.html#1223" class="Bound">α</a> <a id="1225" href="WellFormed.Ordinal.html#1203" class="Function Operator">≈</a> <a id="1227" href="WellFormed.Ordinal.html#1047" class="InductiveConstructor">wf</a> <a id="1230" href="WellFormed.Ordinal.html#1230" class="Bound">β</a> <a id="1232" class="Symbol">=</a> <a id="1234" href="WellFormed.Ordinal.html#1223" class="Bound">α</a> <a id="1236" href="NonWellFormed.Ordinal.html#8185" class="Function Operator">ord.≈</a> <a id="1242" href="WellFormed.Ordinal.html#1230" class="Bound">β</a>
+
+<a id="monoSequence"></a><a id="1245" href="WellFormed.Ordinal.html#1245" class="Function">monoSequence</a> <a id="1258" class="Symbol">:</a> <a id="1260" class="Symbol">(</a><a id="1261" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a> <a id="1263" class="Symbol">→</a> <a id="1265" href="WellFormed.Ordinal.html#1017" class="Record">Ord</a><a id="1268" class="Symbol">)</a> <a id="1270" class="Symbol">→</a> <a id="1272" href="Agda.Primitive.html#326" class="Primitive">Set</a>
+<a id="1276" href="WellFormed.Ordinal.html#1245" class="Function">monoSequence</a> <a id="1289" class="Symbol">=</a> <a id="1291" href="Relation.Binary.Definitions.html#3756" class="Function">Monotonic₁</a> <a id="1302" href="Data.Nat.Base.html#1634" class="Function Operator">ℕ._&lt;_</a> <a id="1308" href="WellFormed.Ordinal.html#1161" class="Function Operator">_&lt;_</a>
+
+<a id="Zero"></a><a id="1313" href="WellFormed.Ordinal.html#1313" class="Function">Zero</a> <a id="1318" class="Symbol">:</a> <a id="1320" href="WellFormed.Ordinal.html#1017" class="Record">Ord</a>
+<a id="1324" href="WellFormed.Ordinal.html#1313" class="Function">Zero</a> <a id="1329" class="Symbol">=</a> <a id="1331" href="WellFormed.Ordinal.html#1047" class="InductiveConstructor">wf</a> <a id="1334" href="NonWellFormed.Ordinal.html#3153" class="InductiveConstructor">zero</a>
+
+<a id="Suc"></a><a id="1340" href="WellFormed.Ordinal.html#1340" class="Function">Suc</a> <a id="1344" class="Symbol">:</a> <a id="1346" href="WellFormed.Ordinal.html#1017" class="Record">Ord</a> <a id="1350" class="Symbol">→</a> <a id="1352" href="WellFormed.Ordinal.html#1017" class="Record">Ord</a>
+<a id="1356" href="WellFormed.Ordinal.html#1340" class="Function">Suc</a> <a id="1360" class="Symbol">(</a><a id="1361" href="WellFormed.Ordinal.html#1047" class="InductiveConstructor">wf</a> <a id="1364" href="WellFormed.Ordinal.html#1364" class="Bound">α</a><a id="1365" class="Symbol">)</a> <a id="1367" class="Symbol">=</a> <a id="1369" href="WellFormed.Ordinal.html#1047" class="InductiveConstructor">wf</a> <a id="1372" class="Symbol">(</a><a id="1373" href="NonWellFormed.Ordinal.html#3166" class="InductiveConstructor">suc</a> <a id="1377" href="WellFormed.Ordinal.html#1364" class="Bound">α</a><a id="1378" class="Symbol">)</a>
+</pre>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>
