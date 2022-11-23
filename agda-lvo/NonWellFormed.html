@@ -34,11 +34,11 @@
 如果你在知乎看到本文: 知乎对Agda语法高亮的支持非常有限, 建议跳转到以上网站阅读</p>
 </blockquote>
 <p><a href="https://choukh.github.io/agda-lvo/WellFormed.html">前往第2卷</a></p>
-<pre class="Agda"><a id="465" class="Symbol">{-#</a> <a id="469" class="Keyword">OPTIONS</a> <a id="477" class="Pragma">--without-K</a> <a id="489" class="Pragma">--safe</a> <a id="496" class="Symbol">#-}</a>
+<pre class="Agda"><a id="415" class="Symbol">{-#</a> <a id="419" class="Keyword">OPTIONS</a> <a id="427" class="Pragma">--without-K</a> <a id="439" class="Pragma">--safe</a> <a id="446" class="Symbol">#-}</a>
 
-<a id="501" class="Keyword">module</a> <a id="508" href="NonWellFormed.html" class="Module">NonWellFormed</a> <a id="522" class="Keyword">where</a>
+<a id="451" class="Keyword">module</a> <a id="458" href="NonWellFormed.html" class="Module">NonWellFormed</a> <a id="472" class="Keyword">where</a>
 </pre>
-<pre class="Agda"><a id="541" class="Keyword">open</a> <a id="546" class="Keyword">import</a> <a id="553" href="NonWellFormed.Ordinal.html" class="Module">NonWellFormed.Ordinal</a> <a id="575" class="Keyword">public</a>
+<pre class="Agda"><a id="491" class="Keyword">open</a> <a id="496" class="Keyword">import</a> <a id="503" href="NonWellFormed.Ordinal.html" class="Module">NonWellFormed.Ordinal</a> <a id="525" class="Keyword">public</a>
 </pre>
 <ul>
 <li>Brouwer 序数的归纳定义</li>
@@ -47,35 +47,35 @@
 <li>证明了 <code>_≤_</code> 是偏序, <code>_&lt;_</code> 是严格序</li>
 <li>没有线序, 但不影响后续构筑</li>
 </ul>
-<pre class="Agda"><a id="713" class="Keyword">open</a> <a id="718" class="Keyword">import</a> <a id="725" href="NonWellFormed.WellFormed.html" class="Module">NonWellFormed.WellFormed</a> <a id="750" class="Keyword">public</a>
+<pre class="Agda"><a id="663" class="Keyword">open</a> <a id="668" class="Keyword">import</a> <a id="675" href="NonWellFormed.WellFormed.html" class="Module">NonWellFormed.WellFormed</a> <a id="700" class="Keyword">public</a>
 </pre>
 <ul>
 <li>定义良构序数为由单调序列递归构造的序数</li>
 <li>证明了有限序数与 <code>ω</code> 是良构序数</li>
 </ul>
-<pre class="Agda"><a id="814" class="Keyword">open</a> <a id="819" class="Keyword">import</a> <a id="826" href="NonWellFormed.Function.html" class="Module">NonWellFormed.Function</a> <a id="849" class="Keyword">public</a>
+<pre class="Agda"><a id="764" class="Keyword">open</a> <a id="769" class="Keyword">import</a> <a id="776" href="NonWellFormed.Function.html" class="Module">NonWellFormed.Function</a> <a id="799" class="Keyword">public</a>
 </pre>
 <ul>
 <li>定义了序数函数的常用性质</li>
 <li>对序数嵌入 (normal function) 的定义做了一些改造, 使之不依赖良构条件</li>
 </ul>
-<pre class="Agda"><a id="932" class="Keyword">open</a> <a id="937" class="Keyword">import</a> <a id="944" href="NonWellFormed.Recursion.html" class="Module">NonWellFormed.Recursion</a> <a id="968" class="Keyword">public</a>
+<pre class="Agda"><a id="882" class="Keyword">open</a> <a id="887" class="Keyword">import</a> <a id="894" href="NonWellFormed.Recursion.html" class="Module">NonWellFormed.Recursion</a> <a id="918" class="Keyword">public</a>
 </pre>
 <ul>
 <li>定义了一般形式的序数递归函数 (超限递归), 并证明了它的一般性质</li>
 </ul>
-<pre class="Agda"><a id="1025" class="Keyword">open</a> <a id="1030" class="Keyword">import</a> <a id="1037" href="NonWellFormed.Arithmetic.html" class="Module">NonWellFormed.Arithmetic</a> <a id="1062" class="Keyword">public</a>
+<pre class="Agda"><a id="975" class="Keyword">open</a> <a id="980" class="Keyword">import</a> <a id="987" href="NonWellFormed.Arithmetic.html" class="Module">NonWellFormed.Arithmetic</a> <a id="1012" class="Keyword">public</a>
 </pre>
 <ul>
 <li>由超限递归定义了 <code>_+_</code>, <code>_*_</code> 和 <code>_^_</code> 并证明了它们的保良构性</li>
 <li>结合律, 分配律, 等等</li>
 </ul>
-<pre class="Agda"><a id="1142" class="Keyword">open</a> <a id="1147" class="Keyword">import</a> <a id="1154" href="NonWellFormed.Tetration.html" class="Module">NonWellFormed.Tetration</a> <a id="1178" class="Keyword">public</a>
+<pre class="Agda"><a id="1092" class="Keyword">open</a> <a id="1097" class="Keyword">import</a> <a id="1104" href="NonWellFormed.Tetration.html" class="Module">NonWellFormed.Tetration</a> <a id="1128" class="Keyword">public</a>
 </pre>
 <ul>
 <li>我们展示第四级运算被锁死, 即 <code>α ^^ β ≈ α ^^ ω</code> 对任意 <code>β ≥ ω</code></li>
 </ul>
-<pre class="Agda"><a id="1247" class="Keyword">open</a> <a id="1252" class="Keyword">import</a> <a id="1259" href="NonWellFormed.Fixpoint.html" class="Module">NonWellFormed.Fixpoint</a> <a id="1282" class="Keyword">public</a>
+<pre class="Agda"><a id="1197" class="Keyword">open</a> <a id="1202" class="Keyword">import</a> <a id="1209" href="NonWellFormed.Fixpoint.html" class="Module">NonWellFormed.Fixpoint</a> <a id="1232" class="Keyword">public</a>
 </pre>
 <ul>
 <li>定义了无穷迭代 <code>_⋱_</code></li>
@@ -83,12 +83,12 @@
 <li>递归 <code>F ⋱_ ∘ suc</code> 即得 <code>F</code> 的不动点枚举函数, 记作 <code>F ′</code></li>
 <li>我们证明了高阶函数 <code>_′</code> 保持序数嵌入且保持保良序性</li>
 </ul>
-<pre class="Agda"><a id="1433" class="Keyword">open</a> <a id="1438" class="Keyword">import</a> <a id="1445" href="NonWellFormed.Fixpoint.Lower.html" class="Module">NonWellFormed.Fixpoint.Lower</a> <a id="1474" class="Keyword">public</a>
+<pre class="Agda"><a id="1383" class="Keyword">open</a> <a id="1388" class="Keyword">import</a> <a id="1395" href="NonWellFormed.Fixpoint.Lower.html" class="Module">NonWellFormed.Fixpoint.Lower</a> <a id="1424" class="Keyword">public</a>
 </pre>
 <ul>
 <li>关于不动点的一些平凡的例子</li>
 </ul>
-<pre class="Agda"><a id="1511" class="Keyword">open</a> <a id="1516" class="Keyword">import</a> <a id="1523" href="NonWellFormed.Epsilon.html" class="Module">NonWellFormed.Epsilon</a> <a id="1545" class="Keyword">public</a>
+<pre class="Agda"><a id="1461" class="Keyword">open</a> <a id="1466" class="Keyword">import</a> <a id="1473" href="NonWellFormed.Epsilon.html" class="Module">NonWellFormed.Epsilon</a> <a id="1495" class="Keyword">public</a>
 </pre>
 <ul>
 <li>ε函数定义为 <code>(ω ^_) ′</code></li>
@@ -96,12 +96,12 @@
 <li>ζ 定义为 <code>ε ′</code> 且 η 为 <code>ζ ′</code></li>
 <li><code>ε</code>, <code>ζ</code>, <code>η</code>, … 都是序数嵌入且保良构</li>
 </ul>
-<pre class="Agda"><a id="1690" class="Keyword">open</a> <a id="1695" class="Keyword">import</a> <a id="1702" href="NonWellFormed.Epsilon.Alternative.html" class="Module">NonWellFormed.Epsilon.Alternative</a> <a id="1736" class="Keyword">public</a>
+<pre class="Agda"><a id="1640" class="Keyword">open</a> <a id="1645" class="Keyword">import</a> <a id="1652" href="NonWellFormed.Epsilon.Alternative.html" class="Module">NonWellFormed.Epsilon.Alternative</a> <a id="1686" class="Keyword">public</a>
 </pre>
 <ul>
 <li>我们证明了对任意良构 <code>α</code> 有 <code>ε (suc α) ≈ ε α ^^ ω</code></li>
 </ul>
-<pre class="Agda"><a id="1799" class="Keyword">open</a> <a id="1804" class="Keyword">import</a> <a id="1811" href="NonWellFormed.VeblenFunction.html" class="Module">NonWellFormed.VeblenFunction</a> <a id="1840" class="Keyword">public</a>
+<pre class="Agda"><a id="1749" class="Keyword">open</a> <a id="1754" class="Keyword">import</a> <a id="1761" href="NonWellFormed.VeblenFunction.html" class="Module">NonWellFormed.VeblenFunction</a> <a id="1790" class="Keyword">public</a>
 </pre>
 <ul>
 <li>定义了二元 Veblen 函数 <code>φ α β</code></li>
