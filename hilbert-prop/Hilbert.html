@@ -470,7 +470,7 @@ Ax3 : (~ φ ⊃ ~ ψ) ⊃ (ψ ⊃ φ)</p>
 </pre>
 <p><strong>【注意4.10】</strong> 很难想象 <code>φ ⊃ φ</code> 这样简单自明的恒真式必须要两次 MP 和三次逻辑公理才能证明. 希尔伯特风格的系统并不追求系统内的自然证明, 而是在保证完备可靠的前提下追求元定理证明的流畅性而人为选定的.</p>
 <p><strong>【注意4.11】</strong> 前面说过, 真值的计算是确定性的但低效的. 与之相对, 证明的存在性的确认是非确定性的但高效的. 意思是说, 没有机械的步骤可以保证找到证明, 但一旦找到, 那么我们可以相对快速地检验证明正确与否.</p>
-<p><strong>【注意4.12】</strong> 任意命题变元都不是恒真式, 也不是 <span class="math inline">\mathfrak{S}_0</span> 的定理. 这意味着对任意命题变元 <code>A</code> 和 <code>B</code>, 如果 <code>A</code> 是定理, 那么 <code>B</code> 是定理. 这是个相当令人迷惑的元定理, 它跟系统内的 <code>A ⊃ B</code> 一定关系都没有.</p>
+<p><strong>【注意4.12】</strong> 任意命题变元都不是恒真式, 也不是 <span class="math inline">\mathfrak{S}_0</span> 的定理. 这意味着对任意命题变元 <code>A</code> 和 <code>B</code>, 如果 <code>A</code> 是定理, 那么 <code>B</code> 是定理. 这是个相当令人迷惑的元定理, 它跟系统内的 <code>A ⊃ B</code> 一点关系都没有.</p>
 <pre class="Agda"><a id="14652" class="Keyword">module</a> <a id="14659" href="Hilbert.html#14659" class="Module">_</a> <a id="14661" class="Symbol">(</a><a id="14662" href="Hilbert.html#14662" class="Bound">m</a> <a id="14664" class="Symbol">:</a> <a id="14666" href="Hilbert.html#1418" class="Function">Variable</a><a id="14674" class="Symbol">)</a> <a id="14676" class="Keyword">where</a>
   <a id="14684" class="Keyword">private</a> <a id="14692" href="Hilbert.html#14692" class="Function">A</a> <a id="14694" class="Symbol">=</a> <a id="14696" href="Hilbert.html#2033" class="InductiveConstructor">var</a> <a id="14700" href="Hilbert.html#14662" class="Bound">m</a>
 
