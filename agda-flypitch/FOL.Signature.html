@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Agda一阶逻辑(1) 签名</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+</head>
+<body>
+
+<header>
+<h1 class="title">Agda一阶逻辑(1) 签名</h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <strong>Contents</strong><label for="contents">⊕</label>
+  <input type="checkbox" id="contents">
+  <ul>
+  <li><a href="#agda一阶逻辑1-签名" id="toc-agda一阶逻辑1-签名">Agda一阶逻辑(1) 签名</a></li>
+  </ul>
+</nav>
+
+<main>
+<h1 id="agda一阶逻辑1-签名">Agda一阶逻辑(1) 签名</h1>
+<blockquote>
+<p>交流Q群: 893531731<br />
+本文源码: <a href="https://github.com/choukh/agda-flypitch/blob/main/src/FOL/Signature.lagda.md">Signature.lagda.md</a><br />
+高亮渲染: <a href="https://choukh.github.io/agda-flypitch/FOL.Signature.html">Signature.html</a></p>
+</blockquote>
+<p>一阶逻辑是一种形式语言, 其语句由一些原始符号按一定的语法组合而成. 符号又分为逻辑符号和非逻辑符号. 本篇先讲非逻辑符号.</p>
+<p>非逻辑符号分为函数符号和关系符号, 且它们都带有一个称为元数 (arity) 的属性. 例如, 元数为 2 的函数符号即用于表示二元函数. 特别地, 元数为零的函数又称为常量.</p>
+<p>较传统的处理方式是给出所有可能的函数符号和关系符号. 即对任意元数 <span class="math inline">n</span>, 都有自然数多个函数符号</p>
+<p><span class="math display">f^n_0,\ f^n_1,\ f^n_2,\ f^n_3,\ ...</span></p>
+<p>以及自然数多个关系符号</p>
+<p><span class="math display">R^n_0,\ R^n_1,\ R^n_2,\ R^n_3,\ ...</span></p>
+<p>在这种处理下, 只有唯一一种一阶逻辑语言.</p>
+<p>较现代的方式是根据最终要实现的一阶理论来指定该理论所需的非逻辑符号. 这些特定的符号以及它们的元数所组成的资料叫做理论的<strong>签名 (signature)</strong>. 在这种处理下, 每种签名都对应一种一阶逻辑语言. 形式地, 一阶逻辑的其他部分都是参数化到签名上的, 因此我们把签名单独作为一个模块.</p>
+<pre class="Agda"><a id="820" class="Symbol">{-#</a> <a id="824" class="Keyword">OPTIONS</a> <a id="832" class="Pragma">--cubical-compatible</a> <a id="853" class="Pragma">--safe</a> <a id="860" class="Symbol">#-}</a>
+
+<a id="865" class="Keyword">module</a> <a id="872" href="FOL.Signature.html" class="Module">FOL.Signature</a> <a id="886" class="Keyword">where</a>
+
+<a id="893" class="Keyword">open</a> <a id="898" class="Keyword">import</a> <a id="905" href="Level.html" class="Module">Level</a> <a id="911" class="Keyword">using</a> <a id="917" class="Symbol">(</a><a id="918" href="Agda.Primitive.html#774" class="Primitive">suc</a><a id="921" class="Symbol">)</a>
+<a id="923" class="Keyword">open</a> <a id="928" class="Keyword">import</a> <a id="935" href="Data.Nat.html" class="Module">Data.Nat</a> <a id="944" class="Keyword">using</a> <a id="950" class="Symbol">(</a><a id="951" href="Agda.Builtin.Nat.html#186" class="Datatype">ℕ</a><a id="952" class="Symbol">)</a>
+</pre>
+<p><strong>定义 (签名)</strong> 由按元数分类的函数符号集族 <code>functions : ℕ → Set u</code> 以及按元数分类的关系符号集族 <code>relations : ℕ → Set u</code> 组成的资料叫做签名. 其中 <code>u</code> 是宇宙多态参数. 签名比符号集高一个宇宙. 常量集是元数为 0 的函数集.</p>
+<pre class="Agda"><a id="1113" class="Keyword">record</a> <a id="Signature"></a><a id="1120" href="FOL.Signature.html#1120" class="Record">Signature</a> <a id="1130" class="Symbol">{</a><a id="1131" href="FOL.Signature.html#1131" class="Bound">u</a><a id="1132" class="Symbol">}</a> <a id="1134" class="Symbol">:</a> <a id="1136" href="Agda.Primitive.html#320" class="Primitive">Set</a> <a id="1140" class="Symbol">(</a><a id="1141" href="Agda.Primitive.html#774" class="Primitive">suc</a> <a id="1145" href="FOL.Signature.html#1131" class="Bound">u</a><a id="1146" class="Symbol">)</a> <a id="1148" class="Keyword">where</a>
+  <a id="1156" class="Keyword">field</a>
+    <a id="Signature.functions"></a><a id="1166" href="FOL.Signature.html#1166" class="Field">functions</a> <a id="1176" class="Symbol">:</a> <a id="1178" href="Agda.Builtin.Nat.html#186" class="Datatype">ℕ</a> <a id="1180" class="Symbol">→</a> <a id="1182" href="Agda.Primitive.html#320" class="Primitive">Set</a> <a id="1186" href="FOL.Signature.html#1131" class="Bound">u</a>
+    <a id="Signature.relations"></a><a id="1192" href="FOL.Signature.html#1192" class="Field">relations</a> <a id="1202" class="Symbol">:</a> <a id="1204" href="Agda.Builtin.Nat.html#186" class="Datatype">ℕ</a> <a id="1206" class="Symbol">→</a> <a id="1208" href="Agda.Primitive.html#320" class="Primitive">Set</a> <a id="1212" href="FOL.Signature.html#1131" class="Bound">u</a>
+  <a id="Signature.constants"></a><a id="1216" href="FOL.Signature.html#1216" class="Function">constants</a> <a id="1226" class="Symbol">=</a> <a id="1228" href="FOL.Signature.html#1166" class="Field">functions</a> <a id="1238" class="Number">0</a>
+</pre>
+<p><strong>例</strong> 下面给出了签名的一个实例, 它可以作为皮亚诺算术 (一种一阶理论) 的签名. 注意符号的元数被编码到了类型里面. 例如, 常量 <code>O</code> 的类型是 <code>func 0</code>, 后继函数 <code>S</code> 的类型是 <code>func 1</code>, 加法 <code>+</code> 以及乘法 <code>*</code> 的类型是 <code>func 2</code>, 小于关系 <code>&lt;</code> 的类型是 <code>rel 2</code>111111111111111111111QQQQQAzz .</p>
+<pre class="Agda"><a id="1455" class="Keyword">module</a> <a id="ExampleSignaturePA"></a><a id="1462" href="FOL.Signature.html#1462" class="Module">ExampleSignaturePA</a> <a id="1481" class="Keyword">where</a>
+
+  <a id="1490" class="Keyword">data</a> <a id="ExampleSignaturePA.func"></a><a id="1495" href="FOL.Signature.html#1495" class="Datatype">func</a> <a id="1500" class="Symbol">:</a> <a id="1502" href="Agda.Builtin.Nat.html#186" class="Datatype">ℕ</a> <a id="1504" class="Symbol">→</a> <a id="1506" href="Agda.Primitive.html#320" class="Primitive">Set</a> <a id="1510" class="Keyword">where</a>
+    <a id="ExampleSignaturePA.func.O"></a><a id="1520" href="FOL.Signature.html#1520" class="InductiveConstructor">O</a> <a id="1522" class="Symbol">:</a> <a id="1524" href="FOL.Signature.html#1495" class="Datatype">func</a> <a id="1529" class="Number">0</a>
+    <a id="ExampleSignaturePA.func.S"></a><a id="1535" href="FOL.Signature.html#1535" class="InductiveConstructor">S</a> <a id="1537" class="Symbol">:</a> <a id="1539" href="FOL.Signature.html#1495" class="Datatype">func</a> <a id="1544" class="Number">1</a>
+    <a id="ExampleSignaturePA.func.+"></a><a id="1550" href="FOL.Signature.html#1550" class="InductiveConstructor">+</a> <a id="1552" class="Symbol">:</a> <a id="1554" href="FOL.Signature.html#1495" class="Datatype">func</a> <a id="1559" class="Number">2</a>
+    <a id="ExampleSignaturePA.func.*"></a><a id="1565" href="FOL.Signature.html#1565" class="InductiveConstructor">*</a> <a id="1567" class="Symbol">:</a> <a id="1569" href="FOL.Signature.html#1495" class="Datatype">func</a> <a id="1574" class="Number">2</a>
+
+  <a id="1579" class="Keyword">data</a> <a id="ExampleSignaturePA.rel"></a><a id="1584" href="FOL.Signature.html#1584" class="Datatype">rel</a> <a id="1588" class="Symbol">:</a> <a id="1590" href="Agda.Builtin.Nat.html#186" class="Datatype">ℕ</a> <a id="1592" class="Symbol">→</a> <a id="1594" href="Agda.Primitive.html#320" class="Primitive">Set</a> <a id="1598" class="Keyword">where</a>
+    <a id="ExampleSignaturePA.rel.&lt;"></a><a id="1608" href="FOL.Signature.html#1608" class="InductiveConstructor">&lt;</a> <a id="1610" class="Symbol">:</a> <a id="1612" href="FOL.Signature.html#1584" class="Datatype">rel</a> <a id="1616" class="Number">2</a>
+
+  <a id="ExampleSignaturePA.σ"></a><a id="1621" href="FOL.Signature.html#1621" class="Function">σ</a> <a id="1623" class="Symbol">:</a> <a id="1625" href="FOL.Signature.html#1120" class="Record">Signature</a>
+  <a id="1637" href="FOL.Signature.html#1621" class="Function">σ</a> <a id="1639" class="Symbol">=</a> <a id="1641" class="Keyword">record</a>
+    <a id="1652" class="Symbol">{</a> <a id="1654" href="FOL.Signature.html#1166" class="Field">functions</a> <a id="1664" class="Symbol">=</a> <a id="1666" href="FOL.Signature.html#1495" class="Datatype">func</a>
+    <a id="1675" class="Symbol">;</a> <a id="1677" href="FOL.Signature.html#1192" class="Field">relations</a> <a id="1687" class="Symbol">=</a> <a id="1689" href="FOL.Signature.html#1584" class="Datatype">rel</a>
+    <a id="1697" class="Symbol">}</a>
+</pre>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>
