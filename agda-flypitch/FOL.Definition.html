@@ -39,7 +39,7 @@
   <li><a href="#导出规则" id="toc-导出规则">导出规则</a>
   <ul>
   <li><a href="#的补充规则" id="toc-的补充规则"><code>⇒</code> 的补充规则</a></li>
-  <li><a href="#归谬法" id="toc-归谬法">归谬法</a></li>
+  <li><a href="#爆炸律" id="toc-爆炸律">爆炸律</a></li>
   <li><a href="#的引入引出规则" id="toc-的引入引出规则"><code>∧</code> 的引入引出规则</a></li>
   <li><a href="#的引入引出规则-1" id="toc-的引入引出规则-1"><code>∨</code> 的引入引出规则</a></li>
   <li><a href="#矛盾律" id="toc-矛盾律">矛盾律</a></li>
@@ -291,7 +291,7 @@
 <a id="9421" href="FOL.Definition.html#9345" class="Function">⇒-intro-tauto</a> <a id="9435" href="FOL.Definition.html#9435" class="Bound">⊢</a> <a id="9437" class="Symbol">=</a> <a id="9439" href="FOL.Definition.html#7154" class="InductiveConstructor">⇒-intro</a> <a id="9447" class="Symbol">(</a><a id="9448" href="FOL.Definition.html#7888" class="Function">weakening</a> <a id="9458" href="Data.Sum.Base.html#818" class="InductiveConstructor">inj₂</a> <a id="9463" class="Symbol">(</a><a id="9464" href="FOL.Definition.html#9435" class="Bound">⊢</a> <a id="9466" class="Symbol">(</a><a id="9467" href="FOL.Definition.html#7040" class="InductiveConstructor">axiom</a> <a id="9473" href="Agda.Builtin.Equality.html#190" class="InductiveConstructor">refl</a><a id="9477" class="Symbol">)))</a>
 </pre>
 <p>以下规则我们直接列出名称而不再加以说明.</p>
-<h3 id="归谬法">归谬法</h3>
+<h3 id="爆炸律">爆炸律</h3>
 <pre class="Agda"><a id="exfalso"></a><a id="9525" href="FOL.Definition.html#9525" class="Function">exfalso</a> <a id="9533" class="Symbol">:</a> <a id="9535" class="Symbol">∀</a> <a id="9537" class="Symbol">{</a><a id="9538" href="FOL.Definition.html#9538" class="Bound">Γ</a> <a id="9540" href="FOL.Definition.html#9540" class="Bound">φ</a><a id="9541" class="Symbol">}</a> <a id="9543" class="Symbol">→</a> <a id="9545" href="FOL.Definition.html#9538" class="Bound">Γ</a> <a id="9547" href="FOL.Definition.html#6994" class="Datatype Operator">⊢</a> <a id="9549" href="FOL.Definition.html#2718" class="InductiveConstructor">⊥</a> <a id="9551" class="Symbol">→</a> <a id="9553" href="FOL.Definition.html#9538" class="Bound">Γ</a> <a id="9555" href="FOL.Definition.html#6994" class="Datatype Operator">⊢</a> <a id="9557" href="FOL.Definition.html#9540" class="Bound">φ</a>
 <a id="9559" href="FOL.Definition.html#9525" class="Function">exfalso</a> <a id="9567" href="FOL.Definition.html#9567" class="Bound">Γ⊢⊥</a> <a id="9571" class="Symbol">=</a> <a id="9573" href="FOL.Definition.html#7078" class="InductiveConstructor">⊥-elim</a> <a id="9580" class="Symbol">(</a><a id="9581" href="FOL.Definition.html#8474" class="Function">weakening1</a> <a id="9592" href="FOL.Definition.html#9567" class="Bound">Γ⊢⊥</a><a id="9595" class="Symbol">)</a>
 
