@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Agda一阶逻辑(1) 语言</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+</head>
+<body>
+
+<header>
+<h1 class="title">Agda一阶逻辑(1) 语言</h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <strong>Contents</strong><label for="contents">⊕</label>
+  <input type="checkbox" id="contents">
+  <ul>
+  <li><a href="#agda一阶逻辑1-语言" id="toc-agda一阶逻辑1-语言">Agda一阶逻辑(1) 语言</a></li>
+  </ul>
+</nav>
+
+<main>
+<h1 id="agda一阶逻辑1-语言">Agda一阶逻辑(1) 语言</h1>
+<blockquote>
+<p>交流Q群: 893531731<br />
+本文源码: <a href="https://github.com/choukh/agda-flypitch/blob/main/src/FOL/Language.lagda.md">Language.lagda.md</a><br />
+高亮渲染: <a href="https://choukh.github.io/agda-flypitch/FOL.Language.html">Language.html</a></p>
+</blockquote>
+<p>一阶逻辑是一种形式语言, 其语句由一些原始符号按一定的语法组合而成. 符号又分为逻辑符号和非逻辑符号. 本篇先讲非逻辑符号.</p>
+<p>非逻辑符号分为函数符号和关系符号, 且它们都带有一个称为元数 (arity) 的属性. 例如, 元数为 2 的函数符号即用于表示二元函数. 特别地, 元数为零的函数又称为常量.</p>
+<p>较传统的处理方式是给出所有可能的函数符号和关系符号. 即对任意元数 <span class="math inline">n</span>, 都有自然数多个函数符号</p>
+<p><span class="math display">f^n_0,\ f^n_1,\ f^n_2,\ f^n_3,\ ...</span></p>
+<p>以及自然数多个关系符号</p>
+<p><span class="math display">R^n_0,\ R^n_1,\ R^n_2,\ R^n_3,\ ...</span></p>
+<p>在这种处理下, 只有唯一一种一阶逻辑语言.</p>
+<p>较现代的方式是根据最终要实现的一阶理论来指定该理论所需的非逻辑符号. 这些特定的符号以及它们的元数所组成的资料叫做理论的<strong>签名 (signature)</strong>. 在这种处理下, 每种签名都对应一种一阶逻辑语言, 因此签名又叫做<strong>语言 (language)</strong>, 语言的实例按惯例记作 ℒ. 由于一阶逻辑的其他部分都是参数化到语言的, 我们把它单独作为一个模块.</p>
+<pre class="Agda"><a id="849" class="Symbol">{-#</a> <a id="853" class="Keyword">OPTIONS</a> <a id="861" class="Pragma">--cubical-compatible</a> <a id="882" class="Pragma">--safe</a> <a id="889" class="Symbol">#-}</a>
+
+<a id="894" class="Keyword">module</a> <a id="901" href="FOL.Language.html" class="Module">FOL.Language</a> <a id="914" class="Keyword">where</a>
+
+<a id="921" class="Keyword">open</a> <a id="926" class="Keyword">import</a> <a id="933" href="Level.html" class="Module">Level</a> <a id="939" class="Keyword">using</a> <a id="945" class="Symbol">(</a><a id="946" href="Agda.Primitive.html#591" class="Postulate">Level</a><a id="951" class="Symbol">;</a> <a id="953" href="Agda.Primitive.html#774" class="Primitive">suc</a><a id="956" class="Symbol">)</a>
+<a id="958" class="Keyword">open</a> <a id="963" class="Keyword">import</a> <a id="970" href="Data.Nat.html" class="Module">Data.Nat</a> <a id="979" class="Keyword">using</a> <a id="985" class="Symbol">(</a><a id="986" href="Agda.Builtin.Nat.html#186" class="Datatype">ℕ</a><a id="987" class="Symbol">)</a>
+</pre>
+<p><strong>定义 (语言)</strong> 由按元数分类的函数符号集族 <code>functions : ℕ → Set u</code> 以及按元数分类的关系符号集族 <code>relations : ℕ → Set u</code> 组成的资料叫做一阶逻辑的语言. 其中 <code>u</code> 是宇宙多态参数. 注意语言比符号集高一个宇宙. 特别地, 常量集是元数为 0 的函数集.</p>
+<pre class="Agda"><a id="1160" class="Keyword">variable</a>
+  <a id="1171" href="FOL.Language.html#1171" class="Generalizable">u</a> <a id="1173" class="Symbol">:</a> <a id="1175" href="Agda.Primitive.html#591" class="Postulate">Level</a>
+
+<a id="1182" class="Keyword">record</a> <a id="Language"></a><a id="1189" href="FOL.Language.html#1189" class="Record">Language</a> <a id="1198" class="Symbol">:</a> <a id="1200" href="Agda.Primitive.html#320" class="Primitive">Set</a> <a id="1204" class="Symbol">(</a><a id="1205" href="Agda.Primitive.html#774" class="Primitive">suc</a> <a id="1209" href="FOL.Language.html#1209" class="Bound">u</a><a id="1210" class="Symbol">)</a> <a id="1212" class="Keyword">where</a>
+  <a id="1220" class="Keyword">field</a>
+    <a id="Language.functions"></a><a id="1230" href="FOL.Language.html#1230" class="Field">functions</a> <a id="1240" class="Symbol">:</a> <a id="1242" href="Agda.Builtin.Nat.html#186" class="Datatype">ℕ</a> <a id="1244" class="Symbol">→</a> <a id="1246" href="Agda.Primitive.html#320" class="Primitive">Set</a> <a id="1250" href="FOL.Language.html#1209" class="Bound">u</a>
+    <a id="Language.relations"></a><a id="1256" href="FOL.Language.html#1256" class="Field">relations</a> <a id="1266" class="Symbol">:</a> <a id="1268" href="Agda.Builtin.Nat.html#186" class="Datatype">ℕ</a> <a id="1270" class="Symbol">→</a> <a id="1272" href="Agda.Primitive.html#320" class="Primitive">Set</a> <a id="1276" href="FOL.Language.html#1209" class="Bound">u</a>
+  <a id="Language.Constants"></a><a id="1280" href="FOL.Language.html#1280" class="Function">Constants</a> <a id="1290" class="Symbol">=</a> <a id="1292" href="FOL.Language.html#1230" class="Field">functions</a> <a id="1302" class="Number">0</a>
+</pre>
+<p><strong>例</strong> 下面给出了语言的一个实例 <code>ℒ</code>, 它可以作为皮亚诺算术 (一种一阶理论) 的语言. 注意符号的元数被编码到了类型里面. 例如, 常量 <code>O</code> 的类型是 <code>func 0</code>, 后继函数 <code>S</code> 的类型是 <code>func 1</code>, 加法 <code>+</code> 以及乘法 <code>*</code> 的类型是 <code>func 2</code>, 小于关系 <code>&lt;</code> 的类型是 <code>rel 2</code>.</p>
+<pre class="Agda"><a id="1489" class="Keyword">module</a> <a id="ExampleLanguagePA"></a><a id="1496" href="FOL.Language.html#1496" class="Module">ExampleLanguagePA</a> <a id="1514" class="Keyword">where</a>
+
+  <a id="1523" class="Keyword">data</a> <a id="ExampleLanguagePA.func"></a><a id="1528" href="FOL.Language.html#1528" class="Datatype">func</a> <a id="1533" class="Symbol">:</a> <a id="1535" href="Agda.Builtin.Nat.html#186" class="Datatype">ℕ</a> <a id="1537" class="Symbol">→</a> <a id="1539" href="Agda.Primitive.html#320" class="Primitive">Set</a> <a id="1543" class="Keyword">where</a>
+    <a id="ExampleLanguagePA.func.O"></a><a id="1553" href="FOL.Language.html#1553" class="InductiveConstructor">O</a> <a id="1555" class="Symbol">:</a> <a id="1557" href="FOL.Language.html#1528" class="Datatype">func</a> <a id="1562" class="Number">0</a>
+    <a id="ExampleLanguagePA.func.S"></a><a id="1568" href="FOL.Language.html#1568" class="InductiveConstructor">S</a> <a id="1570" class="Symbol">:</a> <a id="1572" href="FOL.Language.html#1528" class="Datatype">func</a> <a id="1577" class="Number">1</a>
+    <a id="ExampleLanguagePA.func.+"></a><a id="1583" href="FOL.Language.html#1583" class="InductiveConstructor">+</a> <a id="1585" class="Symbol">:</a> <a id="1587" href="FOL.Language.html#1528" class="Datatype">func</a> <a id="1592" class="Number">2</a>
+    <a id="ExampleLanguagePA.func.*"></a><a id="1598" href="FOL.Language.html#1598" class="InductiveConstructor">*</a> <a id="1600" class="Symbol">:</a> <a id="1602" href="FOL.Language.html#1528" class="Datatype">func</a> <a id="1607" class="Number">2</a>
+
+  <a id="1612" class="Keyword">data</a> <a id="ExampleLanguagePA.rel"></a><a id="1617" href="FOL.Language.html#1617" class="Datatype">rel</a> <a id="1621" class="Symbol">:</a> <a id="1623" href="Agda.Builtin.Nat.html#186" class="Datatype">ℕ</a> <a id="1625" class="Symbol">→</a> <a id="1627" href="Agda.Primitive.html#320" class="Primitive">Set</a> <a id="1631" class="Keyword">where</a>
+    <a id="ExampleLanguagePA.rel.&lt;"></a><a id="1641" href="FOL.Language.html#1641" class="InductiveConstructor">&lt;</a> <a id="1643" class="Symbol">:</a> <a id="1645" href="FOL.Language.html#1617" class="Datatype">rel</a> <a id="1649" class="Number">2</a>
+
+  <a id="ExampleLanguagePA.ℒ"></a><a id="1654" href="FOL.Language.html#1654" class="Function">ℒ</a> <a id="1656" class="Symbol">:</a> <a id="1658" href="FOL.Language.html#1189" class="Record">Language</a>
+  <a id="1669" href="FOL.Language.html#1654" class="Function">ℒ</a> <a id="1671" class="Symbol">=</a> <a id="1673" class="Keyword">record</a>
+    <a id="1684" class="Symbol">{</a> <a id="1686" href="FOL.Language.html#1230" class="Field">functions</a> <a id="1696" class="Symbol">=</a> <a id="1698" href="FOL.Language.html#1528" class="Datatype">func</a>
+    <a id="1707" class="Symbol">;</a> <a id="1709" href="FOL.Language.html#1256" class="Field">relations</a> <a id="1719" class="Symbol">=</a> <a id="1721" href="FOL.Language.html#1617" class="Datatype">rel</a>
+    <a id="1729" class="Symbol">}</a>
+</pre>
+<p>今后我们保留 <code>ℒ</code> 作为语言的实例的记号.</p>
+<pre class="Agda"><a id="1764" class="Keyword">variable</a>
+  <a id="1775" href="FOL.Language.html#1775" class="Generalizable">ℒ</a> <a id="1777" class="Symbol">:</a> <a id="1779" href="FOL.Language.html#1189" class="Record">Language</a>
+</pre>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>
