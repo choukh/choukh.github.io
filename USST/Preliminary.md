@@ -1,321 +1,324 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
-<head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc-markdown-css-theme" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>泛等结构集合论 (1) 前置知识</title>
-  <link rel="stylesheet" href="css/theme.css" />
-  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
-  <script type="text/javascript" src="highlight-hover.js"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
-  <script>document.addEventListener("DOMContentLoaded", function () {
- var mathElements = document.getElementsByClassName("math");
- var macros = [];
- for (var i = 0; i < mathElements.length; i++) {
-  var texText = mathElements[i].firstChild;
-  if (mathElements[i].tagName == "SPAN") {
-   katex.render(texText.data, mathElements[i], {
-    displayMode: mathElements[i].classList.contains('display'),
-    throwOnError: false,
-    macros: macros,
-    fleqn: false
-   });
-}}});
-  </script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
-</head>
-<body>
+---
+title: 泛等结构集合论 (1) 前置知识
+zhihu-tags: Agda, 数理逻辑, 集合论
+zhihu-url: https://zhuanlan.zhihu.com/p/643059692
+---
 
-<header>
-<h1 class="title">泛等结构集合论 (1) 前置知识</h1>
-<blockquote class="metadata">
-</blockquote>
-</header>
+# 泛等结构集合论 (1) 前置知识
 
-<nav id="TOC" role="doc-toc">
-    <strong>Contents</strong><label for="contents">⊕</label>
-  <input type="checkbox" id="contents">
-  <ul>
-  <li><a href="#泛等结构集合论-1-前置知识" id="toc-泛等结构集合论-1-前置知识">泛等结构集合论 (1) 前置知识</a>
-  <ul>
-  <li><a href="#前言" id="toc-前言">前言</a></li>
-  <li><a href="#泛等基础" id="toc-泛等基础">泛等基础</a>
-  <ul>
-  <li><a href="#判断" id="toc-判断">判断</a></li>
-  <li><a href="#命题即类型" id="toc-命题即类型">命题即类型</a></li>
-  <li><a href="#类型宇宙与宇宙层级" id="toc-类型宇宙与宇宙层级">类型宇宙与宇宙层级</a></li>
-  <li><a href="#函数类型" id="toc-函数类型">函数类型</a></li>
-  <li><a href="#类型族" id="toc-类型族">类型族</a></li>
-  <li><a href="#依值函数类型-π类型" id="toc-依值函数类型-π类型">依值函数类型 (Π类型)</a></li>
-  <li><a href="#依值配对类型-σ类型" id="toc-依值配对类型-σ类型">依值配对类型 (Σ类型)</a></li>
-  <li><a href="#基本数据类型" id="toc-基本数据类型">基本数据类型</a></li>
-  <li><a href="#同伦层级" id="toc-同伦层级">同伦层级</a></li>
-  <li><a href="#命题截断" id="toc-命题截断">命题截断</a></li>
-  <li><a href="#相等类型" id="toc-相等类型">相等类型</a></li>
-  <li><a href="#幂集" id="toc-幂集">幂集</a></li>
-  </ul></li>
-  <li><a href="#公理" id="toc-公理">公理</a></li>
-  <li><a href="#命题逻辑" id="toc-命题逻辑">命题逻辑</a></li>
-  <li><a href="#排中律" id="toc-排中律">排中律</a></li>
-  <li><a href="#选择公理" id="toc-选择公理">选择公理</a></li>
-  <li><a href="#势" id="toc-势">势</a></li>
-  <li><a href="#连续统假设" id="toc-连续统假设">连续统假设</a></li>
-  <li><a href="#广义连续统假设" id="toc-广义连续统假设">广义连续统假设</a></li>
-  </ul></li>
-  </ul>
-</nav>
+> 交流Q群: 893531731  
+> 本文源码: [Preliminary.lagda.md](https://github.com/choukh/USST/blob/main/src/Preliminary.lagda.md)  
+> 高亮渲染: [Preliminary.html](https://choukh.github.io/USST/Preliminary.html)  
 
-<main>
-<h1 id="泛等结构集合论-1-前置知识">泛等结构集合论 (1) 前置知识</h1>
-<blockquote>
-<p>交流Q群: 893531731<br />
-本文源码: <a href="https://github.com/choukh/USST/blob/main/src/Preliminary.lagda.md">Preliminary.lagda.md</a><br />
-高亮渲染: <a href="https://choukh.github.io/USST/Preliminary.html">Preliminary.html</a></p>
-</blockquote>
-<h2 id="前言">前言</h2>
-<p><strong>泛等基础 (univalent foundations, 简称 UF)</strong> 中有原生的集合概念 <code>hSet</code>, 它可以视作一种<strong>结构集合论 (structural set theory)</strong> 的模型. 我们尝试在其中复刻传统质料集合论 (material set theory) 的基本概念, 如势, 序数, 连续统假设 (CH), 广义连续统假设 (GCH) 等, 并研究它们与排中律 (LEM) 和选择公理 (AC) 之间的反推事实. 这得益于 UF 是一种<strong>中性数学基础 (foundation of neutral constructive mathematics)</strong>. 本文是这一系列的第一篇, 主要介绍前置知识, 包括泛等基础以及集合论的一些基本概念.</p>
-<p>所谓泛等基础, 简单来说就是在 Martin-Löf 类型论 (MTLL) 的基础上加上泛等公理 (UA) 所得到的扩展, 它解决了 MLTT 的一些问题, 从而足够作为一种数学基础. 本文中我们使用 <a href="https://agda.readthedocs.io/en/v2.6.3/language/cubical.html">Cubical Agda</a> 来作为泛等基础的具体实现.</p>
+## 前言
+
+**泛等基础 (univalent foundations, 简称 UF)** 中有原生的集合概念 `hSet`, 它可以视作一种**结构集合论 (structural set theory)** 的模型. 我们尝试在其中复刻传统质料集合论 (material set theory) 的基本概念, 如势, 序数, 连续统假设 (CH), 广义连续统假设 (GCH) 等, 并研究它们与排中律 (LEM) 和选择公理 (AC) 之间的反推事实. 这得益于 UF 是一种**中性数学基础 (foundation of neutral constructive mathematics)**. 本文是这一系列的第一篇, 主要介绍前置知识, 包括泛等基础以及集合论的一些基本概念.
+
+所谓泛等基础, 简单来说就是在 Martin-Löf 类型论 (MTLL) 的基础上加上泛等公理 (UA) 所得到的扩展, 它解决了 MLTT 的一些问题, 从而足够作为一种数学基础. 本文中我们使用 [Cubical Agda](https://agda.readthedocs.io/en/v2.6.3/language/cubical.html) 来作为泛等基础的具体实现.
+
 <pre class="Agda"><a id="876" class="Symbol">{-#</a> <a id="880" class="Keyword">OPTIONS</a> <a id="888" class="Pragma">--cubical</a> <a id="898" class="Pragma">--safe</a> <a id="905" class="Symbol">#-}</a>
 <a id="909" class="Keyword">module</a> <a id="916" href="Preliminary.html" class="Module">Preliminary</a> <a id="928" class="Keyword">where</a>
 </pre>
-<h2 id="泛等基础">泛等基础</h2>
-<h3 id="判断">判断</h3>
-<p>我们从比较集合论基础的异同开始讲起. 类似于在集合论中可以谈论的任意 <span class="math inline">x</span> 都是集合那样, 在类型论中可以谈论的任意 <span class="math inline">x</span> 都具有一个类型. 我们不能在集合论中谈论 <span class="math inline">x</span> 是不是集合, 我们也不能在类型论中谈论 <span class="math inline">x</span> 是不是具有某一类型 <span class="math inline">A</span>. 像这种在理论中不能谈论的元命题我们叫做一个<strong>判断 (judgement)</strong>. 相比集合论, 在类型论中需要更常接触各种判断, 所以有必要澄清这个概念.</p>
-<p>我们将 ” <span class="math inline">x</span> 具有类型 <span class="math inline">A</span>” 记作 <span class="math inline">x : A</span>, <span class="math inline">x</span> 又叫做 <span class="math inline">A</span> 的项. 科普介绍中经常把 <span class="math inline">x : A</span> 解释成 <span class="math inline">x ∈ A</span>, 虽然在一些情况下不妨这么理解, 但它们本质上是不同层面的概念. 与 <span class="math inline">x : A</span> 同一个层面的是 “x是集合” 这一判断, 而 <span class="math inline">∈</span> 只是集合上配备的一种二元关系. 类似地, 类型 A 上也可以配备上某种二元关系 <span class="math inline">∼</span>.</p>
-<h3 id="命题即类型">命题即类型</h3>
-<p>正如集合论中的 <span class="math inline">x ∈ y</span> 构成了一个命题那样, 类型论中给定 <span class="math inline">x\,y : A</span>, 那么 <span class="math inline">x ∼ y</span> 也构成了一个命题. 实际上, 类型论中的每个命题也都是一个类型. 如果能构造出该类型的一个项, 我们就认为证明了该类型所对应的那个命题. 注意, 尽管命题都是类型, 但并非所有类型都是命题. 关于这一点将在后面的同伦层级这一小节解释. 如果把一个类型 <span class="math inline">A</span> 看作命题, 那个 <span class="math inline">A</span> 的项 <span class="math inline">x : A</span> 也叫 <span class="math inline">A</span> 的一个证明或证据; 如果可以构造 <span class="math inline">x : A</span>, 我们就说 <span class="math inline">A</span> 可证或 <span class="math inline">A</span> 成立.</p>
-<table>
-<thead>
-<tr class="header">
-<th></th>
-<th>集合论</th>
-<th>类型论</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>判断</td>
-<td>x 是集合</td>
-<td>x : A</td>
-</tr>
-<tr class="even">
-<td>不能谈论</td>
-<td>x 是不是集合</td>
-<td>x 是不是具有某类型 A</td>
-</tr>
-<tr class="odd">
-<td>命题</td>
-<td>x ∈ y</td>
-<td>x ∼ y : Type</td>
-</tr>
-</tbody>
-</table>
-<h3 id="类型宇宙与宇宙层级">类型宇宙与宇宙层级</h3>
-<p>正如 <span class="math inline">x : A</span> 是一个判断那样, ” <span class="math inline">A</span> 是一个类型” 也是一个判断, 记作 <code>A : Type</code>. 其中 <code>Type</code> 就叫做<strong>类型宇宙 (type universe)</strong>. 它是一个层级系统, 其层级序数叫做宇宙层级 <code>Level</code>. 但要注意 <code>Level</code> 本身不在类型宇宙之中, 它独享一个单独的宇宙, 叫做层级宇宙 <code>LevelUniv</code>, 即有 <code>Level : LevelUniv</code>. (这些不同的宇宙又叫做 sort, 非形式地, 我们可以说 <code>Type : Sort</code> 和 <code>LevelUniv : Sort</code>)</p>
-<p>最低的宇宙层级是 <code>ℓ-zero : Level</code>, 位于最低宇宙层级的类型记作 <code>Type ℓ-zero</code>, 简记作 <code>Type</code>. 下一个宇宙是 <code>Type (ℓ-suc ℓ-zero)</code>, 简记作 <code>Type₁</code>, 以此类推. 此外, 宇宙层级还有一个二元运算 <code>_⊔_</code>, 它的作用是取两个宇宙层级中较高的那一个, 例如 <code>ℓ-zero ⊔ (ℓ-suc ℓ-zero)</code> 等于 <code>ℓ-suc ℓ-zero</code>.</p>
-<p>以上都是类型论中的原始概念, 我们从 <code>Cubical.Core.Primitives</code> 模块中通过以下代码导入了它们.</p>
+## 泛等基础
+
+### 判断
+
+我们从比较集合论基础的异同开始讲起. 类似于在集合论中可以谈论的任意 $x$ 都是集合那样, 在类型论中可以谈论的任意 $x$ 都具有一个类型. 我们不能在集合论中谈论 $x$ 是不是集合, 我们也不能在类型论中谈论 $x$ 是不是具有某一类型 $A$. 像这种在理论中不能谈论的元命题我们叫做一个**判断 (judgement)**. 相比集合论, 在类型论中需要更常接触各种判断, 所以有必要澄清这个概念.
+
+我们将 " $x$ 具有类型 $A$" 记作 $x : A$, $x$ 又叫做 $A$ 的项. 科普介绍中经常把 $x : A$ 解释成 $x ∈ A$, 虽然在一些情况下不妨这么理解, 但它们本质上是不同层面的概念. 与 $x : A$ 同一个层面的是 "x是集合" 这一判断, 而 $∈$ 只是集合上配备的一种二元关系. 类似地, 类型 A 上也可以配备上某种二元关系 $∼$.
+
+### 命题即类型
+
+正如集合论中的 $x ∈ y$ 构成了一个命题那样, 类型论中给定 $x\,y : A$, 那么 $x ∼ y$ 也构成了一个命题. 实际上, 类型论中的每个命题也都是一个类型. 如果能构造出该类型的一个项, 我们就认为证明了该类型所对应的那个命题. 注意, 尽管命题都是类型, 但并非所有类型都是命题. 关于这一点将在后面的同伦层级这一小节解释. 如果把一个类型 $A$ 看作命题, 那个 $A$ 的项 $x : A$ 也叫 $A$ 的一个证明或证据; 如果可以构造 $x : A$, 我们就说 $A$ 可证或 $A$ 成立.
+
+|         |  集合论      | 类型论
+| ----    |  ----       | ----
+| 判断     | x 是集合    | x : A
+| 不能谈论  | x 是不是集合 | x 是不是具有某类型 A
+| 命题     | x ∈ y       | x ∼ y : Type
+
+### 类型宇宙与宇宙层级
+
+正如 $x : A$ 是一个判断那样, " $A$ 是一个类型" 也是一个判断, 记作 `A : Type`. 其中 `Type` 就叫做**类型宇宙 (type universe)**. 它是一个层级系统, 其层级序数叫做宇宙层级 `Level`. 但要注意 `Level` 本身不在类型宇宙之中, 它独享一个单独的宇宙, 叫做层级宇宙 `LevelUniv`, 即有 `Level : LevelUniv`. (这些不同的宇宙又叫做 sort, 非形式地, 我们可以说 `Type : Sort` 和 `LevelUniv : Sort`)
+
+最低的宇宙层级是 `ℓ-zero : Level`, 位于最低宇宙层级的类型记作 `Type ℓ-zero`, 简记作 `Type`. 下一个宇宙是 `Type (ℓ-suc ℓ-zero)`, 简记作 `Type₁`, 以此类推. 此外, 宇宙层级还有一个二元运算 `_⊔_`, 它的作用是取两个宇宙层级中较高的那一个, 例如 `ℓ-zero ⊔ (ℓ-suc ℓ-zero)` 等于 `ℓ-suc ℓ-zero`.
+
+以上都是类型论中的原始概念, 我们从 `Cubical.Core.Primitives` 模块中通过以下代码导入了它们.
+
 <pre class="Agda"><a id="2362" class="Keyword">open</a> <a id="2367" class="Keyword">import</a> <a id="2374" href="Cubical.Core.Primitives.html" class="Module">Cubical.Core.Primitives</a> <a id="2398" class="Keyword">public</a>
   <a id="2407" class="Keyword">using</a> <a id="2413" class="Symbol">(</a><a id="2414" href="Agda.Primitive.html#388" class="Primitive">Type</a><a id="2418" class="Symbol">;</a> <a id="2420" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="2425" class="Symbol">;</a> <a id="2427" href="Agda.Primitive.html#915" class="Primitive">ℓ-zero</a><a id="2433" class="Symbol">;</a> <a id="2435" href="Agda.Primitive.html#931" class="Primitive">ℓ-suc</a><a id="2440" class="Symbol">)</a>
   <a id="2444" class="Keyword">renaming</a> <a id="2453" class="Symbol">(</a><a id="2454" href="Agda.Primitive.html#961" class="Primitive Operator">ℓ-max</a> <a id="2460" class="Symbol">to</a> <a id="2463" class="Primitive Operator">_⊔_</a><a id="2466" class="Symbol">)</a>
 </pre>
-<p>我们约定在系列文章中都使用 <code>ℓ</code> 和 <code>ℓ′</code> 表示宇宙层级参数. 例如 <code>A : Type ℓ</code> 表示任意给定的宇宙层级 <code>ℓ</code> 的类型 <code>A</code>.</p>
+我们约定在系列文章中都使用 `ℓ` 和 `ℓ′` 表示宇宙层级参数. 例如 `A : Type ℓ` 表示任意给定的宇宙层级 `ℓ` 的类型 `A`.
+
 <pre class="Agda"><a id="2558" class="Keyword">variable</a> <a id="2567" href="Preliminary.html#2567" class="Generalizable">ℓ</a> <a id="2569" href="Preliminary.html#2569" class="Generalizable">ℓ′</a> <a id="2572" class="Symbol">:</a> <a id="2574" href="Agda.Primitive.html#742" class="Postulate">Level</a>
 </pre>
-<p>关于宇宙层级的作用我们在接下来的几小节穿插讲解.</p>
-<h3 id="函数类型">函数类型</h3>
-<p>如质料集合论中的原始概念 <span class="math inline">∈</span> 那样, 类型论中的 <span class="math inline">→</span> 也是一个原始概念. 它是一个<strong>类型形成子 (type former)</strong>, 给定 <code>A : Type ℓ</code> 和 <code>B : Type ℓ′</code>, 那么 <code>A → B</code> 是一个新的类型, 它就是 <span class="math inline">A</span> 到 <span class="math inline">B</span> 的<strong>函数类型 (function type)</strong>. 注意 <code>A → B</code> 位于宇宙 <code>Type (ℓ ⊔ ℓ′)</code> 之中, 因为 <code>A → B</code> 要位于 <code>A</code> 和 <code>B</code> 所位于的宇宙的较大者之中.</p>
-<p>函数类型的项具有 lambda 表达式的形式. 例如恒等函数 <span class="math inline">f : A → A</span> 定义为 <span class="math inline">f ≔ λx.x</span>. 在 Agda 中定义符号 ≔ 就写作普通等号 =, 分隔绑定变量与表达式的点号 <span class="math inline">.</span> 写作 <span class="math inline">→</span>, 所以上式在代码中写作 <code>f = λ x → x</code>. 我们今后只采用这一种写法. 注意不要跟作为类型形成子的 <code>→</code> 混淆.</p>
-<p>扩展函数类型的概念, 我们有类型宇宙上的函数类型, 如 <code>Type ℓ → Type ℓ′</code>. 尝试理解以下代码, 这是 Agda 中定义新的项的最常用写法, 先写项的类型判断, 再换一行写这个项的定义. 其中 <code>_</code> 表示我们定义的是一个匿名项, 它无法被引用, 举例子的时候经常用到这种写法.</p>
+关于宇宙层级的作用我们在接下来的几小节穿插讲解.
+
+### 函数类型
+
+如质料集合论中的原始概念 $∈$ 那样, 类型论中的 $→$ 也是一个原始概念. 它是一个**类型形成子 (type former)**, 给定 `A : Type ℓ` 和 `B : Type ℓ′`, 那么 `A → B` 是一个新的类型, 它就是 $A$ 到 $B$ 的**函数类型 (function type)**. 注意 `A → B` 位于宇宙 `Type (ℓ ⊔ ℓ′)` 之中, 因为 `A → B` 要位于 `A` 和 `B` 所位于的宇宙的较大者之中.
+
+函数类型的项具有 lambda 表达式的形式. 例如恒等函数 $f : A → A$ 定义为 $f ≔ λx.x$. 在 Agda 中定义符号 ≔ 就写作普通等号 =, 分隔绑定变量与表达式的点号 $.$ 写作 $→$, 所以上式在代码中写作 `f = λ x → x`. 我们今后只采用这一种写法. 注意不要跟作为类型形成子的 `→` 混淆.
+
+扩展函数类型的概念, 我们有类型宇宙上的函数类型, 如 `Type ℓ → Type ℓ′`. 尝试理解以下代码, 这是 Agda 中定义新的项的最常用写法, 先写项的类型判断, 再换一行写这个项的定义. 其中 `_` 表示我们定义的是一个匿名项, 它无法被引用, 举例子的时候经常用到这种写法.
+
 <pre class="Agda"><a id="3193" href="Preliminary.html#3193" class="Function">_</a> <a id="3195" class="Symbol">:</a> <a id="3197" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="3202" href="Preliminary.html#2567" class="Generalizable">ℓ</a> <a id="3204" class="Symbol">→</a> <a id="3206" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="3211" href="Preliminary.html#2569" class="Generalizable">ℓ′</a> <a id="3214" class="Symbol">→</a> <a id="3216" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="3221" class="Symbol">(</a><a id="3222" href="Preliminary.html#2567" class="Generalizable">ℓ</a> <a id="3224" href="Preliminary.html#2463" class="Primitive Operator">⊔</a> <a id="3226" href="Preliminary.html#2569" class="Generalizable">ℓ′</a><a id="3228" class="Symbol">)</a>
 <a id="3230" class="Symbol">_</a> <a id="3232" class="Symbol">=</a> <a id="3234" class="Symbol">λ</a> <a id="3236" href="Preliminary.html#3236" class="Bound">A</a> <a id="3238" href="Preliminary.html#3238" class="Bound">B</a> <a id="3240" class="Symbol">→</a> <a id="3242" href="Preliminary.html#3236" class="Bound">A</a> <a id="3244" class="Symbol">→</a> <a id="3246" href="Preliminary.html#3238" class="Bound">B</a>
 </pre>
-<p>最后面的 <code>Type (ℓ ⊔ ℓ′)</code> 可以简写作 <code>Type _</code>, 因为 Agda 可以推断出 <code>A → B</code> 必须位于 <code>ℓ ⊔ ℓ′</code> 宇宙.</p>
+最后面的 `Type (ℓ ⊔ ℓ′)` 可以简写作 `Type _`, 因为 Agda 可以推断出 `A → B` 必须位于 `ℓ ⊔ ℓ′` 宇宙.
+
 <pre class="Agda"><a id="3339" href="Preliminary.html#3339" class="Function">_</a> <a id="3341" class="Symbol">:</a> <a id="3343" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="3348" href="Preliminary.html#2567" class="Generalizable">ℓ</a> <a id="3350" class="Symbol">→</a> <a id="3352" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="3357" href="Preliminary.html#2569" class="Generalizable">ℓ′</a> <a id="3360" class="Symbol">→</a> <a id="3362" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="3367" class="Symbol">_</a>
 <a id="3369" class="Symbol">_</a> <a id="3371" class="Symbol">=</a> <a id="3373" class="Symbol">λ</a> <a id="3375" href="Preliminary.html#3375" class="Bound">A</a> <a id="3377" href="Preliminary.html#3377" class="Bound">B</a> <a id="3379" class="Symbol">→</a> <a id="3381" href="Preliminary.html#3375" class="Bound">A</a> <a id="3383" class="Symbol">→</a> <a id="3385" href="Preliminary.html#3377" class="Bound">B</a>
 </pre>
-<h3 id="类型族">类型族</h3>
-<p>我们继续扩展函数类型的概念. 给定 <code>A : Type ℓ</code>, 那么 <code>A → Type ℓ′</code> 就叫做以 <code>A</code> 为<strong>索引 (index)</strong>的<strong>类型族 (family of type)</strong>. 我们知道命题也是类型, 那么类型族的一个简单的例子是关于 <code>A</code> 的谓词, 它就具有 <code>A → Type ℓ′</code> 的类型. 给定关于 <code>A</code> 的谓词 <code>B : A → Type ℓ′</code> 以及一个 <code>a : A</code>, 那么 <code>B a</code> 就表示 “<code>a</code> 满足 <code>B</code>” 这一命题. 注意这里写的 <code>B a</code> 是一个函数应用, 在 Agda 中没有歧义的情况下函数应用不需要加括号, 我们也遵循这一惯例.</p>
-<p>类型族 <code>A → Type ℓ′</code> 位于类型宇宙 <code>Type (ℓ ⊔ ℓ-suc ℓ′)</code> 之中. 这是因为类型宇宙 <code>Type ℓ′</code> 本身位于下一个宇宙 <code>Type (ℓ-suc ℓ′)</code> 之中, 而 <code>A → Type ℓ′</code> 要位于 <code>A</code> 和 <code>Type ℓ′</code> 所位于的宇宙的较大者之中.</p>
+### 类型族
+
+我们继续扩展函数类型的概念. 给定 `A : Type ℓ`, 那么 `A → Type ℓ′` 就叫做以 `A` 为**索引 (index)**的**类型族 (family of type)**. 我们知道命题也是类型, 那么类型族的一个简单的例子是关于 `A` 的谓词, 它就具有 `A → Type ℓ′` 的类型. 给定关于 `A` 的谓词 `B : A → Type ℓ′` 以及一个 `a : A`, 那么 `B a` 就表示 "`a` 满足 `B`" 这一命题. 注意这里写的 `B a` 是一个函数应用, 在 Agda 中没有歧义的情况下函数应用不需要加括号, 我们也遵循这一惯例.
+
+类型族 `A → Type ℓ′` 位于类型宇宙 `Type (ℓ ⊔ ℓ-suc ℓ′)` 之中. 这是因为类型宇宙 `Type ℓ′` 本身位于下一个宇宙 `Type (ℓ-suc ℓ′)` 之中, 而 `A → Type ℓ′` 要位于 `A` 和 `Type ℓ′` 所位于的宇宙的较大者之中.
+
 <pre class="Agda"><a id="3863" href="Preliminary.html#3863" class="Function">_</a> <a id="3865" class="Symbol">:</a> <a id="3867" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="3872" href="Preliminary.html#2567" class="Generalizable">ℓ</a> <a id="3874" class="Symbol">→</a> <a id="3876" class="Symbol">(</a><a id="3877" href="Preliminary.html#3877" class="Bound">ℓ′</a> <a id="3880" class="Symbol">:</a> <a id="3882" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="3887" class="Symbol">)</a> <a id="3889" class="Symbol">→</a> <a id="3891" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="3896" class="Symbol">(</a><a id="3897" href="Preliminary.html#2567" class="Generalizable">ℓ</a> <a id="3899" href="Preliminary.html#2463" class="Primitive Operator">⊔</a> <a id="3901" href="Agda.Primitive.html#931" class="Primitive">ℓ-suc</a> <a id="3907" href="Preliminary.html#3877" class="Bound">ℓ′</a><a id="3909" class="Symbol">)</a>
 <a id="3911" class="Symbol">_</a> <a id="3913" class="Symbol">=</a> <a id="3915" class="Symbol">λ</a> <a id="3917" href="Preliminary.html#3917" class="Bound">A</a> <a id="3919" href="Preliminary.html#3919" class="Bound">ℓ′</a> <a id="3922" class="Symbol">→</a> <a id="3924" href="Preliminary.html#3917" class="Bound">A</a> <a id="3926" class="Symbol">→</a> <a id="3928" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="3933" href="Preliminary.html#3919" class="Bound">ℓ′</a>
 </pre>
-<h3 id="依值函数类型-π类型">依值函数类型 (Π类型)</h3>
-<p>我们继续扩展函数类型的概念. 给定 <code>A : Type ℓ</code> 和 <code>B : A → Type ℓ′</code>, 那么 <code>(x : A) → B x</code> 叫做<strong>依值函数类型 (dependent function type)</strong>, 也叫做<strong>Π类型 (Pi type)</strong>. 它是函数类型 <code>A → B</code> 的依值版本, 可以看到它们具有类似的形式. Π类型在非形式的文献里一般写作 <span class="math inline">\Pi_{x : A} B(x)</span>, 在 Agda 中还可以写作 <code>∀ x → B x</code> 或者 <code>∀ (x : A) → B x</code>. 采用”命题即类型”的解读, Π类型可以简单理解为是全称量化命题所具有的类型.</p>
-<p>Π类型 <code>∀ x → B x</code> 位于类型宇宙 <code>Type (ℓ ⊔ ℓ′)</code>, 这与函数类型 <code>A → B</code> 的情况是一样的.</p>
+### 依值函数类型 (Π类型)
+
+我们继续扩展函数类型的概念. 给定 `A : Type ℓ` 和 `B : A → Type ℓ′`, 那么 `(x : A) → B x` 叫做**依值函数类型 (dependent function type)**, 也叫做**Π类型 (Pi type)**. 它是函数类型 `A → B` 的依值版本, 可以看到它们具有类似的形式. Π类型在非形式的文献里一般写作 $\Pi_{x : A} B(x)$, 在 Agda 中还可以写作 `∀ x → B x` 或者 `∀ (x : A) → B x`. 采用"命题即类型"的解读, Π类型可以简单理解为是全称量化命题所具有的类型.
+
+Π类型 `∀ x → B x` 位于类型宇宙 `Type (ℓ ⊔ ℓ′)`, 这与函数类型 `A → B` 的情况是一样的.
+
 <pre class="Agda"><a id="4326" href="Preliminary.html#4326" class="Function">_</a> <a id="4328" class="Symbol">:</a> <a id="4330" class="Symbol">(</a><a id="4331" href="Preliminary.html#4331" class="Bound">A</a> <a id="4333" class="Symbol">:</a> <a id="4335" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="4340" href="Preliminary.html#2567" class="Generalizable">ℓ</a><a id="4341" class="Symbol">)</a> <a id="4343" class="Symbol">→</a> <a id="4345" class="Symbol">(</a><a id="4346" href="Preliminary.html#4331" class="Bound">A</a> <a id="4348" class="Symbol">→</a> <a id="4350" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="4355" href="Preliminary.html#2569" class="Generalizable">ℓ′</a><a id="4357" class="Symbol">)</a> <a id="4359" class="Symbol">→</a> <a id="4361" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="4366" class="Symbol">(</a><a id="4367" href="Preliminary.html#2567" class="Generalizable">ℓ</a> <a id="4369" href="Preliminary.html#2463" class="Primitive Operator">⊔</a> <a id="4371" href="Preliminary.html#2569" class="Generalizable">ℓ′</a><a id="4373" class="Symbol">)</a>
 <a id="4375" class="Symbol">_</a> <a id="4377" class="Symbol">=</a> <a id="4379" class="Symbol">λ</a> <a id="4381" href="Preliminary.html#4381" class="Bound">A</a> <a id="4383" href="Preliminary.html#4383" class="Bound">B</a> <a id="4385" class="Symbol">→</a> <a id="4387" class="Symbol">∀</a> <a id="4389" href="Preliminary.html#4389" class="Bound">x</a> <a id="4391" class="Symbol">→</a> <a id="4393" href="Preliminary.html#4383" class="Bound">B</a> <a id="4395" href="Preliminary.html#4389" class="Bound">x</a>
 </pre>
-<p>我们导入 <code>Cubical</code> 库中关于函数的相关概念, 包括函数的应用 <code>_$_</code>, 函数的复合 <code>_∘_</code>, 恒等函数 <code>idfun</code>. 使用 <code>_$_</code> 可以少写一些括号, 例如 <code>f (g x)</code> 可以写作 <code>f $ g x</code>. 使用 <code>_∘_</code> 可以少写一些 lambda 表达式, 例如 <code>λ x → f (g x)</code> 可以写作 <code>f ∘ g</code>. <code>_$_</code> 和 <code>_∘_</code> 都适用于依值函数.</p>
+我们导入 `Cubical` 库中关于函数的相关概念, 包括函数的应用 `_$_`, 函数的复合 `_∘_`, 恒等函数 `idfun`. 使用 `_$_` 可以少写一些括号, 例如 `f (g x)` 可以写作 `f $ g x`. 使用 `_∘_` 可以少写一些 lambda 表达式, 例如 `λ x → f (g x)` 可以写作 `f ∘ g`. `_$_` 和 `_∘_` 都适用于依值函数.
+
 <pre class="Agda"><a id="4614" class="Keyword">open</a> <a id="4619" class="Keyword">import</a> <a id="4626" href="Cubical.Foundations.Function.html" class="Module">Cubical.Foundations.Function</a> <a id="4655" class="Keyword">public</a>
   <a id="4664" class="Keyword">using</a> <a id="4670" class="Symbol">(</a><a id="4671" href="Cubical.Foundations.Function.html#527" class="Function Operator">_$_</a><a id="4674" class="Symbol">;</a> <a id="4676" href="Cubical.Foundations.Function.html#653" class="Function Operator">_∘_</a><a id="4679" class="Symbol">;</a> <a id="4681" href="Cubical.Foundations.Function.html#468" class="Function">idfun</a><a id="4686" class="Symbol">)</a>
 </pre>
-<h3 id="依值配对类型-σ类型">依值配对类型 (Σ类型)</h3>
-<p><strong>依值配对类型 (dependent pair type)</strong>, 也叫做<strong>Σ类型 (Sigma type)</strong>, 可以看作是Π类型的反柯里化. 也就是说, 以下两个类型是等价的.</p>
-<p><code>∀ x → B x → C</code></p>
-<p><code>(Σ A B) → C</code></p>
-<p>逻辑上可以解读为, “对任意 <code>x</code>, 如果 <code>B x</code> 成立, 那么 <code>C</code> 成立” 等价于 “如果存在 <code>x</code>, 使得 <code>B x</code> 成立,那么 <code>C</code> 成立”. 但要注意我们后面会对逻辑上的存在量词有更加精确的刻画, 它并不完全对应于Σ类型. 我们有时会把 <code>Σ A B</code> 读作 “<code>A</code> 配备上结构 <code>B</code>”.</p>
-<p>库中的 <code>Σ-syntax</code> 提供了Σ类型 <code>Σ A B</code> 另一种写法 <code>Σ[ x ∈ A ] B x</code>, 方便做变量绑定. <strong>积类型 (product type)</strong> <code>A × B</code> 定义为 <code>Σ A (λ _ → B)</code>, 这是Σ类型的非依值版本, 对应于笛卡尔积. 不论是依值配对还是非依值配对, 我们都可以用 <code>fst</code> 取得配对的左边, <code>snd</code> 取得配对的右边.</p>
+### 依值配对类型 (Σ类型)
+
+**依值配对类型 (dependent pair type)**, 也叫做**Σ类型 (Sigma type)**, 可以看作是Π类型的反柯里化. 也就是说, 以下两个类型是等价的.
+
+`∀ x → B x → C`
+
+`(Σ A B) → C`
+
+逻辑上可以解读为, "对任意 `x`, 如果 `B x` 成立, 那么 `C` 成立" 等价于 "如果存在 `x`, 使得 `B x` 成立,那么 `C` 成立". 但要注意我们后面会对逻辑上的存在量词有更加精确的刻画, 它并不完全对应于Σ类型. 我们有时会把 `Σ A B` 读作 "`A` 配备上结构 `B`".
+
+库中的 `Σ-syntax` 提供了Σ类型 `Σ A B` 另一种写法 `Σ[ x ∈ A ] B x`, 方便做变量绑定. **积类型 (product type)** `A × B` 定义为 `Σ A (λ _ → B)`, 这是Σ类型的非依值版本, 对应于笛卡尔积. 不论是依值配对还是非依值配对, 我们都可以用 `fst` 取得配对的左边, `snd` 取得配对的右边.
+
 <pre class="Agda"><a id="5195" class="Keyword">open</a> <a id="5200" class="Keyword">import</a> <a id="5207" href="Cubical.Data.Sigma.html" class="Module">Cubical.Data.Sigma</a> <a id="5226" class="Keyword">public</a>
   <a id="5235" class="Keyword">using</a> <a id="5241" class="Symbol">(</a><a id="5242" href="Agda.Builtin.Sigma.html#165" class="Record">Σ</a><a id="5243" class="Symbol">;</a> <a id="5245" href="Cubical.Core.Primitives.html#6268" class="Function">Σ-syntax</a><a id="5253" class="Symbol">;</a> <a id="5255" href="Cubical.Data.Sigma.Base.html#461" class="Function Operator">_×_</a><a id="5258" class="Symbol">;</a> <a id="5260" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">_,_</a><a id="5263" class="Symbol">;</a> <a id="5265" href="Agda.Builtin.Sigma.html#251" class="Field">fst</a><a id="5268" class="Symbol">;</a> <a id="5270" href="Agda.Builtin.Sigma.html#263" class="Field">snd</a><a id="5273" class="Symbol">)</a>
 </pre>
-<p>Σ类型 <code>Σ A B</code> 位于类型宇宙 <code>Type (ℓ ⊔ ℓ′)</code> 之中, 这与Π类型的情况是一样的.</p>
+Σ类型 `Σ A B` 位于类型宇宙 `Type (ℓ ⊔ ℓ′)` 之中, 这与Π类型的情况是一样的.
+
 <pre class="Agda"><a id="5342" href="Preliminary.html#5342" class="Function">_</a> <a id="5344" class="Symbol">:</a> <a id="5346" class="Symbol">(</a><a id="5347" href="Preliminary.html#5347" class="Bound">A</a> <a id="5349" class="Symbol">:</a> <a id="5351" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="5356" href="Preliminary.html#2567" class="Generalizable">ℓ</a><a id="5357" class="Symbol">)</a> <a id="5359" class="Symbol">→</a> <a id="5361" class="Symbol">(</a><a id="5362" href="Preliminary.html#5347" class="Bound">A</a> <a id="5364" class="Symbol">→</a> <a id="5366" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="5371" href="Preliminary.html#2569" class="Generalizable">ℓ′</a><a id="5373" class="Symbol">)</a> <a id="5375" class="Symbol">→</a> <a id="5377" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="5382" class="Symbol">(</a><a id="5383" href="Preliminary.html#2567" class="Generalizable">ℓ</a> <a id="5385" href="Preliminary.html#2463" class="Primitive Operator">⊔</a> <a id="5387" href="Preliminary.html#2569" class="Generalizable">ℓ′</a><a id="5389" class="Symbol">)</a>
 <a id="5391" class="Symbol">_</a> <a id="5393" class="Symbol">=</a> <a id="5395" class="Symbol">λ</a> <a id="5397" href="Preliminary.html#5397" class="Bound">A</a> <a id="5399" href="Preliminary.html#5399" class="Bound">B</a> <a id="5401" class="Symbol">→</a> <a id="5403" href="Agda.Builtin.Sigma.html#165" class="Record">Σ</a> <a id="5405" href="Preliminary.html#5397" class="Bound">A</a> <a id="5407" href="Preliminary.html#5399" class="Bound">B</a>
 </pre>
-<h3 id="基本数据类型">基本数据类型</h3>
-<p>上面讲的类型都是从已有的类型构造新的类型, 而本小节将介绍具体的类型.</p>
-<p>空类型 <code>⊥ : Type</code> 是其项无法被构造的类型, 对应于逻辑假, 正如假无法被证明. <code>⊥-rec</code> 是爆炸律, 即我们可以通过证明假来证明任何命题.</p>
+### 基本数据类型
+
+上面讲的类型都是从已有的类型构造新的类型, 而本小节将介绍具体的类型.
+
+空类型 `⊥ : Type` 是其项无法被构造的类型, 对应于逻辑假, 正如假无法被证明. `⊥-rec` 是爆炸律, 即我们可以通过证明假来证明任何命题.
+
 <pre class="Agda"><a id="5551" class="Keyword">open</a> <a id="5556" class="Keyword">import</a> <a id="5563" href="Cubical.Data.Empty.html" class="Module">Cubical.Data.Empty</a> <a id="5582" class="Keyword">public</a>
   <a id="5591" class="Keyword">using</a> <a id="5597" class="Symbol">(</a><a id="5598" href="Cubical.Data.Empty.Base.html#145" class="Datatype">⊥</a><a id="5599" class="Symbol">)</a> <a id="5601" class="Keyword">renaming</a> <a id="5610" class="Symbol">(</a><a id="5611" href="Cubical.Data.Empty.Base.html#187" class="Function">rec</a> <a id="5615" class="Symbol">to</a> <a id="5618" class="Function">⊥-rec</a><a id="5623" class="Symbol">)</a>
 </pre>
-<p>命题 <code>A</code> 的否定是 <code>A</code> 到 <code>⊥</code> 的函数 <code>A → ⊥</code>, 简记作 <code>¬ A</code>.</p>
+命题 `A` 的否定是 `A` 到 `⊥` 的函数 `A → ⊥`, 简记作 `¬ A`.
+
 <pre class="Agda"><a id="5685" class="Keyword">open</a> <a id="5690" class="Keyword">import</a> <a id="5697" href="Cubical.Relation.Nullary.html" class="Module">Cubical.Relation.Nullary</a> <a id="5722" class="Keyword">public</a> <a id="5729" class="Keyword">using</a> <a id="5735" class="Symbol">(</a><a id="5736" href="Cubical.Relation.Nullary.Base.html#355" class="Function Operator">¬_</a><a id="5738" class="Symbol">)</a>
 </pre>
-<p>单元类型 <code>Unit : Type</code> 对应于逻辑真, 它只有一个项 <code>tt : Unit</code>. 本文不需要用到.</p>
-<p>自然数类型由以下两条规则归纳定义而成.</p>
-<pre><code>--------
-zero : ℕ
+单元类型 `Unit : Type` 对应于逻辑真, 它只有一个项 `tt : Unit`. 本文不需要用到.
 
-m : ℕ
----------
-suc m : ℕ</code></pre>
+自然数类型由以下两条规则归纳定义而成.
+
+    --------
+    zero : ℕ
+
+    m : ℕ
+    ---------
+    suc m : ℕ
+
 <pre class="Agda"><a id="5897" class="Keyword">open</a> <a id="5902" class="Keyword">import</a> <a id="5909" href="Cubical.Data.Nat.html" class="Module">Cubical.Data.Nat</a> <a id="5926" class="Keyword">public</a> <a id="5933" class="Keyword">using</a> <a id="5939" class="Symbol">(</a><a id="5940" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a><a id="5941" class="Symbol">)</a>
 </pre>
-<p>至此我们快速回顾了 MLTT 的一些基本概念, 接下来将介绍泛等基础所特有的概念.</p>
-<h3 id="同伦层级">同伦层级</h3>
-<p>如果说宇宙层级是类型宇宙 <code>Type ℓ</code> 所具有的一种属性, 那么同伦层级 (hLevel) 则是类型 <code>A : Type ℓ</code> 所具有的一种属性. 更具体的解释可以参考同伦类型论 (homotopy type theory, 简称 HoTT) 的相关资料, 本文中我们只关心同伦层级为 1 和 2 的两种类型.</p>
-<p>同伦层级为 1 的类型叫做命题, 该类类型的任意项都可证相等. “类型 <code>A</code> 是命题” 表达为 <code>isProp A</code>. 如所期待的那样, 类型 <code>isProp A</code> 也是一个命题, 即对任意 <code>A : Type ℓ</code> 可证 <code>isProp (isProp A)</code>. 我们也说 <code>isProp</code> 是一个谓词.</p>
-<p>同伦层级为 2 的类型叫做集合, 该类类型的任意两个项的相等都是命题, 即给定两个项相等的任意两个证明, 这两个证明是相等的. “类型 <code>A</code> 是集合” 表达为 <code>isSet A</code>. 与 <code>isProp</code> 一样, <code>isSet</code> 也是一个谓词. 此外我们有 <code>isProp→isSet</code>, 即任意命题都是集合. 直观上, 由于命题的任意项都相等, 那么这些项之间的相等的方式也应该是相等的, 所以命题也是集合.</p>
+至此我们快速回顾了 MLTT 的一些基本概念, 接下来将介绍泛等基础所特有的概念.
+
+### 同伦层级
+
+如果说宇宙层级是类型宇宙 `Type ℓ` 所具有的一种属性, 那么同伦层级 (hLevel) 则是类型 `A : Type ℓ` 所具有的一种属性. 更具体的解释可以参考同伦类型论 (homotopy type theory, 简称 HoTT) 的相关资料, 本文中我们只关心同伦层级为 1 和 2 的两种类型.
+
+同伦层级为 1 的类型叫做命题, 该类类型的任意项都可证相等. "类型 `A` 是命题" 表达为 `isProp A`. 如所期待的那样, 类型 `isProp A` 也是一个命题, 即对任意 `A : Type ℓ` 可证 `isProp (isProp A)`. 我们也说 `isProp` 是一个谓词.
+
+同伦层级为 2 的类型叫做集合, 该类类型的任意两个项的相等都是命题, 即给定两个项相等的任意两个证明, 这两个证明是相等的. "类型 `A` 是集合" 表达为 `isSet A`. 与 `isProp` 一样, `isSet` 也是一个谓词. 此外我们有 `isProp→isSet`, 即任意命题都是集合. 直观上, 由于命题的任意项都相等, 那么这些项之间的相等的方式也应该是相等的, 所以命题也是集合.
+
 <pre class="Agda"><a id="6531" class="Keyword">open</a> <a id="6536" class="Keyword">import</a> <a id="6543" href="Cubical.Foundations.Prelude.html" class="Module">Cubical.Foundations.Prelude</a> <a id="6571" class="Keyword">public</a>
   <a id="6580" class="Keyword">using</a> <a id="6586" class="Symbol">(</a><a id="6587" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a><a id="6593" class="Symbol">;</a> <a id="6595" href="Cubical.Foundations.Prelude.html#14301" class="Function">isSet</a><a id="6600" class="Symbol">;</a> <a id="6602" href="Cubical.Foundations.Prelude.html#18523" class="Function">isProp→isSet</a><a id="6614" class="Symbol">)</a>
 </pre>
-<p>可以证明空类型是命题, 自然数类型是集合.</p>
+可以证明空类型是命题, 自然数类型是集合.
+
 <pre class="Agda"><a id="6652" class="Keyword">open</a> <a id="6657" class="Keyword">import</a> <a id="6664" href="Cubical.Data.Empty.html" class="Module">Cubical.Data.Empty</a> <a id="6683" class="Keyword">public</a> <a id="6690" class="Keyword">using</a> <a id="6696" class="Symbol">(</a><a id="6697" href="Cubical.Data.Empty.Properties.html#228" class="Function">isProp⊥</a><a id="6704" class="Symbol">)</a>
 <a id="6706" class="Keyword">open</a> <a id="6711" class="Keyword">import</a> <a id="6718" href="Cubical.Data.Nat.html" class="Module">Cubical.Data.Nat</a> <a id="6735" class="Keyword">public</a> <a id="6742" class="Keyword">using</a> <a id="6748" class="Symbol">(</a><a id="6749" href="Cubical.Data.Nat.Properties.html#3705" class="Function">isSetℕ</a><a id="6755" class="Symbol">)</a>
 </pre>
-<p>对于嵌套的Π类型, 不管嵌套多少次, 只要最后的目标是命题 (或集合), 那么整个嵌套Π类型也是命题 (或集合). 如果构成Σ类型的两边都是命题 (或集合), 那么这个Σ类型也是命题 (或集合).</p>
+对于嵌套的Π类型, 不管嵌套多少次, 只要最后的目标是命题 (或集合), 那么整个嵌套Π类型也是命题 (或集合). 如果构成Σ类型的两边都是命题 (或集合), 那么这个Σ类型也是命题 (或集合).
+
 <pre class="Agda"><a id="6870" class="Keyword">open</a> <a id="6875" class="Keyword">import</a> <a id="6882" href="Cubical.Foundations.HLevels.html" class="Module">Cubical.Foundations.HLevels</a> <a id="6910" class="Keyword">public</a>
   <a id="6919" class="Keyword">using</a> <a id="6925" class="Symbol">(</a> <a id="6927" href="Cubical.Foundations.HLevels.html#16363" class="Function">isPropΠ</a><a id="6934" class="Symbol">;</a> <a id="6936" href="Cubical.Foundations.HLevels.html#16452" class="Function">isPropΠ2</a><a id="6944" class="Symbol">;</a> <a id="6946" href="Cubical.Foundations.HLevels.html#16598" class="Function">isPropΠ3</a><a id="6954" class="Symbol">;</a> <a id="6956" href="Cubical.Foundations.HLevels.html#16788" class="Function">isPropΠ4</a><a id="6964" class="Symbol">;</a> <a id="6966" href="Cubical.Foundations.HLevels.html#16992" class="Function">isPropΠ5</a><a id="6974" class="Symbol">;</a> <a id="6976" href="Cubical.Foundations.HLevels.html#17232" class="Function">isPropΠ6</a>
         <a id="6993" class="Symbol">;</a> <a id="6995" href="Cubical.Foundations.HLevels.html#17906" class="Function">isSetΠ</a><a id="7001" class="Symbol">;</a> <a id="7003" href="Cubical.Foundations.HLevels.html#12848" class="Function">isSetΣ</a><a id="7009" class="Symbol">)</a>
 </pre>
-<p>命题宇宙 <code>hProp ℓ</code> 定义为 <code>Type ℓ</code> 配备上结构 <code>isProp</code>, 即 <code>hProp ℓ = Σ (Type ℓ) isProp</code>. 引理 <code>isSetHProp</code> 告诉我们, 命题宇宙 <code>hProp ℓ</code> 是集合.</p>
+命题宇宙 `hProp ℓ` 定义为 `Type ℓ` 配备上结构 `isProp`, 即 `hProp ℓ = Σ (Type ℓ) isProp`. 引理 `isSetHProp` 告诉我们, 命题宇宙 `hProp ℓ` 是集合.
+
 <pre class="Agda"><a id="7144" class="Keyword">open</a> <a id="7149" class="Keyword">import</a> <a id="7156" href="Cubical.Foundations.HLevels.html" class="Module">Cubical.Foundations.HLevels</a> <a id="7184" class="Keyword">public</a> <a id="7191" class="Keyword">using</a> <a id="7197" class="Symbol">(</a><a id="7198" href="Cubical.Foundations.HLevels.html#2018" class="Function">hProp</a><a id="7203" class="Symbol">;</a> <a id="7205" href="Cubical.Foundations.HLevels.html#22223" class="Function">isSetHProp</a><a id="7215" class="Symbol">)</a>
 </pre>
-<p>类似地, 集合宇宙 <code>hSet ℓ</code> 定义为 <code>Type ℓ</code> 配备上结构 <code>isSet</code>, 即 <code>hSet ℓ = Σ (Type ℓ) isSet</code>. 但本文中不直接使用 <code>hSet</code>. 为了方便处理, 我们会尽可能地使用它们的柯里化版本, 即说 “给定类型 <code>A</code>, 如果它是命题 (或集合), 那么怎么怎么样”, 而不说 “给定命题 (或集合) <code>A</code>, 怎么怎么样”.</p>
-<p>我们把具有某种结构的类型宇宙叫做 <code>TypeWithStr</code>, 并用 <code>⟨_⟩</code> 取得其左边的类型, 用 <code>str</code> 取得其右边的结构. 例如对于 <code>A : hProp ℓ</code>, <code>⟨ A ⟩</code> 是一个类型, <code>str A</code> 是 “<code>⟨ A ⟩</code> 是命题” 的证据.</p>
+类似地, 集合宇宙 `hSet ℓ` 定义为 `Type ℓ` 配备上结构 `isSet`, 即 `hSet ℓ = Σ (Type ℓ) isSet`. 但本文中不直接使用 `hSet`. 为了方便处理, 我们会尽可能地使用它们的柯里化版本, 即说 "给定类型 `A`, 如果它是命题 (或集合), 那么怎么怎么样", 而不说 "给定命题 (或集合) `A`, 怎么怎么样".
+
+我们把具有某种结构的类型宇宙叫做 `TypeWithStr`, 并用 `⟨_⟩` 取得其左边的类型, 用 `str` 取得其右边的结构. 例如对于 `A : hProp ℓ`, `⟨ A ⟩` 是一个类型, `str A` 是 "`⟨ A ⟩` 是命题" 的证据.
+
 <pre class="Agda"><a id="7555" class="Keyword">open</a> <a id="7560" class="Keyword">import</a> <a id="7567" href="Cubical.Foundations.Structure.html" class="Module">Cubical.Foundations.Structure</a> <a id="7597" class="Keyword">public</a>
   <a id="7606" class="Keyword">using</a> <a id="7612" class="Symbol">(</a><a id="7613" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟨_⟩</a><a id="7616" class="Symbol">;</a> <a id="7618" href="Cubical.Foundations.Structure.html#556" class="Function">str</a><a id="7621" class="Symbol">)</a>
 </pre>
-<h3 id="命题截断">命题截断</h3>
-<p>命题截断 <code>∥_∥₁</code> 用于把一个可能不是命题的类型转化为命题. <code>∣_∣₁</code> 用于构造命题截断的项, <code>squash₁</code> 用于证明命题截断后的类型的项确实都是相等的.</p>
+### 命题截断
+
+命题截断 `∥_∥₁` 用于把一个可能不是命题的类型转化为命题. `∣_∣₁` 用于构造命题截断的项, `squash₁` 用于证明命题截断后的类型的项确实都是相等的.
+
 <pre class="Agda"><a id="7732" class="Keyword">open</a> <a id="7737" class="Keyword">import</a> <a id="7744" href="Cubical.HITs.PropositionalTruncation.html" class="Module">Cubical.HITs.PropositionalTruncation</a> <a id="7781" class="Keyword">public</a>
   <a id="7790" class="Keyword">using</a> <a id="7796" class="Symbol">(</a><a id="7797" href="Cubical.HITs.PropositionalTruncation.Base.html#249" class="Datatype Operator">∥_∥₁</a><a id="7801" class="Symbol">;</a> <a id="7803" href="Cubical.HITs.PropositionalTruncation.Base.html#288" class="InductiveConstructor Operator">∣_∣₁</a><a id="7807" class="Symbol">;</a> <a id="7809" href="Cubical.HITs.PropositionalTruncation.Base.html#308" class="InductiveConstructor">squash₁</a><a id="7816" class="Symbol">)</a>
 </pre>
-<p>我们有引理 <code>∥∥-rec</code>, 它说如果目标 <code>P</code> 是命题, 那么我们可以通过证明 <code>A → P</code> 来证明 <code>∥ A ∥₁ → P</code>.<br />
-我们有引理 <code>∥∥-map2</code>, 它说可以通过证明 <code>A → B → C</code> 来证明 <code>∥ A ∥₁ → ∥ B ∥₁ → ∥ C ∥₁</code>.</p>
+我们有引理 `∥∥-rec`, 它说如果目标 `P` 是命题, 那么我们可以通过证明 `A → P` 来证明 `∥ A ∥₁ → P`.  
+我们有引理 `∥∥-map2`, 它说可以通过证明 `A → B → C` 来证明 `∥ A ∥₁ → ∥ B ∥₁ → ∥ C ∥₁`.
+
 <pre class="Agda">  <a id="7975" class="Keyword">renaming</a> <a id="7984" class="Symbol">(</a><a id="7985" href="Cubical.HITs.PropositionalTruncation.Properties.html#894" class="Function">rec</a> <a id="7989" class="Symbol">to</a> <a id="7992" class="Function">∥∥-rec</a><a id="7998" class="Symbol">;</a> <a id="8000" href="Cubical.HITs.PropositionalTruncation.Properties.html#6585" class="Function">map2</a> <a id="8005" class="Symbol">to</a> <a id="8008" class="Function">∥∥-map2</a><a id="8015" class="Symbol">)</a>
 </pre>
-<p>Σ类型的命题截断完全对应了逻辑上的存在量化命题.</p>
+Σ类型的命题截断完全对应了逻辑上的存在量化命题.
+
 <pre class="Agda"><a id="8056" class="Keyword">open</a> <a id="8061" class="Keyword">import</a> <a id="8068" href="Cubical.Data.Sigma.html" class="Module">Cubical.Data.Sigma</a> <a id="8087" class="Keyword">public</a> <a id="8094" class="Keyword">using</a> <a id="8100" class="Symbol">(</a><a id="8101" href="Cubical.Data.Sigma.Base.html#580" class="Function">∃</a><a id="8102" class="Symbol">;</a> <a id="8104" href="Cubical.Data.Sigma.Base.html#682" class="Function">∃-syntax</a><a id="8112" class="Symbol">)</a>
 </pre>
-<h3 id="相等类型">相等类型</h3>
-<p>“相等” 在泛等基础中是一个复杂的概念. 首先上面提到的库中的概念所涉及到的相等都采用了所谓<strong>路径类型 (path type)</strong>. 但本文中将使用定义为<strong>归纳类型族 (inductive type family)</strong> 的<strong>命题相等类型 (propositional equality)</strong>, 也就是下面导入的 <code>_≡_</code>. 两种相等类型的定义是等价的, 但后者在非同伦论的数学中更加直观, 也更加容易使用. 我们导入了一堆它们之间的相互转化引理: <code>eqToPath</code>, <code>pathToEq</code>, <code>Path≡Eq</code> 等, 以灵活处理各种情况. 使用 <code>Σ≡Prop</code> 可以通过证明两个依值配对的左边分别相等来证明这两个依值配对相等, 只要它们的右边是一个谓词.</p>
-<p><code>_≡_</code> 具有自反性 <code>refl</code>, 对称性 <code>sym</code> 和 传递性 <code>_∙_</code>. 其中 <code>refl</code> 是 <code>_≡_</code> 归纳类型的唯一构造子, 可以做模式匹配和反演推理. 实际上, 包括对称性和传递性在内的 <code>_≡_</code> 的其他性质都通过 <code>refl</code> 推导而来.</p>
-<p><code>ap</code> 也叫合同性, 它说 <code>x ≡ y → f x ≡ f y</code>.<br />
-<code>happly</code> 也叫做同伦应用, 它说 <code>f ≡ g → (x : A) → f x ≡ g x</code>.<br />
-<code>transport</code> 也叫做等量替换, 它说 <code>x ≡ y → P x → P y</code>.</p>
+### 相等类型
+
+"相等" 在泛等基础中是一个复杂的概念. 首先上面提到的库中的概念所涉及到的相等都采用了所谓**路径类型 (path type)**. 但本文中将使用定义为**归纳类型族 (inductive type family)** 的**命题相等类型 (propositional equality)**, 也就是下面导入的 `_≡_`. 两种相等类型的定义是等价的, 但后者在非同伦论的数学中更加直观, 也更加容易使用. 我们导入了一堆它们之间的相互转化引理: `eqToPath`, `pathToEq`, `Path≡Eq` 等, 以灵活处理各种情况. 使用 `Σ≡Prop` 可以通过证明两个依值配对的左边分别相等来证明这两个依值配对相等, 只要它们的右边是一个谓词.
+
+`_≡_` 具有自反性 `refl`, 对称性 `sym` 和 传递性 `_∙_`. 其中 `refl` 是 `_≡_` 归纳类型的唯一构造子, 可以做模式匹配和反演推理. 实际上, 包括对称性和传递性在内的 `_≡_` 的其他性质都通过 `refl` 推导而来.
+
+`ap` 也叫合同性, 它说 `x ≡ y → f x ≡ f y`.  
+`happly` 也叫做同伦应用, 它说 `f ≡ g → (x : A) → f x ≡ g x`.  
+`transport` 也叫做等量替换, 它说 `x ≡ y → P x → P y`.
+
 <pre class="Agda"><a id="8745" class="Keyword">open</a> <a id="8750" class="Keyword">import</a> <a id="8757" href="Cubical.Data.Equality.html" class="Module">Cubical.Data.Equality</a> <a id="8779" class="Keyword">public</a>
   <a id="8788" class="Keyword">using</a> <a id="8794" class="Symbol">(</a> <a id="8796" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">_≡_</a><a id="8799" class="Symbol">;</a> <a id="8801" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a><a id="8805" class="Symbol">;</a> <a id="8807" href="Cubical.Data.Equality.Base.html#1064" class="Function">sym</a><a id="8810" class="Symbol">;</a> <a id="8812" href="Cubical.Data.Equality.Base.html#754" class="Function Operator">_∙_</a><a id="8815" class="Symbol">;</a> <a id="8817" href="Cubical.Data.Equality.Base.html#675" class="Function">ap</a><a id="8819" class="Symbol">;</a> <a id="8821" href="Cubical.Data.Equality.Conversion.html#2697" class="Function">happly</a><a id="8827" class="Symbol">;</a> <a id="8829" href="Cubical.Data.Equality.Base.html#978" class="Function">transport</a>
         <a id="8847" class="Symbol">;</a> <a id="8849" href="Cubical.Data.Equality.Conversion.html#1778" class="Function">eqToPath</a><a id="8857" class="Symbol">;</a> <a id="8859" href="Cubical.Data.Equality.Conversion.html#1846" class="Function">pathToEq</a><a id="8867" class="Symbol">;</a> <a id="8869" href="Cubical.Data.Equality.Conversion.html#2621" class="Function">Path≡Eq</a><a id="8876" class="Symbol">;</a> <a id="8878" href="Cubical.Data.Equality.Conversion.html#5222" class="Function">isPropPathToIsProp</a><a id="8896" class="Symbol">;</a> <a id="8898" href="Cubical.Data.Equality.Conversion.html#3107" class="Function">Σ≡Prop</a><a id="8904" class="Symbol">)</a>
   <a id="8908" class="Keyword">renaming</a> <a id="8917" class="Symbol">(</a><a id="8918" href="Cubical.Data.Equality.PropositionalTruncation.html#592" class="Function">squash₁</a> <a id="8926" class="Symbol">to</a> <a id="8929" class="Function">squash₁Eq</a><a id="8938" class="Symbol">)</a>
 </pre>
-<p>以下引理会经常用到, 它将 “路径类型是命题” 的证明转化成 “相等类型是命题” 的证明.</p>
+以下引理会经常用到, 它将 "路径类型是命题" 的证明转化成 "相等类型是命题" 的证明.
+
 <pre class="Agda"><a id="9000" class="Keyword">open</a> <a id="9005" class="Keyword">import</a> <a id="9012" href="Agda.Builtin.Cubical.Path.html" class="Module">Agda.Builtin.Cubical.Path</a> <a id="9038" class="Keyword">public</a> <a id="9045" class="Keyword">renaming</a> <a id="9054" class="Symbol">(</a><a id="9055" href="Agda.Builtin.Cubical.Path.html#272" class="Function Operator">_≡_</a> <a id="9059" class="Symbol">to</a> <a id="9062" class="Function Operator">Path</a><a id="9066" class="Symbol">)</a>
 
 <a id="transportIsProp"></a><a id="9069" href="Preliminary.html#9069" class="Function">transportIsProp</a> <a id="9085" class="Symbol">:</a> <a id="9087" class="Symbol">{</a><a id="9088" href="Preliminary.html#9088" class="Bound">A</a> <a id="9090" class="Symbol">:</a> <a id="9092" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="9097" href="Preliminary.html#2567" class="Generalizable">ℓ</a><a id="9098" class="Symbol">}</a> <a id="9100" class="Symbol">{</a><a id="9101" href="Preliminary.html#9101" class="Bound">x</a> <a id="9103" href="Preliminary.html#9103" class="Bound">y</a> <a id="9105" class="Symbol">:</a> <a id="9107" href="Preliminary.html#9088" class="Bound">A</a><a id="9108" class="Symbol">}</a> <a id="9110" class="Symbol">→</a> <a id="9112" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a> <a id="9119" class="Symbol">(</a><a id="9120" href="Preliminary.html#9062" class="Function">Path</a> <a id="9125" href="Preliminary.html#9101" class="Bound">x</a> <a id="9127" href="Preliminary.html#9103" class="Bound">y</a><a id="9128" class="Symbol">)</a> <a id="9130" class="Symbol">→</a> <a id="9132" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a> <a id="9139" class="Symbol">(</a><a id="9140" href="Preliminary.html#9101" class="Bound">x</a> <a id="9142" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="9144" href="Preliminary.html#9103" class="Bound">y</a><a id="9145" class="Symbol">)</a>
 <a id="9147" href="Preliminary.html#9069" class="Function">transportIsProp</a> <a id="9163" class="Symbol">=</a> <a id="9165" href="Cubical.Data.Equality.Base.html#978" class="Function">transport</a> <a id="9175" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a> <a id="9182" href="Cubical.Data.Equality.Conversion.html#2621" class="Function">Path≡Eq</a>
 </pre>
-<h3 id="幂集">幂集</h3>
-<p>给定任意类型 <code>X : Type ℓ</code>, 我们把 <code>X</code> 到命题宇宙 <code>hProp ℓ</code> 的函数叫做 <code>X</code> 的幂集, 记作 <code>ℙ X</code>, 它的项也叫 <code>X</code> 的子集.</p>
-<p>给定项 <code>x : X</code> 和子集 <code>A : ℙ X</code>, “<code>x</code> 属于 <code>A</code>” 定义为 <code>⟨ A x ⟩</code>. <code>A</code> 是取值到 <code>hProp ℓ</code> 的函数, 这保证了属于关系是取值到命题的. 此外, 可以证明幂集确实是一个集合: <code>isSetℙ</code>.</p>
+### 幂集
+
+给定任意类型 `X : Type ℓ`, 我们把 `X` 到命题宇宙 `hProp ℓ` 的函数叫做 `X` 的幂集, 记作 `ℙ X`, 它的项也叫 `X` 的子集.
+
+给定项 `x : X` 和子集 `A : ℙ X`, "`x` 属于 `A`" 定义为 `⟨ A x ⟩`. `A` 是取值到 `hProp ℓ` 的函数, 这保证了属于关系是取值到命题的. 此外, 可以证明幂集确实是一个集合: `isSetℙ`.
+
 <pre class="Agda"><a id="9423" class="Keyword">open</a> <a id="9428" class="Keyword">import</a> <a id="9435" href="Cubical.Foundations.Powerset.html" class="Module">Cubical.Foundations.Powerset</a> <a id="9464" class="Keyword">public</a>
   <a id="9473" class="Keyword">using</a> <a id="9479" class="Symbol">(</a><a id="9480" href="Cubical.Foundations.Powerset.html#657" class="Function">ℙ</a><a id="9481" class="Symbol">;</a> <a id="9483" href="Cubical.Foundations.Powerset.html#772" class="Function Operator">_∈_</a><a id="9486" class="Symbol">;</a> <a id="9488" href="Cubical.Foundations.Powerset.html#704" class="Function">isSetℙ</a><a id="9494" class="Symbol">)</a>
 </pre>
-<p>不属于符号 <code>_∉_</code> 定义为 <code>_∈_</code> 的否定, 即 <code>x ∉ A = ¬ x ∈ A</code>.</p>
+不属于符号 `_∉_` 定义为 `_∈_` 的否定, 即 `x ∉ A = ¬ x ∈ A`.
+
 <pre class="Agda"><a id="_∉_"></a><a id="9558" href="Preliminary.html#9558" class="Function Operator">_∉_</a> <a id="9562" class="Symbol">:</a> <a id="9564" class="Symbol">{</a><a id="9565" href="Preliminary.html#9565" class="Bound">X</a> <a id="9567" class="Symbol">:</a> <a id="9569" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="9574" href="Preliminary.html#2567" class="Generalizable">ℓ</a><a id="9575" class="Symbol">}</a> <a id="9577" class="Symbol">→</a> <a id="9579" href="Preliminary.html#9565" class="Bound">X</a> <a id="9581" class="Symbol">→</a> <a id="9583" href="Cubical.Foundations.Powerset.html#657" class="Function">ℙ</a> <a id="9585" href="Preliminary.html#9565" class="Bound">X</a> <a id="9587" class="Symbol">→</a> <a id="9589" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="9594" class="Symbol">_</a>
 <a id="9596" href="Preliminary.html#9596" class="Bound">x</a> <a id="9598" href="Preliminary.html#9558" class="Function Operator">∉</a> <a id="9600" href="Preliminary.html#9600" class="Bound">A</a> <a id="9602" class="Symbol">=</a> <a id="9604" href="Cubical.Relation.Nullary.Base.html#355" class="Function Operator">¬</a> <a id="9606" href="Preliminary.html#9596" class="Bound">x</a> <a id="9608" href="Cubical.Foundations.Powerset.html#772" class="Function Operator">∈</a> <a id="9610" href="Preliminary.html#9600" class="Bound">A</a>
 </pre>
-<h2 id="公理">公理</h2>
-<p>本文需要假设一个公理, 即<strong>命题宇宙调整 (propositional resizing, 简称PR)</strong>. PR的宣告实际上等于是取消了命题宇宙的分层, 使得它只有一层, 所有命题都位于那一层.</p>
-<p>如果取消所有类型的分层, 那么将导致罗素悖论, 而只取消命题宇宙的分层则不会. 我们只会进入所谓<strong>非直谓 (impredicative)</strong> 的数学世界, 而经典数学都是这样的.</p>
-<p>代码工程上, 我们使用了 record 类型, 它可以视作一种带了很多语法糖的Σ类型. 我们定义的 <code>PropositionalResizing</code> 包括了一个 <code>Resize</code> 函数, 以实现给定的两个命题宇宙的相互转换, 并且它需要满足 <code>resize</code> 和 <code>unresize</code> 性质, 即转换前后的两个命题逻辑等价.</p>
+## 公理
+
+本文需要假设一个公理, 即**命题宇宙调整 (propositional resizing, 简称PR)**. PR的宣告实际上等于是取消了命题宇宙的分层, 使得它只有一层, 所有命题都位于那一层.
+
+如果取消所有类型的分层, 那么将导致罗素悖论, 而只取消命题宇宙的分层则不会. 我们只会进入所谓**非直谓 (impredicative)** 的数学世界, 而经典数学都是这样的.
+
+代码工程上, 我们使用了 record 类型, 它可以视作一种带了很多语法糖的Σ类型. 我们定义的 `PropositionalResizing` 包括了一个 `Resize` 函数, 以实现给定的两个命题宇宙的相互转换, 并且它需要满足 `resize` 和 `unresize` 性质, 即转换前后的两个命题逻辑等价.
+
 <pre class="Agda"><a id="9988" class="Keyword">record</a> <a id="PropositionalResizing"></a><a id="9995" href="Preliminary.html#9995" class="Record">PropositionalResizing</a> <a id="10017" class="Symbol">(</a><a id="10018" href="Preliminary.html#10018" class="Bound">ℓ</a> <a id="10020" href="Preliminary.html#10020" class="Bound">ℓ′</a> <a id="10023" class="Symbol">:</a> <a id="10025" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="10030" class="Symbol">)</a> <a id="10032" class="Symbol">:</a> <a id="10034" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="10039" class="Symbol">(</a><a id="10040" href="Agda.Primitive.html#931" class="Primitive">ℓ-suc</a> <a id="10046" href="Preliminary.html#10018" class="Bound">ℓ</a> <a id="10048" href="Preliminary.html#2463" class="Primitive Operator">⊔</a> <a id="10050" href="Agda.Primitive.html#931" class="Primitive">ℓ-suc</a> <a id="10056" href="Preliminary.html#10020" class="Bound">ℓ′</a><a id="10058" class="Symbol">)</a> <a id="10060" class="Keyword">where</a>
   <a id="10068" class="Keyword">field</a>
     <a id="PropositionalResizing.Resize"></a><a id="10078" href="Preliminary.html#10078" class="Field">Resize</a> <a id="10085" class="Symbol">:</a> <a id="10087" href="Cubical.Foundations.HLevels.html#2018" class="Function">hProp</a> <a id="10093" href="Preliminary.html#10018" class="Bound">ℓ</a> <a id="10095" class="Symbol">→</a> <a id="10097" href="Cubical.Foundations.HLevels.html#2018" class="Function">hProp</a> <a id="10103" href="Preliminary.html#10020" class="Bound">ℓ′</a>
     <a id="PropositionalResizing.resize"></a><a id="10110" href="Preliminary.html#10110" class="Field">resize</a> <a id="10117" class="Symbol">:</a> <a id="10119" class="Symbol">{</a><a id="10120" href="Preliminary.html#10120" class="Bound">P</a> <a id="10122" class="Symbol">:</a> <a id="10124" href="Cubical.Foundations.HLevels.html#2018" class="Function">hProp</a> <a id="10130" href="Preliminary.html#10018" class="Bound">ℓ</a><a id="10131" class="Symbol">}</a> <a id="10133" class="Symbol">→</a> <a id="10135" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟨</a> <a id="10137" href="Preliminary.html#10120" class="Bound">P</a> <a id="10139" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟩</a> <a id="10141" class="Symbol">→</a> <a id="10143" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟨</a> <a id="10145" href="Preliminary.html#10078" class="Field">Resize</a> <a id="10152" href="Preliminary.html#10120" class="Bound">P</a> <a id="10154" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟩</a>
     <a id="PropositionalResizing.unresize"></a><a id="10160" href="Preliminary.html#10160" class="Field">unresize</a> <a id="10169" class="Symbol">:</a> <a id="10171" class="Symbol">{</a><a id="10172" href="Preliminary.html#10172" class="Bound">P</a> <a id="10174" class="Symbol">:</a> <a id="10176" href="Cubical.Foundations.HLevels.html#2018" class="Function">hProp</a> <a id="10182" href="Preliminary.html#10018" class="Bound">ℓ</a><a id="10183" class="Symbol">}</a> <a id="10185" class="Symbol">→</a> <a id="10187" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟨</a> <a id="10189" href="Preliminary.html#10078" class="Field">Resize</a> <a id="10196" href="Preliminary.html#10172" class="Bound">P</a> <a id="10198" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟩</a> <a id="10200" class="Symbol">→</a> <a id="10202" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟨</a> <a id="10204" href="Preliminary.html#10172" class="Bound">P</a> <a id="10206" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟩</a>
 </pre>
-<p>以下代码是 Agda 的一些小技巧, 不熟悉 Agda 可以不看. 只需知道我们只要在模块声明中以 <code>⦃ _ : PR ⦄</code> 的形式声明参数, 那么就等于假设了 PR, 就可以在该模块中尽情地使用上面的三个函数, 而不用显式说明具体是哪两个命题宇宙之间的转换.</p>
+以下代码是 Agda 的一些小技巧, 不熟悉 Agda 可以不看. 只需知道我们只要在模块声明中以 `⦃ _ : PR ⦄` 的形式声明参数, 那么就等于假设了 PR, 就可以在该模块中尽情地使用上面的三个函数, 而不用显式说明具体是哪两个命题宇宙之间的转换.
+
 <pre class="Agda"><a id="PR"></a><a id="10353" href="Preliminary.html#10353" class="Function">PR</a> <a id="10356" class="Symbol">=</a> <a id="10358" class="Symbol">∀</a> <a id="10360" class="Symbol">{</a><a id="10361" href="Preliminary.html#10361" class="Bound">ℓ</a> <a id="10363" href="Preliminary.html#10363" class="Bound">ℓ′</a><a id="10365" class="Symbol">}</a> <a id="10367" class="Symbol">→</a> <a id="10369" href="Preliminary.html#9995" class="Record">PropositionalResizing</a> <a id="10391" href="Preliminary.html#10361" class="Bound">ℓ</a> <a id="10393" href="Preliminary.html#10363" class="Bound">ℓ′</a>
 
 <a id="10397" class="Keyword">module</a> <a id="10404" href="Preliminary.html#10404" class="Module">_</a> <a id="10406" class="Symbol">⦃</a> <a id="10408" href="Preliminary.html#10408" class="Bound">pr</a> <a id="10411" class="Symbol">:</a> <a id="10413" href="Preliminary.html#9995" class="Record">PropositionalResizing</a> <a id="10435" href="Preliminary.html#2567" class="Generalizable">ℓ</a> <a id="10437" href="Preliminary.html#2569" class="Generalizable">ℓ′</a> <a id="10440" class="Symbol">⦄</a> <a id="10442" class="Keyword">where</a>
   <a id="10450" class="Keyword">open</a> <a id="10455" href="Preliminary.html#9995" class="Module">PropositionalResizing</a> <a id="10477" href="Preliminary.html#10408" class="Bound">pr</a> <a id="10480" class="Keyword">public</a>
 </pre>
-<h2 id="命题逻辑">命题逻辑</h2>
-<p>本小节我们来补齐泛等基础中对应于直觉主义命题逻辑的相关概念. 我们约定仅在本文剩下的篇幅中使用 <code>A</code> <code>B</code> <code>C</code> 表示任意层级的类型.</p>
+## 命题逻辑
+
+本小节我们来补齐泛等基础中对应于直觉主义命题逻辑的相关概念. 我们约定仅在本文剩下的篇幅中使用 `A` `B` `C` 表示任意层级的类型.
+
 <pre class="Agda"><a id="10581" class="Keyword">private</a> <a id="10589" class="Keyword">variable</a> <a id="10598" href="Preliminary.html#10598" class="Generalizable">A</a> <a id="10600" href="Preliminary.html#10600" class="Generalizable">B</a> <a id="10602" href="Preliminary.html#10602" class="Generalizable">C</a> <a id="10604" class="Symbol">:</a> <a id="10606" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="10611" href="Preliminary.html#2567" class="Generalizable">ℓ</a>
 </pre>
-<p>以下是无矛盾律在直觉主义中更容易处理的版本. 因为我们无法证明排中律 “<code>A</code> 或 <code>¬ A</code>”, 所以单有 <code>A → ¬ A → ⊥</code> 也无法推出矛盾, 必须采用下面的形式才行.</p>
+以下是无矛盾律在直觉主义中更容易处理的版本. 因为我们无法证明排中律 "`A` 或 `¬ A`", 所以单有 `A → ¬ A → ⊥` 也无法推出矛盾, 必须采用下面的形式才行.
+
 <pre class="Agda"><a id="noncontradiction"></a><a id="10718" href="Preliminary.html#10718" class="Function">noncontradiction</a> <a id="10735" class="Symbol">:</a> <a id="10737" class="Symbol">(</a><a id="10738" href="Preliminary.html#10598" class="Generalizable">A</a> <a id="10740" class="Symbol">→</a> <a id="10742" href="Cubical.Relation.Nullary.Base.html#355" class="Function Operator">¬</a> <a id="10744" href="Preliminary.html#10598" class="Generalizable">A</a><a id="10745" class="Symbol">)</a> <a id="10747" class="Symbol">→</a> <a id="10749" class="Symbol">(</a><a id="10750" href="Cubical.Relation.Nullary.Base.html#355" class="Function Operator">¬</a> <a id="10752" href="Preliminary.html#10598" class="Generalizable">A</a> <a id="10754" class="Symbol">→</a> <a id="10756" href="Preliminary.html#10598" class="Generalizable">A</a><a id="10757" class="Symbol">)</a> <a id="10759" class="Symbol">→</a> <a id="10761" href="Cubical.Data.Empty.Base.html#145" class="Datatype">⊥</a>
 <a id="10763" href="Preliminary.html#10718" class="Function">noncontradiction</a> <a id="10780" href="Preliminary.html#10780" class="Bound">p</a> <a id="10782" href="Preliminary.html#10782" class="Bound">q</a> <a id="10784" class="Symbol">=</a> <a id="10786" href="Preliminary.html#10780" class="Bound">p</a> <a id="10788" class="Symbol">(</a><a id="10789" href="Preliminary.html#10782" class="Bound">q</a> <a id="10791" class="Symbol">λ</a> <a id="10793" href="Preliminary.html#10793" class="Bound">a</a> <a id="10795" class="Symbol">→</a> <a id="10797" href="Preliminary.html#10780" class="Bound">p</a> <a id="10799" href="Preliminary.html#10793" class="Bound">a</a> <a id="10801" href="Preliminary.html#10793" class="Bound">a</a><a id="10802" class="Symbol">)</a> <a id="10804" class="Symbol">(</a><a id="10805" href="Preliminary.html#10782" class="Bound">q</a> <a id="10807" class="Symbol">λ</a> <a id="10809" href="Preliminary.html#10809" class="Bound">a</a> <a id="10811" class="Symbol">→</a> <a id="10813" href="Preliminary.html#10780" class="Bound">p</a> <a id="10815" href="Preliminary.html#10809" class="Bound">a</a> <a id="10817" href="Preliminary.html#10809" class="Bound">a</a><a id="10818" class="Symbol">)</a>
 </pre>
-<p>逻辑析取定义为<strong>和类型 (sum type)</strong> 的命题截断. 因为和类型的项起码有两种 (左边或右边) 不同的构造方式, 但析取不关心具体是哪种, 所以必须要做命题截断, 以确保所有证明项都相等.</p>
+逻辑析取定义为**和类型 (sum type)** 的命题截断. 因为和类型的项起码有两种 (左边或右边) 不同的构造方式, 但析取不关心具体是哪种, 所以必须要做命题截断, 以确保所有证明项都相等.
+
 <pre class="Agda"><a id="10935" class="Keyword">open</a> <a id="10940" class="Keyword">import</a> <a id="10947" href="Cubical.Data.Sum.html" class="Module">Cubical.Data.Sum</a> <a id="10964" class="Symbol">as</a> <a id="10967" class="Module">⊎</a> <a id="10969" class="Keyword">public</a> <a id="10976" class="Keyword">using</a> <a id="10982" class="Symbol">(</a><a id="10983" href="Cubical.Data.Sum.Base.html#203" class="Datatype Operator">_⊎_</a><a id="10986" class="Symbol">)</a>
 
 <a id="10989" class="Keyword">infixr</a> <a id="10996" class="Number">2</a> <a id="10998" href="Preliminary.html#11002" class="Function Operator">_∨_</a>
 <a id="_∨_"></a><a id="11002" href="Preliminary.html#11002" class="Function Operator">_∨_</a> <a id="11006" class="Symbol">:</a> <a id="11008" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="11013" href="Preliminary.html#2567" class="Generalizable">ℓ</a> <a id="11015" class="Symbol">→</a> <a id="11017" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="11022" href="Preliminary.html#2569" class="Generalizable">ℓ′</a> <a id="11025" class="Symbol">→</a> <a id="11027" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="11032" class="Symbol">_</a>
 <a id="11034" href="Preliminary.html#11034" class="Bound">A</a> <a id="11036" href="Preliminary.html#11002" class="Function Operator">∨</a> <a id="11038" href="Preliminary.html#11038" class="Bound">B</a> <a id="11040" class="Symbol">=</a> <a id="11042" href="Cubical.HITs.PropositionalTruncation.Base.html#249" class="Datatype Operator">∥</a> <a id="11044" href="Preliminary.html#11034" class="Bound">A</a> <a id="11046" href="Cubical.Data.Sum.Base.html#203" class="Datatype Operator">⊎</a> <a id="11048" href="Preliminary.html#11038" class="Bound">B</a> <a id="11050" href="Cubical.HITs.PropositionalTruncation.Base.html#249" class="Datatype Operator">∥₁</a>
 </pre>
-<p>以下是析取的引入规则, 注意它的证明中使用了命题截断的构造子 <code>∣_∣₁</code>.</p>
+以下是析取的引入规则, 注意它的证明中使用了命题截断的构造子 `∣_∣₁`.
+
 <pre class="Agda"><a id="inl"></a><a id="11106" href="Preliminary.html#11106" class="Function">inl</a> <a id="11110" class="Symbol">:</a> <a id="11112" href="Preliminary.html#10598" class="Generalizable">A</a> <a id="11114" class="Symbol">→</a> <a id="11116" href="Preliminary.html#10598" class="Generalizable">A</a> <a id="11118" href="Preliminary.html#11002" class="Function Operator">∨</a> <a id="11120" href="Preliminary.html#10600" class="Generalizable">B</a>
 <a id="11122" href="Preliminary.html#11106" class="Function">inl</a> <a id="11126" href="Preliminary.html#11126" class="Bound">x</a> <a id="11128" class="Symbol">=</a> <a id="11130" href="Cubical.HITs.PropositionalTruncation.Base.html#288" class="InductiveConstructor Operator">∣</a> <a id="11132" href="Cubical.Data.Sum.Base.html#261" class="InductiveConstructor">⊎.inl</a> <a id="11138" href="Preliminary.html#11126" class="Bound">x</a> <a id="11140" href="Cubical.HITs.PropositionalTruncation.Base.html#288" class="InductiveConstructor Operator">∣₁</a>
 
 <a id="inr"></a><a id="11144" href="Preliminary.html#11144" class="Function">inr</a> <a id="11148" class="Symbol">:</a> <a id="11150" href="Preliminary.html#10600" class="Generalizable">B</a> <a id="11152" class="Symbol">→</a> <a id="11154" href="Preliminary.html#10598" class="Generalizable">A</a> <a id="11156" href="Preliminary.html#11002" class="Function Operator">∨</a> <a id="11158" href="Preliminary.html#10600" class="Generalizable">B</a>
 <a id="11160" href="Preliminary.html#11144" class="Function">inr</a> <a id="11164" href="Preliminary.html#11164" class="Bound">x</a> <a id="11166" class="Symbol">=</a> <a id="11168" href="Cubical.HITs.PropositionalTruncation.Base.html#288" class="InductiveConstructor Operator">∣</a> <a id="11170" href="Cubical.Data.Sum.Base.html#279" class="InductiveConstructor">⊎.inr</a> <a id="11176" href="Preliminary.html#11164" class="Bound">x</a> <a id="11178" href="Cubical.HITs.PropositionalTruncation.Base.html#288" class="InductiveConstructor Operator">∣₁</a>
 </pre>
-<p>注意我们不需要对积类型做命题截断以得到合取, 因为当 <code>_×_</code> 的两边都是命题的时候, 它的项只有一种构造方式, 所以它们之间的相等是自然成立的.</p>
-<h2 id="排中律">排中律</h2>
-<p>我们说一个类型 <code>A</code> 可判定, 记作 <code>Dec A</code>, 当且仅当 <code>A</code> 成立或者 <code>A</code> 的否定成立.</p>
-<p><code>Dec</code> 与和类型有类似的结构, 它的构造子有两个, <code>yes</code> 和 <code>no</code>. <code>yes</code> 的参数是 <code>A</code> 的证明, <code>no</code> 的参数是 <code>¬ A</code> 的证明. 引理 <code>isPropDec</code> 说明 <code>Dec</code> 是一个谓词.</p>
+注意我们不需要对积类型做命题截断以得到合取, 因为当 `_×_` 的两边都是命题的时候, 它的项只有一种构造方式, 所以它们之间的相等是自然成立的.
+
+## 排中律
+
+我们说一个类型 `A` 可判定, 记作 `Dec A`, 当且仅当 `A` 成立或者 `A` 的否定成立.
+
+`Dec` 与和类型有类似的结构, 它的构造子有两个, `yes` 和 `no`. `yes` 的参数是 `A` 的证明, `no` 的参数是 `¬ A` 的证明. 引理 `isPropDec` 说明 `Dec` 是一个谓词.
+
 <pre class="Agda"><a id="11448" class="Keyword">open</a> <a id="11453" class="Keyword">import</a> <a id="11460" href="Cubical.Relation.Nullary.html" class="Module">Cubical.Relation.Nullary</a> <a id="11485" class="Keyword">public</a>
   <a id="11494" class="Keyword">using</a> <a id="11500" class="Symbol">(</a><a id="11501" href="Cubical.Relation.Nullary.Base.html#685" class="Function">NonEmpty</a><a id="11509" class="Symbol">;</a> <a id="11511" href="Cubical.Relation.Nullary.Base.html#444" class="Datatype">Dec</a><a id="11514" class="Symbol">;</a> <a id="11516" href="Cubical.Relation.Nullary.Base.html#478" class="InductiveConstructor">yes</a><a id="11519" class="Symbol">;</a> <a id="11521" href="Cubical.Relation.Nullary.Base.html#505" class="InductiveConstructor">no</a><a id="11523" class="Symbol">;</a> <a id="11525" href="Cubical.Relation.Nullary.Properties.html#1969" class="Function">isPropDec</a><a id="11534" class="Symbol">)</a>
 </pre>
-<p>排中律即是说任意命题都是可判定的.</p>
+排中律即是说任意命题都是可判定的.
+
 <pre class="Agda"><a id="LEM"></a><a id="11568" href="Preliminary.html#11568" class="Function">LEM</a> <a id="11572" class="Symbol">:</a> <a id="11574" class="Symbol">(</a><a id="11575" href="Preliminary.html#11575" class="Bound">ℓ</a> <a id="11577" class="Symbol">:</a> <a id="11579" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="11584" class="Symbol">)</a> <a id="11586" class="Symbol">→</a> <a id="11588" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="11593" class="Symbol">_</a>
 <a id="11595" href="Preliminary.html#11568" class="Function">LEM</a> <a id="11599" href="Preliminary.html#11599" class="Bound">ℓ</a> <a id="11601" class="Symbol">=</a> <a id="11603" class="Symbol">(</a><a id="11604" href="Preliminary.html#11604" class="Bound">P</a> <a id="11606" class="Symbol">:</a> <a id="11608" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="11613" href="Preliminary.html#11599" class="Bound">ℓ</a><a id="11614" class="Symbol">)</a> <a id="11616" class="Symbol">→</a> <a id="11618" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a> <a id="11625" href="Preliminary.html#11604" class="Bound">P</a> <a id="11627" class="Symbol">→</a> <a id="11629" href="Cubical.Relation.Nullary.Base.html#444" class="Datatype">Dec</a> <a id="11633" href="Preliminary.html#11604" class="Bound">P</a>
 </pre>
-<p>排中律本身是一个命题, 因为可判定性是一个谓词.</p>
+排中律本身是一个命题, 因为可判定性是一个谓词.
+
 <pre class="Agda"><a id="isPropLEM"></a><a id="11674" href="Preliminary.html#11674" class="Function">isPropLEM</a> <a id="11684" class="Symbol">:</a> <a id="11686" class="Symbol">(</a><a id="11687" href="Preliminary.html#11687" class="Bound">ℓ</a> <a id="11689" class="Symbol">:</a> <a id="11691" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="11696" class="Symbol">)</a> <a id="11698" class="Symbol">→</a> <a id="11700" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a> <a id="11707" class="Symbol">(</a><a id="11708" href="Preliminary.html#11568" class="Function">LEM</a> <a id="11712" href="Preliminary.html#11687" class="Bound">ℓ</a><a id="11713" class="Symbol">)</a>
 <a id="11715" href="Preliminary.html#11674" class="Function">isPropLEM</a> <a id="11725" href="Preliminary.html#11725" class="Bound">ℓ</a> <a id="11727" class="Symbol">=</a> <a id="11729" href="Cubical.Foundations.HLevels.html#16452" class="Function">isPropΠ2</a> <a id="11738" class="Symbol">λ</a> <a id="11740" href="Preliminary.html#11740" class="Bound">_</a> <a id="11742" class="Symbol">→</a> <a id="11744" href="Cubical.Relation.Nullary.Properties.html#1969" class="Function">isPropDec</a>
 </pre>
-<p>虽然我们不能证明排中律, 但我们可以证明对任意类型, 它的可判定性非空 (双重否定成立). 这在有些书上也叫做排中律不可辩驳.</p>
+虽然我们不能证明排中律, 但我们可以证明对任意类型, 它的可判定性非空 (双重否定成立). 这在有些书上也叫做排中律不可辩驳.
+
 <pre class="Agda"><a id="DecNonEmpty"></a><a id="11832" href="Preliminary.html#11832" class="Function">DecNonEmpty</a> <a id="11844" class="Symbol">:</a> <a id="11846" class="Symbol">(</a><a id="11847" href="Preliminary.html#11847" class="Bound">A</a> <a id="11849" class="Symbol">:</a> <a id="11851" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="11856" href="Preliminary.html#2567" class="Generalizable">ℓ</a><a id="11857" class="Symbol">)</a> <a id="11859" class="Symbol">→</a> <a id="11861" href="Cubical.Relation.Nullary.Base.html#685" class="Function">NonEmpty</a> <a id="11870" class="Symbol">(</a><a id="11871" href="Cubical.Relation.Nullary.Base.html#444" class="Datatype">Dec</a> <a id="11875" href="Preliminary.html#11847" class="Bound">A</a><a id="11876" class="Symbol">)</a>
 <a id="11878" href="Preliminary.html#11832" class="Function">DecNonEmpty</a> <a id="11890" class="Symbol">_</a> <a id="11892" href="Preliminary.html#11892" class="Bound">¬dec</a> <a id="11897" class="Symbol">=</a> <a id="11899" href="Preliminary.html#11892" class="Bound">¬dec</a> <a id="11904" href="Cubical.Foundations.Function.html#527" class="Function Operator">$</a> <a id="11906" href="Cubical.Relation.Nullary.Base.html#505" class="InductiveConstructor">no</a> <a id="11909" class="Symbol">λ</a> <a id="11911" href="Preliminary.html#11911" class="Bound">a</a> <a id="11913" class="Symbol">→</a> <a id="11915" href="Preliminary.html#11892" class="Bound">¬dec</a> <a id="11920" href="Cubical.Foundations.Function.html#527" class="Function Operator">$</a> <a id="11922" href="Cubical.Relation.Nullary.Base.html#478" class="InductiveConstructor">yes</a> <a id="11926" href="Preliminary.html#11911" class="Bound">a</a>
 </pre>
-<h2 id="选择公理">选择公理</h2>
-<p>选择公理是说对于任意集合 <code>A</code> 和 <code>B</code> 以及它们之间的命题关系 <code>R</code>, 如果对任意 <code>x : A</code> 都存在一个 <code>y : B</code> 使得 <code>R x y</code> 成立, 那么存在一个函数 <code>f : A → B</code> 使得对任意 <code>x : A</code> 有 <code>R x (f x)</code> 成立.</p>
+## 选择公理
+
+选择公理是说对于任意集合 `A` 和 `B` 以及它们之间的命题关系 `R`, 如果对任意 `x : A` 都存在一个 `y : B` 使得 `R x y` 成立, 那么存在一个函数 `f : A → B` 使得对任意 `x : A` 有 `R x (f x)` 成立.
+
 <pre class="Agda"><a id="AC"></a><a id="12087" href="Preliminary.html#12087" class="Function">AC</a> <a id="12090" class="Symbol">:</a> <a id="12092" class="Symbol">(</a><a id="12093" href="Preliminary.html#12093" class="Bound">ℓ</a> <a id="12095" href="Preliminary.html#12095" class="Bound">ℓ′</a> <a id="12098" href="Preliminary.html#12098" class="Bound">ℓ′′</a> <a id="12102" class="Symbol">:</a> <a id="12104" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="12109" class="Symbol">)</a> <a id="12111" class="Symbol">→</a> <a id="12113" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="12118" class="Symbol">_</a>
 <a id="12120" href="Preliminary.html#12087" class="Function">AC</a> <a id="12123" href="Preliminary.html#12123" class="Bound">ℓ</a> <a id="12125" href="Preliminary.html#12125" class="Bound">ℓ′</a> <a id="12128" href="Preliminary.html#12128" class="Bound">ℓ′′</a> <a id="12132" class="Symbol">=</a> <a id="12134" class="Symbol">(</a><a id="12135" href="Preliminary.html#12135" class="Bound">A</a> <a id="12137" class="Symbol">:</a> <a id="12139" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="12144" href="Preliminary.html#12123" class="Bound">ℓ</a><a id="12145" class="Symbol">)</a> <a id="12147" class="Symbol">(</a><a id="12148" href="Preliminary.html#12148" class="Bound">B</a> <a id="12150" class="Symbol">:</a> <a id="12152" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="12157" href="Preliminary.html#12125" class="Bound">ℓ′</a><a id="12159" class="Symbol">)</a> <a id="12161" class="Symbol">(</a><a id="12162" href="Preliminary.html#12162" class="Bound">R</a> <a id="12164" class="Symbol">:</a> <a id="12166" href="Preliminary.html#12135" class="Bound">A</a> <a id="12168" class="Symbol">→</a> <a id="12170" href="Preliminary.html#12148" class="Bound">B</a> <a id="12172" class="Symbol">→</a> <a id="12174" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="12179" href="Preliminary.html#12128" class="Bound">ℓ′′</a><a id="12182" class="Symbol">)</a> <a id="12184" class="Symbol">→</a>
   <a id="12188" href="Cubical.Foundations.Prelude.html#14301" class="Function">isSet</a> <a id="12194" href="Preliminary.html#12135" class="Bound">A</a> <a id="12196" class="Symbol">→</a> <a id="12198" href="Cubical.Foundations.Prelude.html#14301" class="Function">isSet</a> <a id="12204" href="Preliminary.html#12148" class="Bound">B</a> <a id="12206" class="Symbol">→</a> <a id="12208" class="Symbol">(∀</a> <a id="12211" href="Preliminary.html#12211" class="Bound">x</a> <a id="12213" href="Preliminary.html#12213" class="Bound">y</a> <a id="12215" class="Symbol">→</a> <a id="12217" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a> <a id="12224" class="Symbol">(</a><a id="12225" href="Preliminary.html#12162" class="Bound">R</a> <a id="12227" href="Preliminary.html#12211" class="Bound">x</a> <a id="12229" href="Preliminary.html#12213" class="Bound">y</a><a id="12230" class="Symbol">))</a> <a id="12233" class="Symbol">→</a>
   <a id="12237" class="Symbol">(∀</a> <a id="12240" href="Preliminary.html#12240" class="Bound">x</a> <a id="12242" class="Symbol">→</a> <a id="12244" href="Cubical.Data.Sigma.Base.html#682" class="Function">∃[</a> <a id="12247" href="Preliminary.html#12247" class="Bound">y</a> <a id="12249" href="Cubical.Data.Sigma.Base.html#682" class="Function">∈</a> <a id="12251" href="Preliminary.html#12148" class="Bound">B</a> <a id="12253" href="Cubical.Data.Sigma.Base.html#682" class="Function">]</a> <a id="12255" href="Preliminary.html#12162" class="Bound">R</a> <a id="12257" href="Preliminary.html#12240" class="Bound">x</a> <a id="12259" href="Preliminary.html#12247" class="Bound">y</a><a id="12260" class="Symbol">)</a> <a id="12262" class="Symbol">→</a> <a id="12264" href="Cubical.Data.Sigma.Base.html#682" class="Function">∃[</a> <a id="12267" href="Preliminary.html#12267" class="Bound">f</a> <a id="12269" href="Cubical.Data.Sigma.Base.html#682" class="Function">∈</a> <a id="12271" class="Symbol">(</a><a id="12272" href="Preliminary.html#12135" class="Bound">A</a> <a id="12274" class="Symbol">→</a> <a id="12276" href="Preliminary.html#12148" class="Bound">B</a><a id="12277" class="Symbol">)</a> <a id="12279" href="Cubical.Data.Sigma.Base.html#682" class="Function">]</a> <a id="12281" class="Symbol">∀</a> <a id="12283" href="Preliminary.html#12283" class="Bound">x</a> <a id="12285" class="Symbol">→</a> <a id="12287" href="Preliminary.html#12162" class="Bound">R</a> <a id="12289" href="Preliminary.html#12283" class="Bound">x</a> <a id="12291" class="Symbol">(</a><a id="12292" href="Preliminary.html#12267" class="Bound">f</a> <a id="12294" href="Preliminary.html#12283" class="Bound">x</a><a id="12295" class="Symbol">)</a>
 </pre>
-<p>选择公理也是一个命题, 因为其表述是一个嵌套Π类型, 其目标是Σ类型的命题截断.</p>
+选择公理也是一个命题, 因为其表述是一个嵌套Π类型, 其目标是Σ类型的命题截断.
+
 <pre class="Agda"><a id="isPropAC"></a><a id="12352" href="Preliminary.html#12352" class="Function">isPropAC</a> <a id="12361" class="Symbol">:</a> <a id="12363" class="Symbol">(</a><a id="12364" href="Preliminary.html#12364" class="Bound">ℓ</a> <a id="12366" href="Preliminary.html#12366" class="Bound">ℓ′</a> <a id="12369" href="Preliminary.html#12369" class="Bound">ℓ′′</a> <a id="12373" class="Symbol">:</a> <a id="12375" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="12380" class="Symbol">)</a> <a id="12382" class="Symbol">→</a> <a id="12384" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a> <a id="12391" class="Symbol">(</a><a id="12392" href="Preliminary.html#12087" class="Function">AC</a> <a id="12395" href="Preliminary.html#12364" class="Bound">ℓ</a> <a id="12397" href="Preliminary.html#12366" class="Bound">ℓ′</a> <a id="12400" href="Preliminary.html#12369" class="Bound">ℓ′′</a><a id="12403" class="Symbol">)</a>
 <a id="12405" href="Preliminary.html#12352" class="Function">isPropAC</a> <a id="12414" href="Preliminary.html#12414" class="Bound">ℓ</a> <a id="12416" href="Preliminary.html#12416" class="Bound">ℓ′</a> <a id="12419" href="Preliminary.html#12419" class="Bound">ℓ′′</a> <a id="12423" class="Symbol">=</a> <a id="12425" href="Cubical.Foundations.HLevels.html#17232" class="Function">isPropΠ6</a> <a id="12434" class="Symbol">λ</a> <a id="12436" href="Preliminary.html#12436" class="Bound">_</a> <a id="12438" href="Preliminary.html#12438" class="Bound">_</a> <a id="12440" href="Preliminary.html#12440" class="Bound">_</a> <a id="12442" href="Preliminary.html#12442" class="Bound">_</a> <a id="12444" href="Preliminary.html#12444" class="Bound">_</a> <a id="12446" href="Preliminary.html#12446" class="Bound">_</a> <a id="12448" class="Symbol">→</a> <a id="12450" href="Cubical.Foundations.HLevels.html#16363" class="Function">isPropΠ</a> <a id="12458" class="Symbol">λ</a> <a id="12460" href="Preliminary.html#12460" class="Bound">_</a> <a id="12462" class="Symbol">→</a> <a id="12464" href="Cubical.HITs.PropositionalTruncation.Base.html#308" class="InductiveConstructor">squash₁</a>
 </pre>
-<h2 id="势">势</h2>
-<p>我们说类型 <code>A</code> 的势小于等于 <code>B</code>, 当且仅当有任意 <code>A</code> 到 <code>B</code> 的单射函数. 注意这里用的是Σ类型, 我们并没有做命题截断. 有时候延迟截断会更方便处理.</p>
+## 势
+
+我们说类型 `A` 的势小于等于 `B`, 当且仅当有任意 `A` 到 `B` 的单射函数. 注意这里用的是Σ类型, 我们并没有做命题截断. 有时候延迟截断会更方便处理.
+
 <pre class="Agda"><a id="injective"></a><a id="12578" href="Preliminary.html#12578" class="Function">injective</a> <a id="12588" class="Symbol">:</a> <a id="12590" class="Symbol">(</a><a id="12591" href="Preliminary.html#10598" class="Generalizable">A</a> <a id="12593" class="Symbol">→</a> <a id="12595" href="Preliminary.html#10600" class="Generalizable">B</a><a id="12596" class="Symbol">)</a> <a id="12598" class="Symbol">→</a> <a id="12600" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="12605" class="Symbol">_</a>
 <a id="12607" href="Preliminary.html#12578" class="Function">injective</a> <a id="12617" href="Preliminary.html#12617" class="Bound">f</a> <a id="12619" class="Symbol">=</a> <a id="12621" class="Symbol">∀</a> <a id="12623" class="Symbol">{</a><a id="12624" href="Preliminary.html#12624" class="Bound">x</a> <a id="12626" href="Preliminary.html#12626" class="Bound">y</a><a id="12627" class="Symbol">}</a> <a id="12629" class="Symbol">→</a> <a id="12631" href="Preliminary.html#12617" class="Bound">f</a> <a id="12633" href="Preliminary.html#12624" class="Bound">x</a> <a id="12635" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="12637" href="Preliminary.html#12617" class="Bound">f</a> <a id="12639" href="Preliminary.html#12626" class="Bound">y</a> <a id="12641" class="Symbol">→</a> <a id="12643" href="Preliminary.html#12624" class="Bound">x</a> <a id="12645" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="12647" href="Preliminary.html#12626" class="Bound">y</a>
 
@@ -325,59 +328,53 @@ suc m : ℕ</code></pre>
 <a id="_≰_"></a><a id="12711" href="Preliminary.html#12711" class="Function Operator">_≰_</a> <a id="12715" class="Symbol">:</a> <a id="12717" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="12722" href="Preliminary.html#2567" class="Generalizable">ℓ</a> <a id="12724" class="Symbol">→</a> <a id="12726" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="12731" href="Preliminary.html#2569" class="Generalizable">ℓ′</a> <a id="12734" class="Symbol">→</a> <a id="12736" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="12741" class="Symbol">_</a>
 <a id="12743" href="Preliminary.html#12743" class="Bound">A</a> <a id="12745" href="Preliminary.html#12711" class="Function Operator">≰</a> <a id="12747" href="Preliminary.html#12747" class="Bound">B</a> <a id="12749" class="Symbol">=</a> <a id="12751" href="Cubical.Relation.Nullary.Base.html#355" class="Function Operator">¬</a> <a id="12753" href="Preliminary.html#12743" class="Bound">A</a> <a id="12755" href="Preliminary.html#12650" class="Function Operator">≤</a> <a id="12757" href="Preliminary.html#12747" class="Bound">B</a>
 </pre>
-<p><code>≤</code> 构成一个预序.</p>
+`≤` 构成一个预序.
+
 <pre class="Agda"><a id="≤-refl"></a><a id="12785" href="Preliminary.html#12785" class="Function">≤-refl</a> <a id="12792" class="Symbol">:</a> <a id="12794" href="Preliminary.html#10598" class="Generalizable">A</a> <a id="12796" href="Preliminary.html#12650" class="Function Operator">≤</a> <a id="12798" href="Preliminary.html#10598" class="Generalizable">A</a>
 <a id="12800" href="Preliminary.html#12785" class="Function">≤-refl</a> <a id="12807" class="Symbol">=</a> <a id="12809" href="Cubical.Foundations.Function.html#468" class="Function">idfun</a> <a id="12815" class="Symbol">_</a> <a id="12817" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="12819" class="Symbol">λ</a> <a id="12821" href="Preliminary.html#12821" class="Bound">refl</a> <a id="12826" class="Symbol">→</a> <a id="12828" href="Preliminary.html#12821" class="Bound">refl</a>
 
 <a id="≤-trans"></a><a id="12834" href="Preliminary.html#12834" class="Function">≤-trans</a> <a id="12842" class="Symbol">:</a> <a id="12844" href="Preliminary.html#10598" class="Generalizable">A</a> <a id="12846" href="Preliminary.html#12650" class="Function Operator">≤</a> <a id="12848" href="Preliminary.html#10600" class="Generalizable">B</a> <a id="12850" class="Symbol">→</a> <a id="12852" href="Preliminary.html#10600" class="Generalizable">B</a> <a id="12854" href="Preliminary.html#12650" class="Function Operator">≤</a> <a id="12856" href="Preliminary.html#10602" class="Generalizable">C</a> <a id="12858" class="Symbol">→</a> <a id="12860" href="Preliminary.html#10598" class="Generalizable">A</a> <a id="12862" href="Preliminary.html#12650" class="Function Operator">≤</a> <a id="12864" href="Preliminary.html#10602" class="Generalizable">C</a>
 <a id="12866" href="Preliminary.html#12834" class="Function">≤-trans</a> <a id="12874" class="Symbol">(</a><a id="12875" href="Preliminary.html#12875" class="Bound">f</a> <a id="12877" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="12879" href="Preliminary.html#12879" class="Bound">f-inj</a><a id="12884" class="Symbol">)</a> <a id="12886" class="Symbol">(</a><a id="12887" href="Preliminary.html#12887" class="Bound">g</a> <a id="12889" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="12891" href="Preliminary.html#12891" class="Bound">g-inj</a><a id="12896" class="Symbol">)</a> <a id="12898" class="Symbol">=</a> <a id="12900" href="Preliminary.html#12887" class="Bound">g</a> <a id="12902" href="Cubical.Foundations.Function.html#653" class="Function Operator">∘</a> <a id="12904" href="Preliminary.html#12875" class="Bound">f</a> <a id="12906" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="12908" href="Preliminary.html#12879" class="Bound">f-inj</a> <a id="12914" href="Cubical.Foundations.Function.html#653" class="Function Operator">∘</a> <a id="12916" href="Preliminary.html#12891" class="Bound">g-inj</a>
 </pre>
-<p><code>≤</code> 的反对称性 (即施罗德-伯恩斯坦定理) 依赖于排中律.</p>
-<p>我们说 <code>A</code> 的势严格小于 <code>B</code>, 当且仅当 <code>A</code> 的势小于等于 <code>B</code> 且 <code>B</code> 的势不小于等于 <code>A</code>.</p>
+`≤` 的反对称性 (即施罗德-伯恩斯坦定理) 依赖于排中律.
+
+我们说 `A` 的势严格小于 `B`, 当且仅当 `A` 的势小于等于 `B` 且 `B` 的势不小于等于 `A`.
+
 <pre class="Agda"><a id="_&lt;_"></a><a id="13028" href="Preliminary.html#13028" class="Function Operator">_&lt;_</a> <a id="13032" class="Symbol">:</a> <a id="13034" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="13039" href="Preliminary.html#2567" class="Generalizable">ℓ</a> <a id="13041" class="Symbol">→</a> <a id="13043" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="13048" href="Preliminary.html#2569" class="Generalizable">ℓ′</a> <a id="13051" class="Symbol">→</a> <a id="13053" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="13058" class="Symbol">_</a>
 <a id="13060" href="Preliminary.html#13060" class="Bound">A</a> <a id="13062" href="Preliminary.html#13028" class="Function Operator">&lt;</a> <a id="13064" href="Preliminary.html#13064" class="Bound">B</a> <a id="13066" class="Symbol">=</a> <a id="13068" href="Preliminary.html#13060" class="Bound">A</a> <a id="13070" href="Preliminary.html#12650" class="Function Operator">≤</a> <a id="13072" href="Preliminary.html#13064" class="Bound">B</a> <a id="13074" href="Cubical.Data.Sigma.Base.html#461" class="Function Operator">×</a> <a id="13076" href="Preliminary.html#13064" class="Bound">B</a> <a id="13078" href="Preliminary.html#12711" class="Function Operator">≰</a> <a id="13080" href="Preliminary.html#13060" class="Bound">A</a>
 </pre>
-<h2 id="连续统假设">连续统假设</h2>
-<p>连续统假设是说如果一个集合的势严格大于自然数集, 并且小于等于自然数集的幂集, 那么它的势就大于等于自然数集的幂集. 由于没有排中律, 我们采用了这种迂回表达.</p>
+## 连续统假设
+
+连续统假设是说如果一个集合的势严格大于自然数集, 并且小于等于自然数集的幂集, 那么它的势就大于等于自然数集的幂集. 由于没有排中律, 我们采用了这种迂回表达.
+
 <pre class="Agda"><a id="isCHType"></a><a id="13187" href="Preliminary.html#13187" class="Function">isCHType</a> <a id="13196" class="Symbol">:</a> <a id="13198" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="13203" href="Preliminary.html#2567" class="Generalizable">ℓ</a> <a id="13205" class="Symbol">→</a> <a id="13207" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="13212" href="Preliminary.html#2569" class="Generalizable">ℓ′</a> <a id="13215" class="Symbol">→</a> <a id="13217" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="13222" class="Symbol">_</a>
 <a id="13224" href="Preliminary.html#13187" class="Function">isCHType</a> <a id="13233" href="Preliminary.html#13233" class="Bound">X</a> <a id="13235" href="Preliminary.html#13235" class="Bound">Y</a> <a id="13237" class="Symbol">=</a> <a id="13239" href="Preliminary.html#13233" class="Bound">X</a> <a id="13241" href="Preliminary.html#13028" class="Function Operator">&lt;</a> <a id="13243" href="Preliminary.html#13235" class="Bound">Y</a> <a id="13245" class="Symbol">→</a> <a id="13247" href="Preliminary.html#13235" class="Bound">Y</a> <a id="13249" href="Preliminary.html#12650" class="Function Operator">≤</a> <a id="13251" href="Cubical.Foundations.Powerset.html#657" class="Function">ℙ</a> <a id="13253" href="Preliminary.html#13233" class="Bound">X</a> <a id="13255" class="Symbol">→</a> <a id="13257" href="Cubical.HITs.PropositionalTruncation.Base.html#249" class="Datatype Operator">∥</a> <a id="13259" href="Cubical.Foundations.Powerset.html#657" class="Function">ℙ</a> <a id="13261" href="Preliminary.html#13233" class="Bound">X</a> <a id="13263" href="Preliminary.html#12650" class="Function Operator">≤</a> <a id="13265" href="Preliminary.html#13235" class="Bound">Y</a> <a id="13267" href="Cubical.HITs.PropositionalTruncation.Base.html#249" class="Datatype Operator">∥₁</a>
 
 <a id="CH"></a><a id="13271" href="Preliminary.html#13271" class="Function">CH</a> <a id="13274" class="Symbol">:</a> <a id="13276" class="Symbol">(</a><a id="13277" href="Preliminary.html#13277" class="Bound">ℓ</a> <a id="13279" class="Symbol">:</a> <a id="13281" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="13286" class="Symbol">)</a> <a id="13288" class="Symbol">→</a> <a id="13290" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="13295" class="Symbol">_</a>
 <a id="13297" href="Preliminary.html#13271" class="Function">CH</a> <a id="13300" href="Preliminary.html#13300" class="Bound">ℓ</a> <a id="13302" class="Symbol">=</a> <a id="13304" class="Symbol">(</a><a id="13305" href="Preliminary.html#13305" class="Bound">X</a> <a id="13307" class="Symbol">:</a> <a id="13309" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="13314" href="Preliminary.html#13300" class="Bound">ℓ</a><a id="13315" class="Symbol">)</a> <a id="13317" class="Symbol">→</a> <a id="13319" href="Cubical.Foundations.Prelude.html#14301" class="Function">isSet</a> <a id="13325" href="Preliminary.html#13305" class="Bound">X</a> <a id="13327" class="Symbol">→</a> <a id="13329" href="Preliminary.html#13187" class="Function">isCHType</a> <a id="13338" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="13340" href="Preliminary.html#13305" class="Bound">X</a>
 </pre>
-<p>注意 <code>CH</code> 表述中嵌套Π类型的最终目标使用了命题截断, 这保证了 <code>CH</code> 是一个命题.</p>
+注意 `CH` 表述中嵌套Π类型的最终目标使用了命题截断, 这保证了 `CH` 是一个命题.
+
 <pre class="Agda"><a id="isPropCH"></a><a id="13403" href="Preliminary.html#13403" class="Function">isPropCH</a> <a id="13412" class="Symbol">:</a> <a id="13414" class="Symbol">(</a><a id="13415" href="Preliminary.html#13415" class="Bound">ℓ</a> <a id="13417" class="Symbol">:</a> <a id="13419" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="13424" class="Symbol">)</a> <a id="13426" class="Symbol">→</a> <a id="13428" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a> <a id="13435" class="Symbol">(</a><a id="13436" href="Preliminary.html#13271" class="Function">CH</a> <a id="13439" href="Preliminary.html#13415" class="Bound">ℓ</a><a id="13440" class="Symbol">)</a>
 <a id="13442" href="Preliminary.html#13403" class="Function">isPropCH</a> <a id="13451" href="Preliminary.html#13451" class="Bound">ℓ</a> <a id="13453" class="Symbol">=</a> <a id="13455" href="Cubical.Foundations.HLevels.html#16788" class="Function">isPropΠ4</a> <a id="13464" class="Symbol">λ</a> <a id="13466" href="Preliminary.html#13466" class="Bound">_</a> <a id="13468" href="Preliminary.html#13468" class="Bound">_</a> <a id="13470" href="Preliminary.html#13470" class="Bound">_</a> <a id="13472" href="Preliminary.html#13472" class="Bound">_</a> <a id="13474" class="Symbol">→</a> <a id="13476" href="Cubical.HITs.PropositionalTruncation.Base.html#308" class="InductiveConstructor">squash₁</a>
 </pre>
-<h2 id="广义连续统假设">广义连续统假设</h2>
-<p>无穷集定义为势大于等于自然数集的集合.</p>
+## 广义连续统假设
+
+无穷集定义为势大于等于自然数集的集合.
+
 <pre class="Agda"><a id="infinite"></a><a id="13530" href="Preliminary.html#13530" class="Function">infinite</a> <a id="13539" class="Symbol">:</a> <a id="13541" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="13546" href="Preliminary.html#2567" class="Generalizable">ℓ</a> <a id="13548" class="Symbol">→</a> <a id="13550" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="13555" class="Symbol">_</a>
 <a id="13557" href="Preliminary.html#13530" class="Function">infinite</a> <a id="13566" href="Preliminary.html#13566" class="Bound">X</a> <a id="13568" class="Symbol">=</a> <a id="13570" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="13572" href="Preliminary.html#12650" class="Function Operator">≤</a> <a id="13574" href="Preliminary.html#13566" class="Bound">X</a>
 </pre>
-<p>广义连续统假设是说, 对任意无穷集和它的幂集, 都没有一个正好卡在它们中间的势.</p>
+广义连续统假设是说, 对任意无穷集和它的幂集, 都没有一个正好卡在它们中间的势.
+
 <pre class="Agda"><a id="isGCHType"></a><a id="13631" href="Preliminary.html#13631" class="Function">isGCHType</a> <a id="13641" class="Symbol">:</a> <a id="13643" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="13648" href="Preliminary.html#2567" class="Generalizable">ℓ</a> <a id="13650" class="Symbol">→</a> <a id="13652" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="13657" href="Preliminary.html#2569" class="Generalizable">ℓ′</a> <a id="13660" class="Symbol">→</a> <a id="13662" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="13667" class="Symbol">_</a>
 <a id="13669" href="Preliminary.html#13631" class="Function">isGCHType</a> <a id="13679" href="Preliminary.html#13679" class="Bound">X</a> <a id="13681" href="Preliminary.html#13681" class="Bound">Y</a> <a id="13683" class="Symbol">=</a> <a id="13685" href="Preliminary.html#13530" class="Function">infinite</a> <a id="13694" href="Preliminary.html#13679" class="Bound">X</a> <a id="13696" class="Symbol">→</a> <a id="13698" href="Preliminary.html#13679" class="Bound">X</a> <a id="13700" href="Preliminary.html#12650" class="Function Operator">≤</a> <a id="13702" href="Preliminary.html#13681" class="Bound">Y</a> <a id="13704" class="Symbol">→</a> <a id="13706" href="Preliminary.html#13681" class="Bound">Y</a> <a id="13708" href="Preliminary.html#12650" class="Function Operator">≤</a> <a id="13710" href="Cubical.Foundations.Powerset.html#657" class="Function">ℙ</a> <a id="13712" href="Preliminary.html#13679" class="Bound">X</a> <a id="13714" class="Symbol">→</a> <a id="13716" href="Preliminary.html#13681" class="Bound">Y</a> <a id="13718" href="Preliminary.html#12650" class="Function Operator">≤</a> <a id="13720" href="Preliminary.html#13679" class="Bound">X</a> <a id="13722" href="Preliminary.html#11002" class="Function Operator">∨</a> <a id="13724" href="Cubical.Foundations.Powerset.html#657" class="Function">ℙ</a> <a id="13726" href="Preliminary.html#13679" class="Bound">X</a> <a id="13728" href="Preliminary.html#12650" class="Function Operator">≤</a> <a id="13730" href="Preliminary.html#13681" class="Bound">Y</a>
 
 <a id="GCH"></a><a id="13733" href="Preliminary.html#13733" class="Function">GCH</a> <a id="13737" class="Symbol">:</a> <a id="13739" class="Symbol">(</a><a id="13740" href="Preliminary.html#13740" class="Bound">ℓ</a> <a id="13742" href="Preliminary.html#13742" class="Bound">ℓ′</a> <a id="13745" class="Symbol">:</a> <a id="13747" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="13752" class="Symbol">)</a> <a id="13754" class="Symbol">→</a> <a id="13756" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="13761" class="Symbol">_</a>
 <a id="13763" href="Preliminary.html#13733" class="Function">GCH</a> <a id="13767" href="Preliminary.html#13767" class="Bound">ℓ</a> <a id="13769" href="Preliminary.html#13769" class="Bound">ℓ′</a> <a id="13772" class="Symbol">=</a> <a id="13774" class="Symbol">(</a><a id="13775" href="Preliminary.html#13775" class="Bound">X</a> <a id="13777" class="Symbol">:</a> <a id="13779" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="13784" href="Preliminary.html#13767" class="Bound">ℓ</a><a id="13785" class="Symbol">)</a> <a id="13787" class="Symbol">(</a><a id="13788" href="Preliminary.html#13788" class="Bound">Y</a> <a id="13790" class="Symbol">:</a> <a id="13792" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="13797" href="Preliminary.html#13769" class="Bound">ℓ′</a><a id="13799" class="Symbol">)</a> <a id="13801" class="Symbol">→</a> <a id="13803" href="Cubical.Foundations.Prelude.html#14301" class="Function">isSet</a> <a id="13809" href="Preliminary.html#13775" class="Bound">X</a> <a id="13811" class="Symbol">→</a> <a id="13813" href="Cubical.Foundations.Prelude.html#14301" class="Function">isSet</a> <a id="13819" href="Preliminary.html#13788" class="Bound">Y</a> <a id="13821" class="Symbol">→</a> <a id="13823" href="Preliminary.html#13631" class="Function">isGCHType</a> <a id="13833" href="Preliminary.html#13775" class="Bound">X</a> <a id="13835" href="Preliminary.html#13788" class="Bound">Y</a>
 </pre>
-<p>同样地, 广义连续统假设也是一个命题.</p>
+同样地, 广义连续统假设也是一个命题.
+
 <pre class="Agda"><a id="isPropGCH"></a><a id="13871" href="Preliminary.html#13871" class="Function">isPropGCH</a> <a id="13881" class="Symbol">:</a> <a id="13883" class="Symbol">(</a><a id="13884" href="Preliminary.html#13884" class="Bound">ℓ</a> <a id="13886" href="Preliminary.html#13886" class="Bound">ℓ′</a> <a id="13889" class="Symbol">:</a> <a id="13891" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="13896" class="Symbol">)</a> <a id="13898" class="Symbol">→</a> <a id="13900" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a> <a id="13907" class="Symbol">(</a><a id="13908" href="Preliminary.html#13733" class="Function">GCH</a> <a id="13912" href="Preliminary.html#13884" class="Bound">ℓ</a> <a id="13914" href="Preliminary.html#13886" class="Bound">ℓ′</a><a id="13916" class="Symbol">)</a>
 <a id="13918" href="Preliminary.html#13871" class="Function">isPropGCH</a> <a id="13928" href="Preliminary.html#13928" class="Bound">ℓ</a> <a id="13930" href="Preliminary.html#13930" class="Bound">ℓ′</a> <a id="13933" class="Symbol">=</a> <a id="13935" href="Cubical.Foundations.HLevels.html#16788" class="Function">isPropΠ4</a> <a id="13944" class="Symbol">λ</a> <a id="13946" href="Preliminary.html#13946" class="Bound">_</a> <a id="13948" href="Preliminary.html#13948" class="Bound">_</a> <a id="13950" href="Preliminary.html#13950" class="Bound">_</a> <a id="13952" href="Preliminary.html#13952" class="Bound">_</a> <a id="13954" class="Symbol">→</a> <a id="13956" href="Cubical.Foundations.HLevels.html#16598" class="Function">isPropΠ3</a> <a id="13965" class="Symbol">λ</a> <a id="13967" href="Preliminary.html#13967" class="Bound">_</a> <a id="13969" href="Preliminary.html#13969" class="Bound">_</a> <a id="13971" href="Preliminary.html#13971" class="Bound">_</a> <a id="13973" class="Symbol">→</a> <a id="13975" href="Cubical.HITs.PropositionalTruncation.Base.html#308" class="InductiveConstructor">squash₁</a>
 </pre>
-</main>
-
-<script>
-;(function() {
-  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
-  var selector = '.task-list > li > input[type="checkbox"]';
-  var checkboxes = document.querySelectorAll(selector);
-  Array.from(checkboxes).forEach((checkbox) => {
-    var wasChecked = checkbox.checked;
-    checkbox.disabled = false;
-    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
-  });
-})();
-</script>
-</body>
-</html>
