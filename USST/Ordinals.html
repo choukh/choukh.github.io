@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>泛等结构集合论 (3) 序数</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+</head>
+<body>
+
+<header>
+<h1 class="title">泛等结构集合论 (3) 序数</h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <strong>Contents</strong><label for="contents">⊕</label>
+  <input type="checkbox" id="contents">
+  <ul>
+  <li><a href="#泛等结构集合论-3-序数" id="toc-泛等结构集合论-3-序数">泛等结构集合论 (3) 序数</a></li>
+  </ul>
+</nav>
+
+<main>
+<h1 id="泛等结构集合论-3-序数">泛等结构集合论 (3) 序数</h1>
+<blockquote>
+<p>交流Q群: 893531731<br />
+本文源码: <a href="https://github.com/choukh/USST/blob/main/src/Ordinals.lagda.md">Ordinals.lagda.md</a><br />
+高亮渲染: <a href="https://choukh.github.io/USST/Ordinals.html">Ordinals.html</a></p>
+</blockquote>
+<p>我们导入前置知识, 并全局假设 <code>PR</code>. 本讲将复刻质料集合论的重要概念: 序数.</p>
+<pre class="Agda"><a id="366" class="Symbol">{-#</a> <a id="370" class="Keyword">OPTIONS</a> <a id="378" class="Pragma">--cubical</a> <a id="388" class="Pragma">--safe</a> <a id="395" class="Symbol">#-}</a>
+<a id="399" class="Keyword">open</a> <a id="404" class="Keyword">import</a> <a id="411" href="Preliminary.html" class="Module">Preliminary</a>
+<a id="423" class="Keyword">module</a> <a id="430" href="Ordinals.html" class="Module">Ordinals</a> <a id="439" class="Symbol">⦃</a> <a id="441" href="Ordinals.html#441" class="Bound">_</a> <a id="443" class="Symbol">:</a> <a id="445" href="Preliminary.html#10619" class="Function">PR</a> <a id="448" class="Symbol">⦄</a> <a id="450" class="Keyword">where</a>
+</pre>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>
