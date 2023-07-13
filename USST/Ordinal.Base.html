@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>泛等结构集合论 (3) 序数的定义</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+</head>
+<body>
+
+<header>
+<h1 class="title">泛等结构集合论 (3) 序数的定义</h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <strong>Contents</strong><label for="contents">⊕</label>
+  <input type="checkbox" id="contents">
+  <ul>
+  <li><a href="#泛等结构集合论-3-序数的定义" id="toc-泛等结构集合论-3-序数的定义">泛等结构集合论 (3) 序数的定义</a>
+  <ul>
+  <li><a href="#序关系的一些性质" id="toc-序关系的一些性质">序关系的一些性质</a>
+  <ul>
+  <li><a href="#命题性" id="toc-命题性">命题性</a></li>
+  <li><a href="#反自反性" id="toc-反自反性">反自反性</a></li>
+  <li><a href="#传递性" id="toc-传递性">传递性</a></li>
+  <li><a href="#良基性" id="toc-良基性">良基性</a></li>
+  </ul></li>
+  <li><a href="#外延性" id="toc-外延性">外延性</a></li>
+  <li><a href="#序数的定义" id="toc-序数的定义">序数的定义</a></li>
+  </ul></li>
+  </ul>
+</nav>
+
+<main>
+<h1 id="泛等结构集合论-3-序数的定义">泛等结构集合论 (3) 序数的定义</h1>
+<blockquote>
+<p>交流Q群: 893531731<br />
+本文源码: <a href="https://github.com/choukh/USST/blob/main/src/Ordinal/Base.lagda.md">Base.lagda.md</a><br />
+高亮渲染: <a href="https://choukh.github.io/USST/Ordinal.Base.html">Base.html</a></p>
+</blockquote>
+<p>我们导入前置知识, 并全局假设 <code>PR</code>. 本讲将复刻质料集合论的重要概念: 序数.</p>
+<pre class="Agda"><a id="322" class="Symbol">{-#</a> <a id="326" class="Keyword">OPTIONS</a> <a id="334" class="Pragma">--cubical</a> <a id="344" class="Pragma">--safe</a> <a id="351" class="Symbol">#-}</a>
+<a id="355" class="Keyword">open</a> <a id="360" class="Keyword">import</a> <a id="367" href="Preliminary.html" class="Module">Preliminary</a>
+<a id="379" class="Keyword">module</a> <a id="386" href="Ordinal.Base.html" class="Module">Ordinal.Base</a> <a id="399" class="Symbol">⦃</a> <a id="401" href="Ordinal.Base.html#401" class="Bound">_</a> <a id="403" class="Symbol">:</a> <a id="405" href="Preliminary.html#10646" class="Function">PR</a> <a id="408" class="Symbol">⦄</a> <a id="410" class="Keyword">where</a>
+</pre>
+<h2 id="序关系的一些性质">序关系的一些性质</h2>
+<p>说白了, 一个序数就是由一个集合以及该集合上的一个满足一定性质的序关系所组成的结构. 我们先定义这个序关系需要满足的性质.</p>
+<p>给定类型 <code>A : Type ℓ</code> 及其上的严格序 <code>_&lt;_ : A → A → Type ℓ′</code></p>
+<pre class="Agda"><a id="556" class="Keyword">module</a> <a id="BinaryRelation"></a><a id="563" href="Ordinal.Base.html#563" class="Module">BinaryRelation</a> <a id="578" class="Symbol">{</a><a id="579" href="Ordinal.Base.html#579" class="Bound">A</a> <a id="581" class="Symbol">:</a> <a id="583" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="588" href="Preliminary.html#2599" class="Generalizable">ℓ</a><a id="589" class="Symbol">}</a> <a id="591" class="Symbol">(</a><a id="592" href="Ordinal.Base.html#592" class="Bound Operator">_&lt;_</a> <a id="596" class="Symbol">:</a> <a id="598" href="Ordinal.Base.html#579" class="Bound">A</a> <a id="600" class="Symbol">→</a> <a id="602" href="Ordinal.Base.html#579" class="Bound">A</a> <a id="604" class="Symbol">→</a> <a id="606" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="611" href="Preliminary.html#2601" class="Generalizable">ℓ′</a><a id="613" class="Symbol">)</a> <a id="615" class="Keyword">where</a>
+</pre>
+<h3 id="命题性">命题性</h3>
+<p>我们说 <code>_&lt;_</code> 是一个 <strong>命题 (propositional)</strong> 关系, 当且仅当对任意 <code>x y : A</code>, <code>x &lt; y</code> 是一个命题.</p>
+<pre class="Agda">  <a id="BinaryRelation.Propositional"></a><a id="721" href="Ordinal.Base.html#721" class="Function">Propositional</a> <a id="735" class="Symbol">:</a> <a id="737" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="742" class="Symbol">_</a>
+  <a id="746" href="Ordinal.Base.html#721" class="Function">Propositional</a> <a id="760" class="Symbol">=</a> <a id="762" class="Symbol">∀</a> <a id="764" href="Ordinal.Base.html#764" class="Bound">x</a> <a id="766" href="Ordinal.Base.html#766" class="Bound">y</a> <a id="768" class="Symbol">→</a> <a id="770" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a> <a id="777" class="Symbol">(</a><a id="778" href="Ordinal.Base.html#764" class="Bound">x</a> <a id="780" href="Ordinal.Base.html#592" class="Bound Operator">&lt;</a> <a id="782" href="Ordinal.Base.html#766" class="Bound">y</a><a id="783" class="Symbol">)</a>
+</pre>
+<p>命题性本身是一个命题.</p>
+<pre class="Agda">  <a id="BinaryRelation.isPropPropositional"></a><a id="813" href="Ordinal.Base.html#813" class="Function">isPropPropositional</a> <a id="833" class="Symbol">:</a> <a id="835" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a> <a id="842" href="Ordinal.Base.html#721" class="Function">Propositional</a>
+  <a id="858" href="Ordinal.Base.html#813" class="Function">isPropPropositional</a> <a id="878" class="Symbol">=</a> <a id="880" href="Cubical.Foundations.HLevels.html#16452" class="Function">isPropΠ2</a> <a id="889" class="Symbol">λ</a> <a id="891" href="Ordinal.Base.html#891" class="Bound">_</a> <a id="893" href="Ordinal.Base.html#893" class="Bound">_</a> <a id="895" class="Symbol">→</a> <a id="897" href="Cubical.Foundations.Prelude.html#18995" class="Function">isPropIsProp</a>
+</pre>
+<h3 id="反自反性">反自反性</h3>
+<p>我们说 <code>_&lt;_</code> 是一个 <strong>反自反 (irreflexive)</strong> 关系, 当且仅当对任意 <code>x : A</code>, <code>¬ x &lt; x</code>.</p>
+<pre class="Agda">  <a id="BinaryRelation.Irreflexive"></a><a id="1004" href="Ordinal.Base.html#1004" class="Function">Irreflexive</a> <a id="1016" class="Symbol">:</a> <a id="1018" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="1023" class="Symbol">_</a>
+  <a id="1027" href="Ordinal.Base.html#1004" class="Function">Irreflexive</a> <a id="1039" class="Symbol">=</a> <a id="1041" class="Symbol">∀</a> <a id="1043" href="Ordinal.Base.html#1043" class="Bound">x</a> <a id="1045" class="Symbol">→</a> <a id="1047" href="Cubical.Relation.Nullary.Base.html#355" class="Function Operator">¬</a> <a id="1049" href="Ordinal.Base.html#1043" class="Bound">x</a> <a id="1051" href="Ordinal.Base.html#592" class="Bound Operator">&lt;</a> <a id="1053" href="Ordinal.Base.html#1043" class="Bound">x</a>
+</pre>
+<p>反自反性是一个命题.</p>
+<pre class="Agda">  <a id="BinaryRelation.isPropIrreflexive"></a><a id="1082" href="Ordinal.Base.html#1082" class="Function">isPropIrreflexive</a> <a id="1100" class="Symbol">:</a> <a id="1102" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a> <a id="1109" href="Ordinal.Base.html#1004" class="Function">Irreflexive</a>
+  <a id="1123" href="Ordinal.Base.html#1082" class="Function">isPropIrreflexive</a> <a id="1141" class="Symbol">=</a> <a id="1143" href="Cubical.Foundations.HLevels.html#16452" class="Function">isPropΠ2</a> <a id="1152" class="Symbol">λ</a> <a id="1154" href="Ordinal.Base.html#1154" class="Bound">_</a> <a id="1156" href="Ordinal.Base.html#1156" class="Bound">_</a> <a id="1158" class="Symbol">→</a> <a id="1160" href="Cubical.Data.Empty.Properties.html#228" class="Function">isProp⊥</a>
+</pre>
+<h3 id="传递性">传递性</h3>
+<p>我们说 <code>_&lt;_</code> 是一个 <strong>传递 (transitive)</strong> 关系, 当且仅当对任意 <code>x y z : A</code>, <code>x &lt; y</code> 与 <code>y &lt; z</code> 蕴含 <code>x &lt; z</code>.</p>
+<pre class="Agda">  <a id="BinaryRelation.Transitive"></a><a id="1282" href="Ordinal.Base.html#1282" class="Function">Transitive</a> <a id="1293" class="Symbol">:</a> <a id="1295" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="1300" class="Symbol">_</a>
+  <a id="1304" href="Ordinal.Base.html#1282" class="Function">Transitive</a> <a id="1315" class="Symbol">=</a> <a id="1317" class="Symbol">∀</a> <a id="1319" href="Ordinal.Base.html#1319" class="Bound">x</a> <a id="1321" href="Ordinal.Base.html#1321" class="Bound">y</a> <a id="1323" href="Ordinal.Base.html#1323" class="Bound">z</a> <a id="1325" class="Symbol">→</a> <a id="1327" href="Ordinal.Base.html#1319" class="Bound">x</a> <a id="1329" href="Ordinal.Base.html#592" class="Bound Operator">&lt;</a> <a id="1331" href="Ordinal.Base.html#1321" class="Bound">y</a> <a id="1333" class="Symbol">→</a> <a id="1335" href="Ordinal.Base.html#1321" class="Bound">y</a> <a id="1337" href="Ordinal.Base.html#592" class="Bound Operator">&lt;</a> <a id="1339" href="Ordinal.Base.html#1323" class="Bound">z</a> <a id="1341" class="Symbol">→</a> <a id="1343" href="Ordinal.Base.html#1319" class="Bound">x</a> <a id="1345" href="Ordinal.Base.html#592" class="Bound Operator">&lt;</a> <a id="1347" href="Ordinal.Base.html#1323" class="Bound">z</a>
+</pre>
+<p>如果<code>_&lt;_</code> 是一个命题关系, 那么传递性是一个命题.</p>
+<pre class="Agda">  <a id="BinaryRelation.isPropTransitive"></a><a id="1394" href="Ordinal.Base.html#1394" class="Function">isPropTransitive</a> <a id="1411" class="Symbol">:</a> <a id="1413" href="Ordinal.Base.html#721" class="Function">Propositional</a> <a id="1427" class="Symbol">→</a> <a id="1429" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a> <a id="1436" href="Ordinal.Base.html#1282" class="Function">Transitive</a>
+  <a id="1449" href="Ordinal.Base.html#1394" class="Function">isPropTransitive</a> <a id="1466" href="Ordinal.Base.html#1466" class="Bound">prop</a> <a id="1471" class="Symbol">=</a> <a id="1473" href="Cubical.Foundations.HLevels.html#16992" class="Function">isPropΠ5</a> <a id="1482" class="Symbol">λ</a> <a id="1484" href="Ordinal.Base.html#1484" class="Bound">_</a> <a id="1486" href="Ordinal.Base.html#1486" class="Bound">_</a> <a id="1488" href="Ordinal.Base.html#1488" class="Bound">_</a> <a id="1490" href="Ordinal.Base.html#1490" class="Bound">_</a> <a id="1492" href="Ordinal.Base.html#1492" class="Bound">_</a> <a id="1494" class="Symbol">→</a> <a id="1496" href="Ordinal.Base.html#1466" class="Bound">prop</a> <a id="1501" class="Symbol">_</a> <a id="1503" class="Symbol">_</a>
+</pre>
+<h3 id="良基性">良基性</h3>
+<p>我们说在 <code>_&lt;_</code> 关系下, 一个 <code>x : A</code> <strong>可及 (accessible)</strong>, 当且仅当对任意 <code>y &lt; x</code>, <code>y</code> 也可及.</p>
+<pre class="Agda">  <a id="1604" class="Keyword">data</a> <a id="BinaryRelation.Acc"></a><a id="1609" href="Ordinal.Base.html#1609" class="Datatype">Acc</a> <a id="1613" class="Symbol">(</a><a id="1614" href="Ordinal.Base.html#1614" class="Bound">x</a> <a id="1616" class="Symbol">:</a> <a id="1618" href="Ordinal.Base.html#579" class="Bound">A</a><a id="1619" class="Symbol">)</a> <a id="1621" class="Symbol">:</a> <a id="1623" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="1628" class="Symbol">(</a><a id="1629" href="Ordinal.Base.html#588" class="Bound">ℓ</a> <a id="1631" href="Agda.Primitive.html#961" class="Primitive Operator">⊔</a> <a id="1633" href="Ordinal.Base.html#611" class="Bound">ℓ′</a><a id="1635" class="Symbol">)</a> <a id="1637" class="Keyword">where</a>
+    <a id="BinaryRelation.Acc.acc"></a><a id="1647" href="Ordinal.Base.html#1647" class="InductiveConstructor">acc</a> <a id="1651" class="Symbol">:</a> <a id="1653" class="Symbol">(∀</a> <a id="1656" href="Ordinal.Base.html#1656" class="Bound">y</a> <a id="1658" class="Symbol">→</a> <a id="1660" href="Ordinal.Base.html#1656" class="Bound">y</a> <a id="1662" href="Ordinal.Base.html#592" class="Bound Operator">&lt;</a> <a id="1664" href="Ordinal.Base.html#1614" class="Bound">x</a> <a id="1666" class="Symbol">→</a> <a id="1668" href="Ordinal.Base.html#1609" class="Datatype">Acc</a> <a id="1672" href="Ordinal.Base.html#1656" class="Bound">y</a><a id="1673" class="Symbol">)</a> <a id="1675" class="Symbol">→</a> <a id="1677" href="Ordinal.Base.html#1609" class="Datatype">Acc</a> <a id="1681" href="Ordinal.Base.html#1614" class="Bound">x</a>
+</pre>
+<p>我们说 <code>_&lt;_</code> 是一个 <strong>良基 (well-founded)</strong> 关系, 当且仅当任意 <code>x : A</code> 都可及.</p>
+<pre class="Agda">  <a id="BinaryRelation.WellFounded"></a><a id="1759" href="Ordinal.Base.html#1759" class="Function">WellFounded</a> <a id="1771" class="Symbol">:</a> <a id="1773" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="1778" class="Symbol">_</a>
+  <a id="1782" href="Ordinal.Base.html#1759" class="Function">WellFounded</a> <a id="1794" class="Symbol">=</a> <a id="1796" class="Symbol">∀</a> <a id="1798" href="Ordinal.Base.html#1798" class="Bound">x</a> <a id="1800" class="Symbol">→</a> <a id="1802" href="Ordinal.Base.html#1609" class="Datatype">Acc</a> <a id="1806" href="Ordinal.Base.html#1798" class="Bound">x</a>
+</pre>
+<p>可及性是一个命题. 下面的证明中暴露了 cubical 的底层机制, 就是那个 <code>i</code>, 以使证明更简洁. 也可以不暴露, 只需证 <code>H₁</code> 等于 <code>H₂</code>, 它们都具有 <code>∀ y → y &lt; x → Acc y</code> 类型. 由归纳假设, <code>Acc y</code> 是命题, 所以这个Π类型也是命题, 所以它的两个项 <code>H₁</code> 与 <code>H₂</code> 相等.</p>
+<pre class="Agda">  <a id="BinaryRelation.isPropAcc"></a><a id="1993" href="Ordinal.Base.html#1993" class="Function">isPropAcc</a> <a id="2003" class="Symbol">:</a> <a id="2005" class="Symbol">∀</a> <a id="2007" href="Ordinal.Base.html#2007" class="Bound">x</a> <a id="2009" class="Symbol">→</a> <a id="2011" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a> <a id="2018" class="Symbol">(</a><a id="2019" href="Ordinal.Base.html#1609" class="Datatype">Acc</a> <a id="2023" href="Ordinal.Base.html#2007" class="Bound">x</a><a id="2024" class="Symbol">)</a>
+  <a id="2028" href="Ordinal.Base.html#1993" class="Function">isPropAcc</a> <a id="2038" href="Ordinal.Base.html#2038" class="Bound">x</a> <a id="2040" class="Symbol">(</a><a id="2041" href="Ordinal.Base.html#1647" class="InductiveConstructor">acc</a> <a id="2045" href="Ordinal.Base.html#2045" class="Bound">H₁</a><a id="2047" class="Symbol">)</a> <a id="2049" class="Symbol">(</a><a id="2050" href="Ordinal.Base.html#1647" class="InductiveConstructor">acc</a> <a id="2054" href="Ordinal.Base.html#2054" class="Bound">H₂</a><a id="2056" class="Symbol">)</a> <a id="2058" href="Ordinal.Base.html#2058" class="Bound">i</a> <a id="2060" class="Symbol">=</a> <a id="2062" href="Ordinal.Base.html#1647" class="InductiveConstructor">acc</a> <a id="2066" class="Symbol">λ</a> <a id="2068" href="Ordinal.Base.html#2068" class="Bound">y</a> <a id="2070" href="Ordinal.Base.html#2070" class="Bound">y&lt;x</a> <a id="2074" class="Symbol">→</a> <a id="2076" href="Ordinal.Base.html#1993" class="Function">isPropAcc</a> <a id="2086" href="Ordinal.Base.html#2068" class="Bound">y</a> <a id="2088" class="Symbol">(</a><a id="2089" href="Ordinal.Base.html#2045" class="Bound">H₁</a> <a id="2092" href="Ordinal.Base.html#2068" class="Bound">y</a> <a id="2094" href="Ordinal.Base.html#2070" class="Bound">y&lt;x</a><a id="2097" class="Symbol">)</a> <a id="2099" class="Symbol">(</a><a id="2100" href="Ordinal.Base.html#2054" class="Bound">H₂</a> <a id="2103" href="Ordinal.Base.html#2068" class="Bound">y</a> <a id="2105" href="Ordinal.Base.html#2070" class="Bound">y&lt;x</a><a id="2108" class="Symbol">)</a> <a id="2110" href="Ordinal.Base.html#2058" class="Bound">i</a>
+</pre>
+<p>良基性也是一个命题.</p>
+<pre class="Agda">  <a id="BinaryRelation.isPropWellFounded"></a><a id="2139" href="Ordinal.Base.html#2139" class="Function">isPropWellFounded</a> <a id="2157" class="Symbol">:</a> <a id="2159" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a> <a id="2166" href="Ordinal.Base.html#1759" class="Function">WellFounded</a>
+  <a id="2180" href="Ordinal.Base.html#2139" class="Function">isPropWellFounded</a> <a id="2198" class="Symbol">=</a> <a id="2200" href="Cubical.Foundations.HLevels.html#16363" class="Function">isPropΠ</a> <a id="2208" class="Symbol">λ</a> <a id="2210" href="Ordinal.Base.html#2210" class="Bound">_</a> <a id="2212" class="Symbol">→</a> <a id="2214" href="Ordinal.Base.html#1993" class="Function">isPropAcc</a> <a id="2224" class="Symbol">_</a>
+</pre>
+<h2 id="外延性">外延性</h2>
+<p>我们说 <code>_&lt;_</code> 是一个 <strong>外延 (extensional)</strong> 关系, 当且仅当对任意 <code>x y : A</code>, 如果对任意 <code>z : A</code> 都有 <code>z &lt; x</code> 当且仅当 <code>z &lt; y</code>, 那么 <code>x ≡ y</code>.</p>
+<pre class="Agda">  <a id="BinaryRelation.Extensional"></a><a id="2359" href="Ordinal.Base.html#2359" class="Function">Extensional</a> <a id="2371" class="Symbol">:</a> <a id="2373" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="2378" class="Symbol">_</a>
+  <a id="2382" href="Ordinal.Base.html#2359" class="Function">Extensional</a> <a id="2394" class="Symbol">=</a> <a id="2396" class="Symbol">∀</a> <a id="2398" href="Ordinal.Base.html#2398" class="Bound">x</a> <a id="2400" href="Ordinal.Base.html#2400" class="Bound">y</a> <a id="2402" class="Symbol">→</a> <a id="2404" class="Symbol">(∀</a> <a id="2407" href="Ordinal.Base.html#2407" class="Bound">z</a> <a id="2409" class="Symbol">→</a> <a id="2411" href="Ordinal.Base.html#2407" class="Bound">z</a> <a id="2413" href="Ordinal.Base.html#592" class="Bound Operator">&lt;</a> <a id="2415" href="Ordinal.Base.html#2398" class="Bound">x</a> <a id="2417" href="Preliminary.html#11644" class="Function Operator">↔</a> <a id="2419" href="Ordinal.Base.html#2407" class="Bound">z</a> <a id="2421" href="Ordinal.Base.html#592" class="Bound Operator">&lt;</a> <a id="2423" href="Ordinal.Base.html#2400" class="Bound">y</a><a id="2424" class="Symbol">)</a> <a id="2426" class="Symbol">→</a> <a id="2428" href="Ordinal.Base.html#2398" class="Bound">x</a> <a id="2430" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="2432" href="Ordinal.Base.html#2400" class="Bound">y</a>
+</pre>
+<p>如果 <code>A</code> 是集合, 那么外延性是命题.</p>
+<pre class="Agda">  <a id="BinaryRelation.isPropExtensional"></a><a id="2472" href="Ordinal.Base.html#2472" class="Function">isPropExtensional</a> <a id="2490" class="Symbol">:</a> <a id="2492" href="Cubical.Foundations.Prelude.html#14301" class="Function">isSet</a> <a id="2498" href="Ordinal.Base.html#579" class="Bound">A</a> <a id="2500" class="Symbol">→</a> <a id="2502" href="Cubical.Foundations.Prelude.html#14246" class="Function">isProp</a> <a id="2509" href="Ordinal.Base.html#2359" class="Function">Extensional</a>
+  <a id="2523" href="Ordinal.Base.html#2472" class="Function">isPropExtensional</a> <a id="2541" href="Ordinal.Base.html#2541" class="Bound">A-set</a> <a id="2547" class="Symbol">=</a> <a id="2549" href="Cubical.Foundations.HLevels.html#16598" class="Function">isPropΠ3</a> <a id="2558" class="Symbol">λ</a> <a id="2560" href="Ordinal.Base.html#2560" class="Bound">_</a> <a id="2562" href="Ordinal.Base.html#2562" class="Bound">_</a> <a id="2564" href="Ordinal.Base.html#2564" class="Bound">_</a> <a id="2566" class="Symbol">→</a> <a id="2568" href="Preliminary.html#9362" class="Function">transportIsProp</a> <a id="2584" href="Cubical.Foundations.Function.html#527" class="Function Operator">$</a> <a id="2586" href="Ordinal.Base.html#2541" class="Bound">A-set</a> <a id="2592" class="Symbol">_</a> <a id="2594" class="Symbol">_</a>
+</pre>
+<h2 id="序数的定义">序数的定义</h2>
+<pre class="Agda"><a id="2619" class="Keyword">record</a> <a id="IsOrdinalRelation"></a><a id="2626" href="Ordinal.Base.html#2626" class="Record">IsOrdinalRelation</a> <a id="2644" class="Symbol">{</a><a id="2645" href="Ordinal.Base.html#2645" class="Bound">A</a> <a id="2647" class="Symbol">:</a> <a id="2649" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="2654" href="Preliminary.html#2599" class="Generalizable">ℓ</a><a id="2655" class="Symbol">}</a> <a id="2657" class="Symbol">(</a><a id="2658" href="Ordinal.Base.html#2658" class="Bound Operator">_&lt;_</a> <a id="2662" class="Symbol">:</a> <a id="2664" href="Ordinal.Base.html#2645" class="Bound">A</a> <a id="2666" class="Symbol">→</a> <a id="2668" href="Ordinal.Base.html#2645" class="Bound">A</a> <a id="2670" class="Symbol">→</a> <a id="2672" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="2677" href="Preliminary.html#2601" class="Generalizable">ℓ′</a><a id="2679" class="Symbol">)</a> <a id="2681" class="Symbol">:</a> <a id="2683" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="2688" class="Symbol">(</a><a id="2689" href="Ordinal.Base.html#2654" class="Bound">ℓ</a> <a id="2691" href="Agda.Primitive.html#961" class="Primitive Operator">⊔</a> <a id="2693" href="Ordinal.Base.html#2677" class="Bound">ℓ′</a><a id="2695" class="Symbol">)</a> <a id="2697" class="Keyword">where</a>
+  <a id="2705" class="Keyword">open</a> <a id="2710" href="Ordinal.Base.html#563" class="Module">BinaryRelation</a> <a id="2725" href="Ordinal.Base.html#2658" class="Bound Operator">_&lt;_</a>
+  <a id="2731" class="Keyword">field</a>
+    <a id="IsOrdinalRelation.&lt;-prop"></a><a id="2741" href="Ordinal.Base.html#2741" class="Field">&lt;-prop</a>    <a id="2751" class="Symbol">:</a> <a id="2753" href="Ordinal.Base.html#721" class="Function">Propositional</a>
+    <a id="IsOrdinalRelation.&lt;-irrefl"></a><a id="2771" href="Ordinal.Base.html#2771" class="Field">&lt;-irrefl</a>  <a id="2781" class="Symbol">:</a> <a id="2783" href="Ordinal.Base.html#1004" class="Function">Irreflexive</a>
+    <a id="IsOrdinalRelation.&lt;-trans"></a><a id="2799" href="Ordinal.Base.html#2799" class="Field">&lt;-trans</a>   <a id="2809" class="Symbol">:</a> <a id="2811" href="Ordinal.Base.html#1282" class="Function">Transitive</a>
+    <a id="IsOrdinalRelation.&lt;-wf"></a><a id="2826" href="Ordinal.Base.html#2826" class="Field">&lt;-wf</a>      <a id="2836" class="Symbol">:</a> <a id="2838" href="Ordinal.Base.html#1759" class="Function">WellFounded</a>
+    <a id="IsOrdinalRelation.&lt;-ext"></a><a id="2854" href="Ordinal.Base.html#2854" class="Field">&lt;-ext</a>     <a id="2864" class="Symbol">:</a> <a id="2866" href="Ordinal.Base.html#2359" class="Function">Extensional</a>
+</pre>
+<pre class="Agda"><a id="2891" class="Keyword">record</a> <a id="OrdianlStructure"></a><a id="2898" href="Ordinal.Base.html#2898" class="Record">OrdianlStructure</a> <a id="2915" class="Symbol">(</a><a id="2916" href="Ordinal.Base.html#2916" class="Bound">ℓ′</a> <a id="2919" class="Symbol">:</a> <a id="2921" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="2926" class="Symbol">)</a> <a id="2928" class="Symbol">(</a><a id="2929" href="Ordinal.Base.html#2929" class="Bound">A</a> <a id="2931" class="Symbol">:</a> <a id="2933" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="2938" href="Preliminary.html#2599" class="Generalizable">ℓ</a><a id="2939" class="Symbol">)</a> <a id="2941" class="Symbol">:</a> <a id="2943" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="2948" class="Symbol">(</a><a id="2949" href="Ordinal.Base.html#2938" class="Bound">ℓ</a> <a id="2951" href="Agda.Primitive.html#961" class="Primitive Operator">⊔</a> <a id="2953" href="Agda.Primitive.html#931" class="Primitive">ℓ-suc</a> <a id="2959" href="Ordinal.Base.html#2916" class="Bound">ℓ′</a><a id="2961" class="Symbol">)</a> <a id="2963" class="Keyword">where</a>
+  <a id="2971" class="Keyword">field</a>
+    <a id="OrdianlStructure._&lt;_"></a><a id="2981" href="Ordinal.Base.html#2981" class="Field Operator">_&lt;_</a> <a id="2985" class="Symbol">:</a> <a id="2987" href="Ordinal.Base.html#2929" class="Bound">A</a> <a id="2989" class="Symbol">→</a> <a id="2991" href="Ordinal.Base.html#2929" class="Bound">A</a> <a id="2993" class="Symbol">→</a> <a id="2995" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="3000" href="Ordinal.Base.html#2916" class="Bound">ℓ′</a>
+    <a id="OrdianlStructure.&lt;-ord"></a><a id="3007" href="Ordinal.Base.html#3007" class="Field">&lt;-ord</a> <a id="3013" class="Symbol">:</a> <a id="3015" href="Ordinal.Base.html#2626" class="Record">IsOrdinalRelation</a> <a id="3033" href="Ordinal.Base.html#2981" class="Field Operator">_&lt;_</a>
+</pre>
+<pre class="Agda"><a id="Ordinal"></a><a id="3050" href="Ordinal.Base.html#3050" class="Function">Ordinal</a> <a id="3058" class="Symbol">:</a> <a id="3060" class="Symbol">(</a><a id="3061" href="Ordinal.Base.html#3061" class="Bound">ℓ</a> <a id="3063" href="Ordinal.Base.html#3063" class="Bound">ℓ′</a> <a id="3066" class="Symbol">:</a> <a id="3068" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="3073" class="Symbol">)</a> <a id="3075" class="Symbol">→</a> <a id="3077" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="3082" class="Symbol">_</a>
+<a id="3084" href="Ordinal.Base.html#3050" class="Function">Ordinal</a> <a id="3092" href="Ordinal.Base.html#3092" class="Bound">ℓ</a> <a id="3094" href="Ordinal.Base.html#3094" class="Bound">ℓ′</a> <a id="3097" class="Symbol">=</a> <a id="3099" href="Cubical.Foundations.Structure.html#398" class="Function">TypeWithStr</a> <a id="3111" href="Ordinal.Base.html#3092" class="Bound">ℓ</a> <a id="3113" class="Symbol">(</a><a id="3114" href="Ordinal.Base.html#2898" class="Record">OrdianlStructure</a> <a id="3131" href="Ordinal.Base.html#3094" class="Bound">ℓ′</a><a id="3133" class="Symbol">)</a>
+</pre>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>
