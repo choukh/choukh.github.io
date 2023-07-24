@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>泛等结构集合论 (5) 吃自己:序数宇宙也是序数</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+</head>
+<body>
+
+<header>
+<h1 class="title">泛等结构集合论 (5) 吃自己:序数宇宙也是序数</h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <strong>Contents</strong><label for="contents">⊕</label>
+  <input type="checkbox" id="contents">
+  <ul>
+  <li><a href="#泛等结构集合论-5-吃自己-序数宇宙也是序数" id="toc-泛等结构集合论-5-吃自己-序数宇宙也是序数">泛等结构集合论 (5) 吃自己: 序数宇宙也是序数</a>
+  <ul>
+  <li><a href="#前段" id="toc-前段">前段</a>
+  <ul>
+  <li><a href="#前段解除" id="toc-前段解除">前段解除</a></li>
+  <li><a href="#单射性" id="toc-单射性">单射性</a></li>
+  </ul></li>
+  <li><a href="#严格序" id="toc-严格序">严格序</a></li>
+  </ul></li>
+  </ul>
+</nav>
+
+<main>
+<h1 id="泛等结构集合论-5-吃自己-序数宇宙也是序数">泛等结构集合论 (5) 吃自己: 序数宇宙也是序数</h1>
+<blockquote>
+<p>交流Q群: 893531731<br />
+本文源码: <a href="https://github.com/choukh/USST/blob/main/src/Ordinal/OrdInOrd.lagda.md">Ordinal.OrdInOrd.lagda.md</a><br />
+高亮渲染: <a href="https://choukh.github.io/USST/Ordinal.OrdInOrd.html">Ordinal.OrdInOrd.html</a></p>
+</blockquote>
+<pre class="Agda"><a id="332" class="Symbol">{-#</a> <a id="336" class="Keyword">OPTIONS</a> <a id="344" class="Pragma">--cubical</a> <a id="354" class="Pragma">--safe</a> <a id="361" class="Symbol">#-}</a>
+<a id="365" class="Symbol">{-#</a> <a id="369" class="Keyword">OPTIONS</a> <a id="377" class="Pragma">--lossy-unification</a> <a id="397" class="Pragma">--hidden-argument-puns</a> <a id="420" class="Symbol">#-}</a>
+<a id="424" class="Keyword">module</a> <a id="431" href="Ordinal.OrdInOrd.html" class="Module">Ordinal.OrdInOrd</a> <a id="448" class="Keyword">where</a>
+<a id="454" class="Keyword">open</a> <a id="459" class="Keyword">import</a> <a id="466" href="Preliminary.html" class="Module">Preliminary</a>
+<a id="478" class="Keyword">open</a> <a id="483" class="Keyword">import</a> <a id="490" href="Ordinal.Base.html" class="Module">Ordinal.Base</a>
+<a id="503" class="Keyword">open</a> <a id="508" class="Keyword">import</a> <a id="515" href="Ordinal.Order.html" class="Module">Ordinal.Order</a>
+</pre>
+<h2 id="前段">前段</h2>
+<p>上一章也提到了前段, 它就是序数 <code>α</code> 的底集 <code>⟨ α ⟩</code> 里小于某个元素 <code>a</code> 的那些元素 <code>B = Σ ⟨ α ⟩ (_≺ a)</code>, 它们也构成了一个序数.</p>
+<pre class="Agda"><a id="635" class="Keyword">module</a> <a id="642" href="Ordinal.OrdInOrd.html#642" class="Module">_</a> <a id="644" class="Symbol">(</a><a id="645" href="Ordinal.OrdInOrd.html#645" class="Bound">α</a> <a id="647" class="Symbol">:</a> <a id="649" href="Ordinal.Base.html#6483" class="Function">Ord</a> <a id="653" href="Preliminary.html#2692" class="Generalizable">𝓊</a><a id="654" class="Symbol">)</a> <a id="656" class="Symbol">(</a><a id="657" href="Ordinal.OrdInOrd.html#657" class="Bound">a</a> <a id="659" class="Symbol">:</a> <a id="661" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟨</a> <a id="663" href="Ordinal.OrdInOrd.html#645" class="Bound">α</a> <a id="665" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟩</a><a id="666" class="Symbol">)</a> <a id="668" class="Keyword">where</a>
+  <a id="676" class="Keyword">open</a> <a id="681" href="Ordinal.Base.html#5941" class="Module">OrdStr</a> <a id="688" class="Symbol">(</a><a id="689" href="Cubical.Foundations.Structure.html#556" class="Function">str</a> <a id="693" href="Ordinal.OrdInOrd.html#645" class="Bound">α</a><a id="694" class="Symbol">)</a>
+
+  <a id="699" class="Keyword">infix</a> <a id="705" class="Number">21</a> <a id="708" href="Ordinal.OrdInOrd.html#714" class="Function Operator">_↓_</a>
+  <a id="714" href="Ordinal.OrdInOrd.html#714" class="Function Operator">_↓_</a> <a id="718" class="Symbol">:</a> <a id="720" href="Ordinal.Base.html#6483" class="Function">Ord</a> <a id="724" href="Ordinal.OrdInOrd.html#653" class="Bound">𝓊</a>
+  <a id="728" href="Ordinal.OrdInOrd.html#714" class="Function Operator">_↓_</a> <a id="732" class="Symbol">=</a> <a id="734" href="Ordinal.OrdInOrd.html#757" class="Function">B</a> <a id="736" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="738" href="Ordinal.OrdInOrd.html#966" class="Function">strB</a>
+    <a id="747" class="Keyword">where</a>
+    <a id="757" href="Ordinal.OrdInOrd.html#757" class="Function">B</a> <a id="759" class="Symbol">:</a> <a id="761" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="766" href="Ordinal.OrdInOrd.html#653" class="Bound">𝓊</a>
+    <a id="772" href="Ordinal.OrdInOrd.html#757" class="Function">B</a> <a id="774" class="Symbol">=</a> <a id="776" href="Agda.Builtin.Sigma.html#165" class="Record">Σ</a> <a id="778" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟨</a> <a id="780" href="Ordinal.OrdInOrd.html#645" class="Bound">α</a> <a id="782" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟩</a> <a id="784" class="Symbol">(</a><a id="785" href="Ordinal.Base.html#6041" class="Function Operator">_≺</a> <a id="788" href="Ordinal.OrdInOrd.html#657" class="Bound">a</a><a id="789" class="Symbol">)</a>
+</pre>
+<p>为了完成构造, 我们还需要提供 <code>B</code> 的序数结构 <code>strB</code>. 首先取原序数的底序作为新序数的底序 <code>&lt;</code>.</p>
+<pre class="Agda">    <a id="866" href="Ordinal.OrdInOrd.html#866" class="Function Operator">_&lt;_</a> <a id="870" class="Symbol">:</a> <a id="872" href="Ordinal.OrdInOrd.html#757" class="Function">B</a> <a id="874" class="Symbol">→</a> <a id="876" href="Ordinal.OrdInOrd.html#757" class="Function">B</a> <a id="878" class="Symbol">→</a> <a id="880" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="885" href="Ordinal.OrdInOrd.html#653" class="Bound">𝓊</a>
+    <a id="891" class="Symbol">(</a><a id="892" href="Ordinal.OrdInOrd.html#892" class="Bound">x</a> <a id="894" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="896" class="Symbol">_)</a> <a id="899" href="Ordinal.OrdInOrd.html#866" class="Function Operator">&lt;</a> <a id="901" class="Symbol">(</a><a id="902" href="Ordinal.OrdInOrd.html#902" class="Bound">y</a> <a id="904" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="906" class="Symbol">_)</a> <a id="909" class="Symbol">=</a> <a id="911" href="Ordinal.OrdInOrd.html#892" class="Bound">x</a> <a id="913" href="Ordinal.Base.html#6041" class="Function Operator">≺</a> <a id="915" href="Ordinal.OrdInOrd.html#902" class="Bound">y</a>
+</pre>
+<p>现在还需要说明 <code>&lt;</code> 也是良序. 命题性和传递性是显然的.</p>
+<pre class="Agda">    <a id="966" href="Ordinal.OrdInOrd.html#966" class="Function">strB</a> <a id="971" class="Symbol">:</a> <a id="973" href="Ordinal.Base.html#5941" class="Record">OrdStr</a> <a id="980" href="Ordinal.OrdInOrd.html#757" class="Function">B</a>
+    <a id="986" href="Ordinal.OrdInOrd.html#966" class="Function">strB</a> <a id="991" class="Symbol">=</a> <a id="993" href="Ordinal.Base.html#5994" class="InductiveConstructor">mkOrdinalStr</a> <a id="1006" href="Ordinal.OrdInOrd.html#866" class="Function Operator">_&lt;_</a> <a id="1010" href="Cubical.Foundations.Function.html#527" class="Function Operator">$</a> <a id="1012" href="Ordinal.Base.html#4600" class="InductiveConstructor">BinaryRelation.mkWellOrdered</a>
+      <a id="1047" class="Symbol">(λ</a> <a id="1050" href="Ordinal.OrdInOrd.html#1050" class="Bound">_</a> <a id="1052" href="Ordinal.OrdInOrd.html#1052" class="Bound">_</a> <a id="1054" class="Symbol">→</a> <a id="1056" href="Ordinal.Base.html#4630" class="Function">≺-prop</a> <a id="1063" class="Symbol">_</a> <a id="1065" class="Symbol">_)</a>
+      <a id="1074" class="Symbol">(λ</a> <a id="1077" href="Ordinal.OrdInOrd.html#1077" class="Bound">_</a> <a id="1079" href="Ordinal.OrdInOrd.html#1079" class="Bound">_</a> <a id="1081" href="Ordinal.OrdInOrd.html#1081" class="Bound">_</a> <a id="1083" href="Ordinal.OrdInOrd.html#1083" class="Bound">x&lt;y</a> <a id="1087" href="Ordinal.OrdInOrd.html#1087" class="Bound">y&lt;z</a> <a id="1091" class="Symbol">→</a> <a id="1093" href="Ordinal.Base.html#4662" class="Function">≺-trans</a> <a id="1101" class="Symbol">_</a> <a id="1103" class="Symbol">_</a> <a id="1105" class="Symbol">_</a> <a id="1107" href="Ordinal.OrdInOrd.html#1083" class="Bound">x&lt;y</a> <a id="1111" href="Ordinal.OrdInOrd.html#1087" class="Bound">y&lt;z</a><a id="1114" class="Symbol">)</a>
+</pre>
+<p>(TODO)</p>
+<pre class="Agda">      <a id="1143" class="Symbol">(λ</a> <a id="1146" class="Symbol">(</a><a id="1147" href="Ordinal.OrdInOrd.html#1147" class="Bound">x</a> <a id="1149" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="1151" href="Ordinal.OrdInOrd.html#1151" class="Bound">x≺a</a><a id="1154" class="Symbol">)</a> <a id="1156" class="Symbol">(</a><a id="1157" href="Ordinal.OrdInOrd.html#1157" class="Bound">y</a> <a id="1159" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="1161" href="Ordinal.OrdInOrd.html#1161" class="Bound">y≺a</a><a id="1164" class="Symbol">)</a> <a id="1166" href="Ordinal.OrdInOrd.html#1166" class="Bound">ext</a> <a id="1170" class="Symbol">→</a> <a id="1172" href="Preliminary.html#9778" class="Function">Σ≡Prop</a>
+        <a id="1187" class="Symbol">(λ</a> <a id="1190" href="Ordinal.OrdInOrd.html#1190" class="Bound">_</a> <a id="1192" class="Symbol">→</a> <a id="1194" href="Ordinal.Base.html#4630" class="Function">≺-prop</a> <a id="1201" class="Symbol">_</a> <a id="1203" class="Symbol">_)</a>
+        <a id="1214" class="Symbol">(</a><a id="1215" href="Ordinal.Base.html#4691" class="Function">≺-ext</a> <a id="1221" href="Ordinal.OrdInOrd.html#1147" class="Bound">x</a> <a id="1223" href="Ordinal.OrdInOrd.html#1157" class="Bound">y</a> <a id="1225" class="Symbol">λ</a> <a id="1227" href="Ordinal.OrdInOrd.html#1227" class="Bound">z</a> <a id="1229" class="Symbol">→</a> <a id="1231" class="Symbol">(λ</a> <a id="1234" href="Ordinal.OrdInOrd.html#1234" class="Bound">z≺x</a> <a id="1238" class="Symbol">→</a> <a id="1240" href="Ordinal.OrdInOrd.html#1166" class="Bound">ext</a> <a id="1244" class="Symbol">(</a><a id="1245" href="Ordinal.OrdInOrd.html#1227" class="Bound">z</a> <a id="1247" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="1249" href="Ordinal.Base.html#4662" class="Function">≺-trans</a> <a id="1257" href="Ordinal.OrdInOrd.html#1227" class="Bound">z</a> <a id="1259" href="Ordinal.OrdInOrd.html#1147" class="Bound">x</a> <a id="1261" href="Ordinal.OrdInOrd.html#657" class="Bound">a</a> <a id="1263" href="Ordinal.OrdInOrd.html#1234" class="Bound">z≺x</a> <a id="1267" href="Ordinal.OrdInOrd.html#1151" class="Bound">x≺a</a><a id="1270" class="Symbol">)</a> <a id="1272" class="Symbol">.</a><a id="1273" href="Agda.Builtin.Sigma.html#251" class="Field">fst</a> <a id="1277" href="Ordinal.OrdInOrd.html#1234" class="Bound">z≺x</a><a id="1280" class="Symbol">)</a>
+                       <a id="1305" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="1307" class="Symbol">(λ</a> <a id="1310" href="Ordinal.OrdInOrd.html#1310" class="Bound">z≺y</a> <a id="1314" class="Symbol">→</a> <a id="1316" href="Ordinal.OrdInOrd.html#1166" class="Bound">ext</a> <a id="1320" class="Symbol">(</a><a id="1321" href="Ordinal.OrdInOrd.html#1227" class="Bound">z</a> <a id="1323" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="1325" href="Ordinal.Base.html#4662" class="Function">≺-trans</a> <a id="1333" href="Ordinal.OrdInOrd.html#1227" class="Bound">z</a> <a id="1335" href="Ordinal.OrdInOrd.html#1157" class="Bound">y</a> <a id="1337" href="Ordinal.OrdInOrd.html#657" class="Bound">a</a> <a id="1339" href="Ordinal.OrdInOrd.html#1310" class="Bound">z≺y</a> <a id="1343" href="Ordinal.OrdInOrd.html#1161" class="Bound">y≺a</a><a id="1346" class="Symbol">)</a> <a id="1348" class="Symbol">.</a><a id="1349" href="Agda.Builtin.Sigma.html#263" class="Field">snd</a> <a id="1353" href="Ordinal.OrdInOrd.html#1310" class="Bound">z≺y</a><a id="1356" class="Symbol">)))</a>
+</pre>
+<p>(TODO)</p>
+<pre class="Agda">      <a id="1387" class="Symbol">(</a><a id="1388" href="Cubical.Foundations.Function.html#1613" class="Function">uncurry</a> <a id="1396" href="Cubical.Foundations.Function.html#527" class="Function Operator">$</a> <a id="1398" href="Ordinal.Base.html#6153" class="Function">elim</a> <a id="1403" class="Symbol">λ</a> <a id="1405" href="Ordinal.OrdInOrd.html#1405" class="Bound">x</a> <a id="1407" href="Ordinal.OrdInOrd.html#1407" class="Bound">IH</a> <a id="1410" href="Ordinal.OrdInOrd.html#1410" class="Bound">x≺a</a> <a id="1414" class="Symbol">→</a> <a id="1416" href="Ordinal.Base.html#3020" class="InductiveConstructor">acc</a> <a id="1420" class="Symbol">λ</a> <a id="1422" class="Symbol">{</a> <a id="1424" class="Symbol">(</a><a id="1425" href="Ordinal.OrdInOrd.html#1425" class="Bound">y</a> <a id="1427" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="1429" href="Ordinal.OrdInOrd.html#1429" class="Bound">y≺a</a><a id="1432" class="Symbol">)</a> <a id="1434" href="Ordinal.OrdInOrd.html#1434" class="Bound">y≺x</a> <a id="1438" class="Symbol">→</a> <a id="1440" href="Ordinal.OrdInOrd.html#1407" class="Bound">IH</a> <a id="1443" href="Ordinal.OrdInOrd.html#1425" class="Bound">y</a> <a id="1445" href="Ordinal.OrdInOrd.html#1434" class="Bound">y≺x</a> <a id="1449" href="Ordinal.OrdInOrd.html#1429" class="Bound">y≺a</a> <a id="1453" class="Symbol">})</a>
+        <a id="1464" class="Keyword">where</a> <a id="1470" class="Keyword">open</a> <a id="1475" href="Ordinal.Base.html#614" class="Module">BinaryRelation</a>
+</pre>
+<h3 id="前段解除">前段解除</h3>
+<p>(TODO)</p>
+<pre class="Agda"><a id="1521" class="Keyword">module</a> <a id="1528" href="Ordinal.OrdInOrd.html#1528" class="Module">_</a> <a id="1530" class="Symbol">{</a><a id="1531" href="Ordinal.OrdInOrd.html#1531" class="Bound">α</a> <a id="1533" class="Symbol">:</a> <a id="1535" href="Ordinal.Base.html#6483" class="Function">Ord</a> <a id="1539" href="Preliminary.html#2692" class="Generalizable">𝓊</a><a id="1540" class="Symbol">}</a> <a id="1542" class="Symbol">{</a><a id="1543" href="Ordinal.OrdInOrd.html#1543" class="Bound">a</a> <a id="1545" class="Symbol">:</a> <a id="1547" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟨</a> <a id="1549" href="Ordinal.OrdInOrd.html#1531" class="Bound">α</a> <a id="1551" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟩</a><a id="1552" class="Symbol">}</a> <a id="1554" class="Keyword">where</a>
+  <a id="1562" class="Keyword">open</a> <a id="1567" href="Ordinal.Base.html#5941" class="Module">OrdStr</a> <a id="1574" class="Symbol">(</a><a id="1575" href="Cubical.Foundations.Structure.html#556" class="Function">str</a> <a id="1579" href="Ordinal.OrdInOrd.html#1531" class="Bound">α</a><a id="1580" class="Symbol">)</a>
+
+  <a id="1585" href="Ordinal.OrdInOrd.html#1585" class="Function">↑</a> <a id="1587" class="Symbol">:</a> <a id="1589" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟨</a> <a id="1591" href="Ordinal.OrdInOrd.html#1531" class="Bound">α</a> <a id="1593" href="Ordinal.OrdInOrd.html#714" class="Function Operator">↓</a> <a id="1595" href="Ordinal.OrdInOrd.html#1543" class="Bound">a</a> <a id="1597" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟩</a> <a id="1599" class="Symbol">→</a> <a id="1601" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟨</a> <a id="1603" href="Ordinal.OrdInOrd.html#1531" class="Bound">α</a> <a id="1605" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟩</a>
+  <a id="1609" href="Ordinal.OrdInOrd.html#1585" class="Function">↑</a> <a id="1611" class="Symbol">=</a> <a id="1613" href="Agda.Builtin.Sigma.html#251" class="Field">fst</a>
+</pre>
+<p>(TODO)</p>
+<pre class="Agda">  <a id="1640" href="Ordinal.OrdInOrd.html#1640" class="Function">↑-bounded</a> <a id="1650" class="Symbol">:</a> <a id="1652" class="Symbol">(</a><a id="1653" href="Ordinal.OrdInOrd.html#1653" class="Bound">x</a> <a id="1655" class="Symbol">:</a> <a id="1657" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟨</a> <a id="1659" href="Ordinal.OrdInOrd.html#1531" class="Bound">α</a> <a id="1661" href="Ordinal.OrdInOrd.html#714" class="Function Operator">↓</a> <a id="1663" href="Ordinal.OrdInOrd.html#1543" class="Bound">a</a> <a id="1665" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟩</a><a id="1666" class="Symbol">)</a> <a id="1668" class="Symbol">→</a> <a id="1670" href="Ordinal.OrdInOrd.html#1585" class="Function">↑</a> <a id="1672" href="Ordinal.OrdInOrd.html#1653" class="Bound">x</a> <a id="1674" href="Ordinal.Order.html#928" class="Field">≺⟨</a> <a id="1677" href="Ordinal.OrdInOrd.html#1531" class="Bound">α</a> <a id="1679" href="Ordinal.Order.html#928" class="Field">⟩</a> <a id="1681" href="Ordinal.OrdInOrd.html#1543" class="Bound">a</a>
+  <a id="1685" href="Ordinal.OrdInOrd.html#1640" class="Function">↑-bounded</a> <a id="1695" class="Symbol">=</a> <a id="1697" href="Agda.Builtin.Sigma.html#263" class="Field">snd</a>
+</pre>
+<p>前段解除是一个序数嵌入.</p>
+<pre class="Agda">  <a id="1730" href="Ordinal.OrdInOrd.html#1730" class="Function">↑-ordEmbed</a> <a id="1741" class="Symbol">:</a> <a id="1743" href="Ordinal.Order.html#1485" class="Record">IsOrdEmbed</a> <a id="1754" href="Ordinal.OrdInOrd.html#1585" class="Function">↑</a>
+  <a id="1758" href="Ordinal.OrdInOrd.html#1730" class="Function">↑-ordEmbed</a> <a id="1769" class="Symbol">=</a> <a id="1771" href="Ordinal.Order.html#1575" class="InductiveConstructor">mkIsOrdEmbed</a> <a id="1784" class="Symbol">(λ</a> <a id="1787" href="Ordinal.OrdInOrd.html#1787" class="Bound">_</a> <a id="1789" href="Ordinal.OrdInOrd.html#1789" class="Bound">_</a> <a id="1791" class="Symbol">→</a> <a id="1793" href="Cubical.Foundations.Function.html#468" class="Function">idfun</a> <a id="1799" class="Symbol">_)</a>
+    <a id="1806" class="Symbol">λ</a> <a id="1808" class="Symbol">{</a> <a id="1810" href="Ordinal.OrdInOrd.html#1810" class="Bound">b</a> <a id="1812" class="Symbol">(</a><a id="1813" href="Ordinal.OrdInOrd.html#1813" class="Bound">a′</a> <a id="1816" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="1818" href="Ordinal.OrdInOrd.html#1818" class="Bound">a′≺a</a><a id="1822" class="Symbol">)</a> <a id="1824" href="Ordinal.OrdInOrd.html#1824" class="Bound">b≺a′</a> <a id="1829" class="Symbol">→</a> <a id="1831" class="Symbol">(</a><a id="1832" href="Ordinal.OrdInOrd.html#1810" class="Bound">b</a> <a id="1834" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="1836" href="Ordinal.Base.html#4662" class="Function">≺-trans</a> <a id="1844" class="Symbol">_</a> <a id="1846" class="Symbol">_</a> <a id="1848" class="Symbol">_</a> <a id="1850" href="Ordinal.OrdInOrd.html#1824" class="Bound">b≺a′</a> <a id="1855" href="Ordinal.OrdInOrd.html#1818" class="Bound">a′≺a</a><a id="1859" class="Symbol">)</a> <a id="1861" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="1863" href="Ordinal.OrdInOrd.html#1824" class="Bound">b≺a′</a> <a id="1868" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="1870" href="Cubical.Foundations.Prelude.html#915" class="Function">refl</a> <a id="1875" class="Symbol">}</a>
+</pre>
+<h3 id="单射性">单射性</h3>
+<p>(TODO)</p>
+<pre class="Agda"><a id="↓≤"></a><a id="1907" href="Ordinal.OrdInOrd.html#1907" class="Function">↓≤</a> <a id="1910" class="Symbol">:</a> <a id="1912" class="Symbol">{</a><a id="1913" href="Ordinal.OrdInOrd.html#1913" class="Bound">a</a> <a id="1915" class="Symbol">:</a> <a id="1917" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟨</a> <a id="1919" href="Ordinal.Base.html#6588" class="Generalizable">α</a> <a id="1921" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟩</a><a id="1922" class="Symbol">}</a> <a id="1924" class="Symbol">→</a> <a id="1926" href="Ordinal.Base.html#6588" class="Generalizable">α</a> <a id="1928" href="Ordinal.OrdInOrd.html#714" class="Function Operator">↓</a> <a id="1930" href="Ordinal.OrdInOrd.html#1913" class="Bound">a</a> <a id="1932" href="Ordinal.Order.html#6554" class="Function Operator">≤</a> <a id="1934" href="Ordinal.Base.html#6588" class="Generalizable">α</a>
+<a id="1936" href="Ordinal.OrdInOrd.html#1907" class="Function">↓≤</a> <a id="1939" class="Symbol">=</a> <a id="1941" href="Ordinal.OrdInOrd.html#1585" class="Function">↑</a> <a id="1943" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="1945" href="Ordinal.OrdInOrd.html#1730" class="Function">↑-ordEmbed</a>
+</pre>
+<p>(TODO)</p>
+<p>↓-reflects-≼ : (a b : ⟨ α ⟩) → α ↓ a ≤ α ↓ b → a ≼⟨ α ⟩ b ↓-reflects-≼ {α} a b (f , f-ordEmb) z z≺a = {! !} where ↑eq : ↑ ≡ ↑ ∘ f ↑eq = ordEmbed-unique ↑ (↑ ∘ f) ↑-ordEmbed (str {! !})</p>
+<p>(TODO)</p>
+<p>↓-inj : (a b : ⟨ α ⟩) → α ↓ a ≡ α ↓ b → a ≡ b ↓-inj a b eq = {! !}</p>
+<h2 id="严格序">严格序</h2>
+<p>(TODO)</p>
+<pre class="Agda"><a id="_&lt;_"></a><a id="2267" href="Ordinal.OrdInOrd.html#2267" class="Function Operator">_&lt;_</a> <a id="2271" class="Symbol">:</a> <a id="2273" href="Ordinal.Base.html#6483" class="Function">Ord</a> <a id="2277" href="Preliminary.html#2692" class="Generalizable">𝓊</a> <a id="2279" class="Symbol">→</a> <a id="2281" href="Ordinal.Base.html#6483" class="Function">Ord</a> <a id="2285" href="Preliminary.html#2694" class="Generalizable">𝓋</a> <a id="2287" class="Symbol">→</a> <a id="2289" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="2294" class="Symbol">(</a><a id="2295" href="Preliminary.html#2692" class="Generalizable">𝓊</a> <a id="2297" href="Agda.Primitive.html#961" class="Primitive Operator">⊔</a> <a id="2299" href="Preliminary.html#2694" class="Generalizable">𝓋</a><a id="2300" class="Symbol">)</a>
+<a id="2302" href="Ordinal.OrdInOrd.html#2302" class="Bound">α</a> <a id="2304" href="Ordinal.OrdInOrd.html#2267" class="Function Operator">&lt;</a> <a id="2306" href="Ordinal.OrdInOrd.html#2306" class="Bound">β</a> <a id="2308" class="Symbol">=</a> <a id="2310" href="Preliminary.html#5407" class="Function">Σ</a> <a id="2312" href="Ordinal.OrdInOrd.html#2312" class="Bound">b</a> <a id="2314" href="Preliminary.html#5407" class="Function">∶</a> <a id="2316" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟨</a> <a id="2318" href="Ordinal.OrdInOrd.html#2306" class="Bound">β</a> <a id="2320" href="Cubical.Foundations.Structure.html#639" class="Function Operator">⟩</a> <a id="2322" href="Preliminary.html#5407" class="Function">,</a> <a id="2324" href="Ordinal.OrdInOrd.html#2302" class="Bound">α</a> <a id="2326" href="Ordinal.Base.html#7582" class="Function Operator">≃ₒ</a> <a id="2329" class="Symbol">(</a><a id="2330" href="Ordinal.OrdInOrd.html#2306" class="Bound">β</a> <a id="2332" href="Ordinal.OrdInOrd.html#714" class="Function Operator">↓</a> <a id="2334" href="Ordinal.OrdInOrd.html#2312" class="Bound">b</a><a id="2335" class="Symbol">)</a>
+</pre>
+<p>(TODO)</p>
+<p>&lt;-prop : (α : Ord 𝓊) (β : Ord 𝓋) → isProp (α &lt; β) &lt;-prop = {! !}</p>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>
