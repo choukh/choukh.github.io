@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>泛等结构集合论 (6) 哈特格斯数</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+</head>
+<body>
+
+<header>
+<h1 class="title">泛等结构集合论 (6) 哈特格斯数</h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <strong>Contents</strong><label for="contents">⊕</label>
+  <input type="checkbox" id="contents">
+  <ul>
+  <li><a href="#泛等结构集合论-6-哈特格斯数" id="toc-泛等结构集合论-6-哈特格斯数">泛等结构集合论 (6) 哈特格斯数</a></li>
+  </ul>
+</nav>
+
+<main>
+<h1 id="泛等结构集合论-6-哈特格斯数">泛等结构集合论 (6) 哈特格斯数</h1>
+<blockquote>
+<p>交流Q群: 893531731<br />
+本文源码: <a href="https://github.com/choukh/USST/blob/main/src/Cardinal/Hartogs.lagda.md">Cardinal.Hartogs.lagda.md</a><br />
+高亮渲染: <a href="https://choukh.github.io/USST/Cardinal.Hartogs.html">Cardinal.Hartogs.html</a></p>
+</blockquote>
+<pre class="Agda"><a id="317" class="Symbol">{-#</a> <a id="321" class="Keyword">OPTIONS</a> <a id="329" class="Pragma">--cubical</a> <a id="339" class="Pragma">--safe</a> <a id="346" class="Symbol">#-}</a>
+<a id="350" class="Symbol">{-#</a> <a id="354" class="Keyword">OPTIONS</a> <a id="362" class="Pragma">--lossy-unification</a> <a id="382" class="Symbol">#-}</a>
+<a id="386" class="Keyword">module</a> <a id="393" href="Cardinal.Hartogs.html" class="Module">Cardinal.Hartogs</a> <a id="410" class="Keyword">where</a>
+<a id="416" class="Keyword">open</a> <a id="421" class="Keyword">import</a> <a id="428" href="Preliminary.html" class="Module">Preliminary</a>
+<a id="440" class="Keyword">open</a> <a id="445" class="Keyword">import</a> <a id="452" href="Ordinal.html" class="Module">Ordinal</a>
+<a id="460" class="Keyword">open</a> <a id="465" href="Ordinal.Base.html#653" class="Module">BinaryRelation</a>
+</pre>
+<pre class="Agda"><a id="493" class="Keyword">module</a> <a id="Pre"></a><a id="500" href="Cardinal.Hartogs.html#500" class="Module">Pre</a> <a id="504" class="Symbol">{</a><a id="505" href="Cardinal.Hartogs.html#505" class="Bound">A</a> <a id="507" class="Symbol">:</a> <a id="509" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="514" href="Preliminary.html#2692" class="Generalizable">𝓊</a><a id="515" class="Symbol">}</a> <a id="517" class="Symbol">(</a><a id="518" href="Cardinal.Hartogs.html#518" class="Bound">A-set</a> <a id="524" class="Symbol">:</a> <a id="526" href="Cubical.Foundations.Prelude.html#14301" class="Function">isSet</a> <a id="532" href="Cardinal.Hartogs.html#505" class="Bound">A</a><a id="533" class="Symbol">)</a> <a id="535" class="Keyword">where</a>
+</pre>
+<p>ℍ : Ord (𝓊 ⁺) ℍ = ?</p>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>
