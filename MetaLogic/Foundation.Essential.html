@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Foundation.Essential</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+</head>
+<body>
+
+<header>
+<h1 class="title"></h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <strong>Contents</strong><label for="contents">⊕</label>
+  <input type="checkbox" id="contents">
+  <ul>
+  <li><a href="#数学基础-简介" id="toc-数学基础-简介">数学基础: 简介</a></li>
+  </ul>
+</nav>
+
+<main>
+<blockquote>
+<p>交流Q群: 893531731<br />
+本文源码: <a href="">Github - Foundation.Essential.lagda.md</a><br />
+高亮渲染: <a href="">GitHub Pages - Foundation.Essential.html</a></p>
+</blockquote>
+<h1 id="数学基础-简介">数学基础: 简介</h1>
+<pre class="Agda"><a id="150" class="Keyword">module</a> <a id="157" href="Foundation.Essential.html" class="Module">Foundation.Essential</a> <a id="178" class="Keyword">where</a>
+
+<a id="185" class="Keyword">open</a> <a id="190" class="Keyword">import</a> <a id="197" href="Foundation.Prelude.html" class="Module">Foundation.Prelude</a> <a id="216" class="Keyword">public</a>
+<a id="223" class="Keyword">open</a> <a id="228" class="Keyword">import</a> <a id="235" href="Foundation.Logic.html" class="Module">Foundation.Logic</a> <a id="252" class="Keyword">public</a>
+<a id="259" class="Keyword">open</a> <a id="264" class="Keyword">import</a> <a id="271" href="Foundation.Set.Powerset.html" class="Module">Foundation.Set.Powerset</a> <a id="295" class="Keyword">public</a>
+<a id="302" class="Keyword">open</a> <a id="307" class="Keyword">import</a> <a id="314" href="Foundation.Function.Bundles.html" class="Module">Foundation.Function.Bundles</a> <a id="342" class="Keyword">public</a>
+<a id="349" class="Keyword">open</a> <a id="354" class="Keyword">import</a> <a id="361" href="Foundation.Function.Sequance.html" class="Module">Foundation.Function.Sequance</a> <a id="390" class="Keyword">public</a>
+
+<a id="398" class="Keyword">open</a> <a id="403" class="Keyword">import</a> <a id="410" href="Foundation.Data.Empty.html" class="Module">Foundation.Data.Empty</a> <a id="432" class="Keyword">public</a>
+<a id="439" class="Keyword">open</a> <a id="444" class="Keyword">import</a> <a id="451" href="Foundation.Data.Unit.html" class="Module">Foundation.Data.Unit</a> <a id="472" class="Keyword">public</a>
+<a id="479" class="Keyword">open</a> <a id="484" class="Keyword">import</a> <a id="491" href="Foundation.Data.Bool.html" class="Module">Foundation.Data.Bool</a> <a id="512" class="Keyword">public</a>
+<a id="519" class="Keyword">open</a> <a id="524" class="Keyword">import</a> <a id="531" href="Foundation.Data.Nat.html" class="Module">Foundation.Data.Nat</a> <a id="551" class="Keyword">public</a>
+<a id="558" class="Keyword">open</a> <a id="563" class="Keyword">import</a> <a id="570" href="Foundation.Data.Sigma.html" class="Module">Foundation.Data.Sigma</a> <a id="592" class="Keyword">public</a>
+<a id="599" class="Keyword">open</a> <a id="604" class="Keyword">import</a> <a id="611" href="Foundation.Data.Sum.html" class="Module">Foundation.Data.Sum</a> <a id="631" class="Keyword">public</a>
+<a id="638" class="Keyword">open</a> <a id="643" class="Keyword">import</a> <a id="650" href="Foundation.Data.List.html" class="Module">Foundation.Data.List</a> <a id="671" class="Keyword">public</a>
+<a id="678" class="Keyword">open</a> <a id="683" class="Keyword">import</a> <a id="690" href="Foundation.Data.Vec.html" class="Module">Foundation.Data.Vec</a> <a id="710" class="Keyword">public</a>
+
+<a id="718" class="Keyword">open</a> <a id="723" class="Keyword">import</a> <a id="730" href="Foundation.Relation.Nullary.Negation.html" class="Module">Foundation.Relation.Nullary.Negation</a> <a id="767" class="Keyword">public</a>
+<a id="774" class="Keyword">open</a> <a id="779" class="Keyword">import</a> <a id="786" href="Foundation.Relation.Nullary.Decidable.html" class="Module">Foundation.Relation.Nullary.Decidable</a> <a id="824" class="Keyword">public</a>
+<a id="831" class="Keyword">open</a> <a id="836" class="Keyword">import</a> <a id="843" href="Foundation.Relation.Nullary.Discrete.html" class="Module">Foundation.Relation.Nullary.Discrete</a> <a id="880" class="Keyword">public</a>
+
+<a id="888" class="Keyword">open</a> <a id="893" class="Keyword">import</a> <a id="900" href="Foundation.Relation.Unary.Countable.html" class="Module">Foundation.Relation.Unary.Countable</a> <a id="936" class="Keyword">public</a>
+<a id="943" class="Keyword">open</a> <a id="948" class="Keyword">import</a> <a id="955" href="Foundation.Relation.Unary.Enumerable.html" class="Module">Foundation.Relation.Unary.Enumerable</a> <a id="992" class="Symbol">as</a> <a id="995" class="Module">E</a> <a id="997" class="Keyword">public</a>
+<a id="1004" class="Keyword">open</a> <a id="1009" href="Foundation.Relation.Unary.Enumerable.html#2015" class="Module">E.ListView</a> <a id="1020" class="Keyword">public</a>
+</pre>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Foundation.Data.Nat</title><link rel="stylesheet" href="Agda.css"><script type="text/javascript" src="highlight-hover.js"></script></head><body><pre class="Agda"><a id="1" class="Keyword">module</a> <a id="8" href="Foundation.Data.Nat.html" class="Module">Foundation.Data.Nat</a> <a id="28" class="Keyword">where</a>
+
+<a id="35" class="Keyword">open</a> <a id="40" class="Keyword">import</a> <a id="47" href="Foundation.Prelude.html" class="Module">Foundation.Prelude</a>
+<a id="66" class="Keyword">open</a> <a id="71" class="Keyword">import</a> <a id="78" href="Foundation.Relation.Nullary.Discrete.html" class="Module">Foundation.Relation.Nullary.Discrete</a>
+
+<a id="116" class="Keyword">open</a> <a id="121" class="Keyword">import</a> <a id="128" href="Data.Nat.Properties.html" class="Module">Data.Nat.Properties</a> <a id="148" class="Symbol">as</a> <a id="151" class="Module">ℕ</a> <a id="153" class="Keyword">public</a>
+  <a id="162" class="Keyword">using</a> <a id="168" class="Symbol">(</a>
+    <a id="174" href="Data.Nat.Properties.html#14663" class="Function">+-suc</a><a id="179" class="Symbol">;</a> <a id="181" href="Data.Nat.Properties.html#15204" class="Function">+-comm</a>
+  <a id="190" class="Symbol">)</a>
+
+<a id="discreteℕ"></a><a id="193" href="Foundation.Data.Nat.html#193" class="Function">discreteℕ</a> <a id="203" class="Symbol">:</a> <a id="205" href="Relation.Binary.Definitions.html#6468" class="Function">discrete</a> <a id="214" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+<a id="216" href="Foundation.Data.Nat.html#193" class="Function">discreteℕ</a> <a id="226" class="Symbol">=</a> <a id="228" href="Data.Nat.Properties.html#3568" class="Function Operator">ℕ._≟_</a>
+
+<a id="isSetℕ"></a><a id="235" href="Foundation.Data.Nat.html#235" class="Function">isSetℕ</a> <a id="242" class="Symbol">:</a> <a id="244" href="Foundation.Prelude.HLevel.html#889" class="Function">isSet</a> <a id="250" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+<a id="252" href="Foundation.Data.Nat.html#235" class="Function">isSetℕ</a> <a id="259" class="Symbol">=</a> <a id="261" href="Foundation.Relation.Nullary.Discrete.html#547" class="Function">discrete→isSet</a> <a id="276" href="Foundation.Data.Nat.html#193" class="Function">discreteℕ</a>
+</pre></body></html>

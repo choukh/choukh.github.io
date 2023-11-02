@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>FOL.Language</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+</head>
+<body>
+
+<header>
+<h1 class="title"></h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <strong>Contents</strong><label for="contents">⊕</label>
+  <input type="checkbox" id="contents">
+  <ul>
+  <li><a href="#一阶逻辑-1.语言" id="toc-一阶逻辑-1.语言">一阶逻辑: 1.语言</a></li>
+  </ul>
+</nav>
+
+<main>
+<blockquote>
+<p>交流Q群: 893531731<br />
+本文源码: <a href="">Github - FOL.Language.lagda.md</a><br />
+高亮渲染: <a href="">GitHub Pages - FOL.Language.html</a></p>
+</blockquote>
+<h1 id="一阶逻辑-1.语言">一阶逻辑: 1.语言</h1>
+<pre class="Agda"><a id="136" class="Keyword">module</a> <a id="143" href="FOL.Language.html" class="Module">FOL.Language</a> <a id="156" class="Keyword">where</a>
+
+<a id="163" class="Keyword">open</a> <a id="168" class="Keyword">import</a> <a id="175" href="Foundation.Essential.html" class="Module">Foundation.Essential</a>
+
+<a id="197" class="Keyword">record</a> <a id="Language"></a><a id="204" href="FOL.Language.html#204" class="Record">Language</a> <a id="213" class="Symbol">:</a> <a id="215" href="Agda.Primitive.html#388" class="Primitive">𝕋₁</a> <a id="218" class="Keyword">where</a>
+  <a id="226" class="Keyword">field</a>
+    <a id="Language.𝓕"></a><a id="236" href="FOL.Language.html#236" class="Field">𝓕</a> <a id="238" class="Symbol">:</a> <a id="240" href="Agda.Primitive.html#388" class="Primitive">𝕋</a>
+    <a id="Language.𝓡"></a><a id="246" href="FOL.Language.html#246" class="Field">𝓡</a> <a id="248" class="Symbol">:</a> <a id="250" href="Agda.Primitive.html#388" class="Primitive">𝕋</a>
+    <a id="Language.∣_∣ᶠ"></a><a id="256" href="FOL.Language.html#256" class="Field Operator">∣_∣ᶠ</a> <a id="261" class="Symbol">:</a> <a id="263" href="FOL.Language.html#236" class="Field">𝓕</a> <a id="265" class="Symbol">→</a> <a id="267" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+    <a id="Language.∣_∣ᴿ"></a><a id="273" href="FOL.Language.html#273" class="Field Operator">∣_∣ᴿ</a> <a id="278" class="Symbol">:</a> <a id="280" href="FOL.Language.html#246" class="Field">𝓡</a> <a id="282" class="Symbol">→</a> <a id="284" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+    <a id="Language.discr𝓕"></a><a id="290" href="FOL.Language.html#290" class="Field">discr𝓕</a> <a id="297" class="Symbol">:</a> <a id="299" href="Relation.Binary.Definitions.html#6468" class="Function">discrete</a> <a id="308" href="FOL.Language.html#236" class="Field">𝓕</a>
+    <a id="Language.discr𝓡"></a><a id="314" href="FOL.Language.html#314" class="Field">discr𝓡</a> <a id="321" class="Symbol">:</a> <a id="323" href="Relation.Binary.Definitions.html#6468" class="Function">discrete</a> <a id="332" href="FOL.Language.html#246" class="Field">𝓡</a>
+    <a id="Language.enum𝓕"></a><a id="338" href="FOL.Language.html#338" class="Field">enum𝓕</a> <a id="344" class="Symbol">:</a> <a id="346" href="Foundation.Relation.Unary.Enumerable.html#2456" class="Function">enumerable</a> <a id="357" href="FOL.Language.html#236" class="Field">𝓕</a>
+    <a id="Language.enum𝓡"></a><a id="363" href="FOL.Language.html#363" class="Field">enum𝓡</a> <a id="369" class="Symbol">:</a> <a id="371" href="Foundation.Relation.Unary.Enumerable.html#2456" class="Function">enumerable</a> <a id="382" href="FOL.Language.html#246" class="Field">𝓡</a>
+
+  <a id="Language.count𝓕"></a><a id="387" href="FOL.Language.html#387" class="Function">count𝓕</a> <a id="394" class="Symbol">:</a> <a id="396" href="Foundation.Relation.Unary.Countable.html#158" class="Function">countable</a> <a id="406" href="FOL.Language.html#236" class="Field">𝓕</a>
+  <a id="410" href="FOL.Language.html#387" class="Function">count𝓕</a> <a id="417" class="Symbol">=</a> <a id="419" href="Foundation.Relation.Unary.Enumerable.html#9022" class="Function">discr→enum→count</a> <a id="436" href="FOL.Language.html#290" class="Field">discr𝓕</a> <a id="443" href="FOL.Language.html#338" class="Field">enum𝓕</a>
+
+  <a id="Language.count𝓡"></a><a id="452" href="FOL.Language.html#452" class="Function">count𝓡</a> <a id="459" class="Symbol">:</a> <a id="461" href="Foundation.Relation.Unary.Countable.html#158" class="Function">countable</a> <a id="471" href="FOL.Language.html#246" class="Field">𝓡</a>
+  <a id="475" href="FOL.Language.html#452" class="Function">count𝓡</a> <a id="482" class="Symbol">=</a> <a id="484" href="Foundation.Relation.Unary.Enumerable.html#9022" class="Function">discr→enum→count</a> <a id="501" href="FOL.Language.html#314" class="Field">discr𝓡</a> <a id="508" href="FOL.Language.html#363" class="Field">enum𝓡</a>
+
+  <a id="Language.isSet𝓕"></a><a id="517" href="FOL.Language.html#517" class="Function">isSet𝓕</a> <a id="524" class="Symbol">:</a> <a id="526" href="Foundation.Prelude.HLevel.html#889" class="Function">isSet</a> <a id="532" href="FOL.Language.html#236" class="Field">𝓕</a>
+  <a id="536" href="FOL.Language.html#517" class="Function">isSet𝓕</a> <a id="543" class="Symbol">=</a> <a id="545" href="Foundation.Relation.Nullary.Discrete.html#547" class="Function">discrete→isSet</a> <a id="560" href="FOL.Language.html#290" class="Field">discr𝓕</a>
+
+  <a id="Language.isSet𝓡"></a><a id="570" href="FOL.Language.html#570" class="Function">isSet𝓡</a> <a id="577" class="Symbol">:</a> <a id="579" href="Foundation.Prelude.HLevel.html#889" class="Function">isSet</a> <a id="585" href="FOL.Language.html#246" class="Field">𝓡</a>
+  <a id="589" href="FOL.Language.html#570" class="Function">isSet𝓡</a> <a id="596" class="Symbol">=</a> <a id="598" href="Foundation.Relation.Nullary.Discrete.html#547" class="Function">discrete→isSet</a> <a id="613" href="FOL.Language.html#314" class="Field">discr𝓡</a>
+</pre>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>
