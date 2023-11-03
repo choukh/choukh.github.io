@@ -21,41 +21,41 @@
     <strong>Contents</strong><label for="contents">⊕</label>
   <input type="checkbox" id="contents">
   <ul>
-  <li><a href="#数学基础-简介" id="toc-数学基础-简介">数学基础: 简介</a></li>
+  <li><a href="#数学基础" id="toc-数学基础">数学基础</a></li>
   </ul>
 </nav>
 
 <main>
+<h1 id="数学基础">数学基础</h1>
 <blockquote>
 <p>交流Q群: 893531731<br />
 本文源码: <a href="">Github - Foundation.Essential.lagda.md</a><br />
 高亮渲染: <a href="">GitHub Pages - Foundation.Essential.html</a></p>
 </blockquote>
-<h1 id="数学基础-简介">数学基础: 简介</h1>
-<pre class="Agda"><a id="150" class="Keyword">module</a> <a id="157" href="Foundation.Essential.html" class="Module">Foundation.Essential</a> <a id="178" class="Keyword">where</a>
+<pre class="Agda"><a id="146" class="Keyword">module</a> <a id="153" href="Foundation.Essential.html" class="Module">Foundation.Essential</a> <a id="174" class="Keyword">where</a>
 
-<a id="185" class="Keyword">open</a> <a id="190" class="Keyword">import</a> <a id="197" href="Foundation.Prelude.html" class="Module">Foundation.Prelude</a> <a id="216" class="Keyword">public</a>
-<a id="223" class="Keyword">open</a> <a id="228" class="Keyword">import</a> <a id="235" href="Foundation.Logic.html" class="Module">Foundation.Logic</a> <a id="252" class="Keyword">public</a>
-<a id="259" class="Keyword">open</a> <a id="264" class="Keyword">import</a> <a id="271" href="Foundation.Set.Powerset.html" class="Module">Foundation.Set.Powerset</a> <a id="295" class="Keyword">public</a>
-<a id="302" class="Keyword">open</a> <a id="307" class="Keyword">import</a> <a id="314" href="Foundation.Function.Bundles.html" class="Module">Foundation.Function.Bundles</a> <a id="342" class="Keyword">public</a>
-<a id="349" class="Keyword">open</a> <a id="354" class="Keyword">import</a> <a id="361" href="Foundation.Function.Sequance.html" class="Module">Foundation.Function.Sequance</a> <a id="390" class="Keyword">public</a>
+<a id="181" class="Keyword">open</a> <a id="186" class="Keyword">import</a> <a id="193" href="Foundation.Prelude.html" class="Module">Foundation.Prelude</a> <a id="212" class="Keyword">public</a>
+<a id="219" class="Keyword">open</a> <a id="224" class="Keyword">import</a> <a id="231" href="Foundation.Logic.html" class="Module">Foundation.Logic</a> <a id="248" class="Keyword">public</a>
+<a id="255" class="Keyword">open</a> <a id="260" class="Keyword">import</a> <a id="267" href="Foundation.Set.Powerset.html" class="Module">Foundation.Set.Powerset</a> <a id="291" class="Keyword">public</a>
+<a id="298" class="Keyword">open</a> <a id="303" class="Keyword">import</a> <a id="310" href="Foundation.Function.Bundles.html" class="Module">Foundation.Function.Bundles</a> <a id="338" class="Keyword">public</a>
+<a id="345" class="Keyword">open</a> <a id="350" class="Keyword">import</a> <a id="357" href="Foundation.Function.Sequance.html" class="Module">Foundation.Function.Sequance</a> <a id="386" class="Keyword">public</a>
 
-<a id="398" class="Keyword">open</a> <a id="403" class="Keyword">import</a> <a id="410" href="Foundation.Data.Empty.html" class="Module">Foundation.Data.Empty</a> <a id="432" class="Keyword">public</a>
-<a id="439" class="Keyword">open</a> <a id="444" class="Keyword">import</a> <a id="451" href="Foundation.Data.Unit.html" class="Module">Foundation.Data.Unit</a> <a id="472" class="Keyword">public</a>
-<a id="479" class="Keyword">open</a> <a id="484" class="Keyword">import</a> <a id="491" href="Foundation.Data.Bool.html" class="Module">Foundation.Data.Bool</a> <a id="512" class="Keyword">public</a>
-<a id="519" class="Keyword">open</a> <a id="524" class="Keyword">import</a> <a id="531" href="Foundation.Data.Nat.html" class="Module">Foundation.Data.Nat</a> <a id="551" class="Keyword">public</a>
-<a id="558" class="Keyword">open</a> <a id="563" class="Keyword">import</a> <a id="570" href="Foundation.Data.Sigma.html" class="Module">Foundation.Data.Sigma</a> <a id="592" class="Keyword">public</a>
-<a id="599" class="Keyword">open</a> <a id="604" class="Keyword">import</a> <a id="611" href="Foundation.Data.Sum.html" class="Module">Foundation.Data.Sum</a> <a id="631" class="Keyword">public</a>
-<a id="638" class="Keyword">open</a> <a id="643" class="Keyword">import</a> <a id="650" href="Foundation.Data.List.html" class="Module">Foundation.Data.List</a> <a id="671" class="Keyword">public</a>
-<a id="678" class="Keyword">open</a> <a id="683" class="Keyword">import</a> <a id="690" href="Foundation.Data.Vec.html" class="Module">Foundation.Data.Vec</a> <a id="710" class="Keyword">public</a>
+<a id="394" class="Keyword">open</a> <a id="399" class="Keyword">import</a> <a id="406" href="Foundation.Data.Empty.html" class="Module">Foundation.Data.Empty</a> <a id="428" class="Keyword">public</a>
+<a id="435" class="Keyword">open</a> <a id="440" class="Keyword">import</a> <a id="447" href="Foundation.Data.Unit.html" class="Module">Foundation.Data.Unit</a> <a id="468" class="Keyword">public</a>
+<a id="475" class="Keyword">open</a> <a id="480" class="Keyword">import</a> <a id="487" href="Foundation.Data.Bool.html" class="Module">Foundation.Data.Bool</a> <a id="508" class="Keyword">public</a>
+<a id="515" class="Keyword">open</a> <a id="520" class="Keyword">import</a> <a id="527" href="Foundation.Data.Nat.html" class="Module">Foundation.Data.Nat</a> <a id="547" class="Keyword">public</a>
+<a id="554" class="Keyword">open</a> <a id="559" class="Keyword">import</a> <a id="566" href="Foundation.Data.Sigma.html" class="Module">Foundation.Data.Sigma</a> <a id="588" class="Keyword">public</a>
+<a id="595" class="Keyword">open</a> <a id="600" class="Keyword">import</a> <a id="607" href="Foundation.Data.Sum.html" class="Module">Foundation.Data.Sum</a> <a id="627" class="Keyword">public</a>
+<a id="634" class="Keyword">open</a> <a id="639" class="Keyword">import</a> <a id="646" href="Foundation.Data.List.html" class="Module">Foundation.Data.List</a> <a id="667" class="Keyword">public</a>
+<a id="674" class="Keyword">open</a> <a id="679" class="Keyword">import</a> <a id="686" href="Foundation.Data.Vec.html" class="Module">Foundation.Data.Vec</a> <a id="706" class="Keyword">public</a>
 
-<a id="718" class="Keyword">open</a> <a id="723" class="Keyword">import</a> <a id="730" href="Foundation.Relation.Nullary.Negation.html" class="Module">Foundation.Relation.Nullary.Negation</a> <a id="767" class="Keyword">public</a>
-<a id="774" class="Keyword">open</a> <a id="779" class="Keyword">import</a> <a id="786" href="Foundation.Relation.Nullary.Decidable.html" class="Module">Foundation.Relation.Nullary.Decidable</a> <a id="824" class="Keyword">public</a>
-<a id="831" class="Keyword">open</a> <a id="836" class="Keyword">import</a> <a id="843" href="Foundation.Relation.Nullary.Discrete.html" class="Module">Foundation.Relation.Nullary.Discrete</a> <a id="880" class="Keyword">public</a>
+<a id="714" class="Keyword">open</a> <a id="719" class="Keyword">import</a> <a id="726" href="Foundation.Relation.Nullary.Negation.html" class="Module">Foundation.Relation.Nullary.Negation</a> <a id="763" class="Keyword">public</a>
+<a id="770" class="Keyword">open</a> <a id="775" class="Keyword">import</a> <a id="782" href="Foundation.Relation.Nullary.Decidable.html" class="Module">Foundation.Relation.Nullary.Decidable</a> <a id="820" class="Keyword">public</a>
+<a id="827" class="Keyword">open</a> <a id="832" class="Keyword">import</a> <a id="839" href="Foundation.Relation.Nullary.Discrete.html" class="Module">Foundation.Relation.Nullary.Discrete</a> <a id="876" class="Keyword">public</a>
 
-<a id="888" class="Keyword">open</a> <a id="893" class="Keyword">import</a> <a id="900" href="Foundation.Relation.Unary.Countable.html" class="Module">Foundation.Relation.Unary.Countable</a> <a id="936" class="Keyword">public</a>
-<a id="943" class="Keyword">open</a> <a id="948" class="Keyword">import</a> <a id="955" href="Foundation.Relation.Unary.Enumerable.html" class="Module">Foundation.Relation.Unary.Enumerable</a> <a id="992" class="Symbol">as</a> <a id="995" class="Module">E</a> <a id="997" class="Keyword">public</a>
-<a id="1004" class="Keyword">open</a> <a id="1009" href="Foundation.Relation.Unary.Enumerable.html#2015" class="Module">E.ListView</a> <a id="1020" class="Keyword">public</a>
+<a id="884" class="Keyword">open</a> <a id="889" class="Keyword">import</a> <a id="896" href="Foundation.Relation.Unary.Countable.html" class="Module">Foundation.Relation.Unary.Countable</a> <a id="932" class="Keyword">public</a>
+<a id="939" class="Keyword">open</a> <a id="944" class="Keyword">import</a> <a id="951" href="Foundation.Relation.Unary.Enumerable.html" class="Module">Foundation.Relation.Unary.Enumerable</a> <a id="988" class="Symbol">as</a> <a id="991" class="Module">E</a> <a id="993" class="Keyword">public</a>
+<a id="1000" class="Keyword">open</a> <a id="1005" href="Foundation.Relation.Unary.Enumerable.html#2015" class="Module">E.ListView</a> <a id="1016" class="Keyword">public</a>
 </pre>
 </main>
 
