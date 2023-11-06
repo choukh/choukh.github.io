@@ -27,37 +27,38 @@
 
 <main>
 <h1 id="一阶逻辑-语言">一阶逻辑: 语言</h1>
-<blockquote>
-<p>交流Q群: 893531731<br />
-<a href="https://github.com/choukh/MetaLogic/blob/main/src/FOL/Language.lagda.md">GitHub</a> | <a href="https://choukh.github.io/MetaLogic/FOL.Language.html">GitHub Pages</a> | <a href="https://www.yuque.com/ocau/metalogic/fol.language">语雀</a></p>
-</blockquote>
-<pre class="Agda"><a id="282" class="Keyword">module</a> <a id="289" href="FOL.Language.html" class="Module">FOL.Language</a> <a id="302" class="Keyword">where</a>
+<pre class="Agda"><a id="48" class="Keyword">module</a> <a id="55" href="FOL.Language.html" class="Module">FOL.Language</a> <a id="68" class="Keyword">where</a>
 
-<a id="309" class="Keyword">open</a> <a id="314" class="Keyword">import</a> <a id="321" href="Foundation.Essential.html" class="Module">Foundation.Essential</a>
+<a id="75" class="Keyword">open</a> <a id="80" class="Keyword">import</a> <a id="87" href="Foundation.Essential.html" class="Module">Foundation.Essential</a>
 
-<a id="343" class="Keyword">record</a> <a id="Language"></a><a id="350" href="FOL.Language.html#350" class="Record">Language</a> <a id="359" class="Symbol">:</a> <a id="361" href="Agda.Primitive.html#388" class="Primitive">𝕋₁</a> <a id="364" class="Keyword">where</a>
-  <a id="372" class="Keyword">field</a>
-    <a id="Language.𝓕"></a><a id="382" href="FOL.Language.html#382" class="Field">𝓕</a> <a id="384" class="Symbol">:</a> <a id="386" href="Agda.Primitive.html#388" class="Primitive">𝕋</a>
-    <a id="Language.𝓡"></a><a id="392" href="FOL.Language.html#392" class="Field">𝓡</a> <a id="394" class="Symbol">:</a> <a id="396" href="Agda.Primitive.html#388" class="Primitive">𝕋</a>
-    <a id="Language.∣_∣ᶠ"></a><a id="402" href="FOL.Language.html#402" class="Field Operator">∣_∣ᶠ</a> <a id="407" class="Symbol">:</a> <a id="409" href="FOL.Language.html#382" class="Field">𝓕</a> <a id="411" class="Symbol">→</a> <a id="413" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
-    <a id="Language.∣_∣ᴿ"></a><a id="419" href="FOL.Language.html#419" class="Field Operator">∣_∣ᴿ</a> <a id="424" class="Symbol">:</a> <a id="426" href="FOL.Language.html#392" class="Field">𝓡</a> <a id="428" class="Symbol">→</a> <a id="430" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
-    <a id="Language.discr𝓕"></a><a id="436" href="FOL.Language.html#436" class="Field">discr𝓕</a> <a id="443" class="Symbol">:</a> <a id="445" href="Relation.Binary.Definitions.html#6468" class="Function">discrete</a> <a id="454" href="FOL.Language.html#382" class="Field">𝓕</a>
-    <a id="Language.discr𝓡"></a><a id="460" href="FOL.Language.html#460" class="Field">discr𝓡</a> <a id="467" class="Symbol">:</a> <a id="469" href="Relation.Binary.Definitions.html#6468" class="Function">discrete</a> <a id="478" href="FOL.Language.html#392" class="Field">𝓡</a>
-    <a id="Language.enum𝓕"></a><a id="484" href="FOL.Language.html#484" class="Field">enum𝓕</a> <a id="490" class="Symbol">:</a> <a id="492" href="Foundation.Relation.Unary.Enumerable.html#2456" class="Function">enumerable</a> <a id="503" href="FOL.Language.html#382" class="Field">𝓕</a>
-    <a id="Language.enum𝓡"></a><a id="509" href="FOL.Language.html#509" class="Field">enum𝓡</a> <a id="515" class="Symbol">:</a> <a id="517" href="Foundation.Relation.Unary.Enumerable.html#2456" class="Function">enumerable</a> <a id="528" href="FOL.Language.html#392" class="Field">𝓡</a>
+<a id="109" class="Keyword">record</a> <a id="Language"></a><a id="116" href="FOL.Language.html#116" class="Record">Language</a> <a id="125" class="Symbol">:</a> <a id="127" href="Agda.Primitive.html#388" class="Primitive">𝕋₁</a> <a id="130" class="Keyword">where</a>
+  <a id="138" class="Keyword">field</a>
+    <a id="Language.𝓕"></a><a id="148" href="FOL.Language.html#148" class="Field">𝓕</a> <a id="150" class="Symbol">:</a> <a id="152" href="Agda.Primitive.html#388" class="Primitive">𝕋</a>
+    <a id="Language.𝓡"></a><a id="158" href="FOL.Language.html#158" class="Field">𝓡</a> <a id="160" class="Symbol">:</a> <a id="162" href="Agda.Primitive.html#388" class="Primitive">𝕋</a>
+    <a id="Language.∣_∣ᶠ"></a><a id="168" href="FOL.Language.html#168" class="Field Operator">∣_∣ᶠ</a> <a id="173" class="Symbol">:</a> <a id="175" href="FOL.Language.html#148" class="Field">𝓕</a> <a id="177" class="Symbol">→</a> <a id="179" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+    <a id="Language.∣_∣ᴿ"></a><a id="185" href="FOL.Language.html#185" class="Field Operator">∣_∣ᴿ</a> <a id="190" class="Symbol">:</a> <a id="192" href="FOL.Language.html#158" class="Field">𝓡</a> <a id="194" class="Symbol">→</a> <a id="196" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+    <a id="Language.discr𝓕"></a><a id="202" href="FOL.Language.html#202" class="Field">discr𝓕</a> <a id="209" class="Symbol">:</a> <a id="211" href="Relation.Binary.Definitions.html#6468" class="Function">discrete</a> <a id="220" href="FOL.Language.html#148" class="Field">𝓕</a>
+    <a id="Language.discr𝓡"></a><a id="226" href="FOL.Language.html#226" class="Field">discr𝓡</a> <a id="233" class="Symbol">:</a> <a id="235" href="Relation.Binary.Definitions.html#6468" class="Function">discrete</a> <a id="244" href="FOL.Language.html#158" class="Field">𝓡</a>
+    <a id="Language.enum𝓕"></a><a id="250" href="FOL.Language.html#250" class="Field">enum𝓕</a> <a id="256" class="Symbol">:</a> <a id="258" href="Foundation.Relation.Unary.Enumerable.html#2456" class="Function">enumerable</a> <a id="269" href="FOL.Language.html#148" class="Field">𝓕</a>
+    <a id="Language.enum𝓡"></a><a id="275" href="FOL.Language.html#275" class="Field">enum𝓡</a> <a id="281" class="Symbol">:</a> <a id="283" href="Foundation.Relation.Unary.Enumerable.html#2456" class="Function">enumerable</a> <a id="294" href="FOL.Language.html#158" class="Field">𝓡</a>
 
-  <a id="Language.count𝓕"></a><a id="533" href="FOL.Language.html#533" class="Function">count𝓕</a> <a id="540" class="Symbol">:</a> <a id="542" href="Foundation.Relation.Unary.Countable.html#158" class="Function">countable</a> <a id="552" href="FOL.Language.html#382" class="Field">𝓕</a>
-  <a id="556" href="FOL.Language.html#533" class="Function">count𝓕</a> <a id="563" class="Symbol">=</a> <a id="565" href="Foundation.Relation.Unary.Enumerable.html#9022" class="Function">discr→enum→count</a> <a id="582" href="FOL.Language.html#436" class="Field">discr𝓕</a> <a id="589" href="FOL.Language.html#484" class="Field">enum𝓕</a>
+  <a id="Language.count𝓕"></a><a id="299" href="FOL.Language.html#299" class="Function">count𝓕</a> <a id="306" class="Symbol">:</a> <a id="308" href="Foundation.Relation.Unary.Countable.html#158" class="Function">countable</a> <a id="318" href="FOL.Language.html#148" class="Field">𝓕</a>
+  <a id="322" href="FOL.Language.html#299" class="Function">count𝓕</a> <a id="329" class="Symbol">=</a> <a id="331" href="Foundation.Relation.Unary.Enumerable.html#9022" class="Function">discr→enum→count</a> <a id="348" href="FOL.Language.html#202" class="Field">discr𝓕</a> <a id="355" href="FOL.Language.html#250" class="Field">enum𝓕</a>
 
-  <a id="Language.count𝓡"></a><a id="598" href="FOL.Language.html#598" class="Function">count𝓡</a> <a id="605" class="Symbol">:</a> <a id="607" href="Foundation.Relation.Unary.Countable.html#158" class="Function">countable</a> <a id="617" href="FOL.Language.html#392" class="Field">𝓡</a>
-  <a id="621" href="FOL.Language.html#598" class="Function">count𝓡</a> <a id="628" class="Symbol">=</a> <a id="630" href="Foundation.Relation.Unary.Enumerable.html#9022" class="Function">discr→enum→count</a> <a id="647" href="FOL.Language.html#460" class="Field">discr𝓡</a> <a id="654" href="FOL.Language.html#509" class="Field">enum𝓡</a>
+  <a id="Language.count𝓡"></a><a id="364" href="FOL.Language.html#364" class="Function">count𝓡</a> <a id="371" class="Symbol">:</a> <a id="373" href="Foundation.Relation.Unary.Countable.html#158" class="Function">countable</a> <a id="383" href="FOL.Language.html#158" class="Field">𝓡</a>
+  <a id="387" href="FOL.Language.html#364" class="Function">count𝓡</a> <a id="394" class="Symbol">=</a> <a id="396" href="Foundation.Relation.Unary.Enumerable.html#9022" class="Function">discr→enum→count</a> <a id="413" href="FOL.Language.html#226" class="Field">discr𝓡</a> <a id="420" href="FOL.Language.html#275" class="Field">enum𝓡</a>
 
-  <a id="Language.isSet𝓕"></a><a id="663" href="FOL.Language.html#663" class="Function">isSet𝓕</a> <a id="670" class="Symbol">:</a> <a id="672" href="Foundation.Prelude.HLevel.html#889" class="Function">isSet</a> <a id="678" href="FOL.Language.html#382" class="Field">𝓕</a>
-  <a id="682" href="FOL.Language.html#663" class="Function">isSet𝓕</a> <a id="689" class="Symbol">=</a> <a id="691" href="Foundation.Relation.Nullary.Discrete.html#547" class="Function">discrete→isSet</a> <a id="706" href="FOL.Language.html#436" class="Field">discr𝓕</a>
+  <a id="Language.isSet𝓕"></a><a id="429" href="FOL.Language.html#429" class="Function">isSet𝓕</a> <a id="436" class="Symbol">:</a> <a id="438" href="Foundation.Prelude.HLevel.html#889" class="Function">isSet</a> <a id="444" href="FOL.Language.html#148" class="Field">𝓕</a>
+  <a id="448" href="FOL.Language.html#429" class="Function">isSet𝓕</a> <a id="455" class="Symbol">=</a> <a id="457" href="Foundation.Relation.Nullary.Discrete.html#547" class="Function">discrete→isSet</a> <a id="472" href="FOL.Language.html#202" class="Field">discr𝓕</a>
 
-  <a id="Language.isSet𝓡"></a><a id="716" href="FOL.Language.html#716" class="Function">isSet𝓡</a> <a id="723" class="Symbol">:</a> <a id="725" href="Foundation.Prelude.HLevel.html#889" class="Function">isSet</a> <a id="731" href="FOL.Language.html#392" class="Field">𝓡</a>
-  <a id="735" href="FOL.Language.html#716" class="Function">isSet𝓡</a> <a id="742" class="Symbol">=</a> <a id="744" href="Foundation.Relation.Nullary.Discrete.html#547" class="Function">discrete→isSet</a> <a id="759" href="FOL.Language.html#460" class="Field">discr𝓡</a>
+  <a id="Language.isSet𝓡"></a><a id="482" href="FOL.Language.html#482" class="Function">isSet𝓡</a> <a id="489" class="Symbol">:</a> <a id="491" href="Foundation.Prelude.HLevel.html#889" class="Function">isSet</a> <a id="497" href="FOL.Language.html#158" class="Field">𝓡</a>
+  <a id="501" href="FOL.Language.html#482" class="Function">isSet𝓡</a> <a id="508" class="Symbol">=</a> <a id="510" href="Foundation.Relation.Nullary.Discrete.html#547" class="Function">discrete→isSet</a> <a id="525" href="FOL.Language.html#226" class="Field">discr𝓡</a>
 </pre>
+<blockquote>
+<p>知识共享许可协议: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC-BY-NC-SA 4.0</a><br />
+<a href="https://github.com/choukh/MetaLogic/blob/main/src/FOL/Language.lagda.md">GitHub</a> | <a href="https://choukh.github.io/MetaLogic/FOL.Language.html">GitHub Pages</a> | <a href="https://www.yuque.com/ocau/metalogic/fol.language">语雀</a><br />
+交流Q群: 893531731</p>
+</blockquote>
 </main>
 
 <script>
