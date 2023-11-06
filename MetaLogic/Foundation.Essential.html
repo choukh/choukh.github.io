@@ -49,48 +49,69 @@
 <li>中文版快速参考: <a href="https://www.yuque.com/ocau/hset/ti2u9nvok36hmibm">Agda 泛等基础</a></li>
 </ul>
 <h2 id="基础概念">基础概念</h2>
-<p>以下统一列出元语言中可以谈论的基础概念, 正篇中将直接使用它们而不再额外定义. 简单来说, 它们只不过是对 <a href="https://github.com/agda/cubical">Cubical 标准库</a> 的重新封装, 以满足我们的特殊需求: 尽可能使用命题相等 (propositional equality) 而不是道路 (path), 以方便我们的形式化, 因为我们不涉及高阶同伦概念.</p>
+<p>以下统一列出元语言中可以谈论的基础概念, 正篇中将直接使用它们而不再额外定义. 简单来说, 它们只不过是对 <a href="https://github.com/agda/cubical">Cubical 标准库</a> 的重新封装, 以满足我们的特殊需求: 尽可能使用命题相等 (Propositional Equality) 而不是道路 (Path), 以方便我们的形式化, 因为我们不涉及高阶同伦概念.</p>
 <pre class="Agda"><a id="1610" class="Keyword">module</a> <a id="1617" href="Foundation.Essential.html" class="Module">Foundation.Essential</a> <a id="1638" class="Keyword">where</a>
 </pre>
 <h3 id="前奏">前奏</h3>
-<p>前奏是基础中的基础, 是定义其他基础概念所必须的基础概念, 以至于有些是原始概念. 具体涉及到 Cubical 类型论的规则, 这里不深入其引入细节, 而只作为一个黑盒使用.</p>
-<pre class="Agda"><a id="1754" class="Keyword">open</a> <a id="1759" class="Keyword">import</a> <a id="1766" href="Foundation.Prelude.html" class="Module">Foundation.Prelude</a> <a id="1785" class="Keyword">public</a>
-</pre>
-<p>具体地, 我们有以下前奏:</p>
+<p>前奏 (Prelude) 是基础中的基础, 是定义其他基础概念所必须的基础概念, 以至于有些是原始概念, 如道路类型. 这些原始概念具体涉及到 Cubical 类型论的规则, 这里不深入其细节, 而只作为一个黑盒使用.</p>
 <h4 id="内置">内置</h4>
-<p>内置 (builtin) 模块主要包括有编译器支持的一些原始概念.</p>
+<pre class="Agda"><a id="1785" class="Keyword">open</a> <a id="1790" class="Keyword">import</a> <a id="1797" href="Foundation.Prelude.Builtin.html" class="Module">Foundation.Prelude.Builtin</a> <a id="1824" class="Keyword">public</a>
+</pre>
+<p>内置 (Builtin) 模块主要包括带编译器支持的一些原始概念, 如宇宙和道路类型等, 以及一些基本数据类型:</p>
+<ul>
+<li>宇宙: 类型宇宙 <code>𝕋</code>, 宇宙层级 <code>Level</code>, 零级宇宙 <code>0ℓ</code>, 后继宇宙 <code>_⁺</code>, 宇宙二元并 <code>_⊔_</code>, 宇宙提升 <code>Lift</code>.</li>
+<li>同一性类型: 命题相等类型 <code>_≡_</code>, 道路类型 <code>_≡🧊_</code>.</li>
+<li>基本数据类型: 单元类型 <code>⊤</code>, 布尔类型 <code>𝔹</code>, 自然数类型 <code>ℕ</code>, 列表 (有序不定长有限集合) 类型 <code>𝕃</code>, Σ类型 <code>Σ</code>.</li>
+</ul>
+<p>注意, 对某些相似概念的 Cubical 版本, 我们会在其名字中带上“🧊”, 以示区别. 此外, 我们对符号作如下约定:</p>
+<ul>
+<li>宇宙层级编号: <code>ℓ ℓ′ ℓ″ ℓ‴ ℓ⁗ ℓ₀ ℓ₁ ℓ₂ ℓ₃ ℓ₄ : Level</code></li>
+<li>位于任意宇宙的类型: <code>A B C D T : 𝕋 ℓ</code></li>
+<li>类型族 / 一元关系: <code>P Q : A → 𝕋 ℓ</code></li>
+<li>二元关系: <code>R S : A → B → 𝕋 ℓ</code></li>
+<li>依值类型族: <code>P₂ Q₂ : (x : A) → P x → 𝕋 ℓ</code></li>
+</ul>
+<p>注意当我们说“任意”的时候指的是 arbitrary, 而对于 forall, 我们一定会说“所有”或“对任意”. 我们保留“谓词”这个名称给可以证明是命题的一元关系. 最后, 我们约定Σ类型 <code>Σ A (λ x → P)</code>, 即满足 <code>P</code> 的 <code>A</code>, 可以简记为 <code>Σ x ꞉ A ⸴ P</code>, 或者 <code>Σ x ⸴ P</code>.</p>
 <h4 id="函数">函数</h4>
+<pre class="Agda"><a id="2505" class="Keyword">open</a> <a id="2510" class="Keyword">import</a> <a id="2517" href="Foundation.Prelude.Function.html" class="Module">Foundation.Prelude.Function</a> <a id="2545" class="Keyword">public</a>
+</pre>
 <h4 id="命题相等">命题相等</h4>
+<pre class="Agda"><a id="2576" class="Keyword">open</a> <a id="2581" class="Keyword">import</a> <a id="2588" href="Foundation.Prelude.Equality.html" class="Module">Foundation.Prelude.Equality</a> <a id="2616" class="Keyword">public</a>
+</pre>
 <h4 id="同伦层级">同伦层级</h4>
+<pre class="Agda"><a id="2647" class="Keyword">open</a> <a id="2652" class="Keyword">import</a> <a id="2659" href="Foundation.Prelude.HLevel.html" class="Module">Foundation.Prelude.HLevel</a> <a id="2685" class="Keyword">public</a>
+</pre>
 <h4 id="其他">其他</h4>
+<pre class="Agda"><a id="2714" class="Keyword">open</a> <a id="2719" class="Keyword">import</a> <a id="2726" href="Foundation.Prelude.Misc.html" class="Module">Foundation.Prelude.Misc</a> <a id="2750" class="Keyword">public</a>
+</pre>
 <h3 id="逻辑">逻辑</h3>
-<pre class="Agda"><a id="1912" class="Keyword">open</a> <a id="1917" class="Keyword">import</a> <a id="1924" href="Foundation.Logic.html" class="Module">Foundation.Logic</a> <a id="1941" class="Keyword">public</a>
+<pre class="Agda"><a id="2778" class="Keyword">open</a> <a id="2783" class="Keyword">import</a> <a id="2790" href="Foundation.Logic.html" class="Module">Foundation.Logic</a> <a id="2807" class="Keyword">public</a>
 </pre>
 <h3 id="集合">集合</h3>
-<pre class="Agda"><a id="1969" class="Keyword">open</a> <a id="1974" class="Keyword">import</a> <a id="1981" href="Foundation.Set.Powerset.html" class="Module">Foundation.Set.Powerset</a> <a id="2005" class="Keyword">public</a>
+<pre class="Agda"><a id="2835" class="Keyword">open</a> <a id="2840" class="Keyword">import</a> <a id="2847" href="Foundation.Set.Powerset.html" class="Module">Foundation.Set.Powerset</a> <a id="2871" class="Keyword">public</a>
 </pre>
 <h3 id="函数-1">函数</h3>
-<pre class="Agda"><a id="2033" class="Keyword">open</a> <a id="2038" class="Keyword">import</a> <a id="2045" href="Foundation.Function.Bundles.html" class="Module">Foundation.Function.Bundles</a> <a id="2073" class="Keyword">public</a>
-<a id="2080" class="Keyword">open</a> <a id="2085" class="Keyword">import</a> <a id="2092" href="Foundation.Function.Sequance.html" class="Module">Foundation.Function.Sequance</a> <a id="2121" class="Keyword">public</a>
+<pre class="Agda"><a id="2899" class="Keyword">open</a> <a id="2904" class="Keyword">import</a> <a id="2911" href="Foundation.Function.Bundles.html" class="Module">Foundation.Function.Bundles</a> <a id="2939" class="Keyword">public</a>
+<a id="2946" class="Keyword">open</a> <a id="2951" class="Keyword">import</a> <a id="2958" href="Foundation.Function.Sequance.html" class="Module">Foundation.Function.Sequance</a> <a id="2987" class="Keyword">public</a>
 </pre>
 <h3 id="数据类型">数据类型</h3>
-<pre class="Agda"><a id="2151" class="Keyword">open</a> <a id="2156" class="Keyword">import</a> <a id="2163" href="Foundation.Data.Empty.html" class="Module">Foundation.Data.Empty</a> <a id="2185" class="Keyword">public</a>
-<a id="2192" class="Keyword">open</a> <a id="2197" class="Keyword">import</a> <a id="2204" href="Foundation.Data.Unit.html" class="Module">Foundation.Data.Unit</a> <a id="2225" class="Keyword">public</a>
-<a id="2232" class="Keyword">open</a> <a id="2237" class="Keyword">import</a> <a id="2244" href="Foundation.Data.Bool.html" class="Module">Foundation.Data.Bool</a> <a id="2265" class="Keyword">public</a>
-<a id="2272" class="Keyword">open</a> <a id="2277" class="Keyword">import</a> <a id="2284" href="Foundation.Data.Nat.html" class="Module">Foundation.Data.Nat</a> <a id="2304" class="Keyword">public</a>
-<a id="2311" class="Keyword">open</a> <a id="2316" class="Keyword">import</a> <a id="2323" href="Foundation.Data.Sigma.html" class="Module">Foundation.Data.Sigma</a> <a id="2345" class="Keyword">public</a>
-<a id="2352" class="Keyword">open</a> <a id="2357" class="Keyword">import</a> <a id="2364" href="Foundation.Data.Sum.html" class="Module">Foundation.Data.Sum</a> <a id="2384" class="Keyword">public</a>
-<a id="2391" class="Keyword">open</a> <a id="2396" class="Keyword">import</a> <a id="2403" href="Foundation.Data.List.html" class="Module">Foundation.Data.List</a> <a id="2424" class="Keyword">public</a>
-<a id="2431" class="Keyword">open</a> <a id="2436" class="Keyword">import</a> <a id="2443" href="Foundation.Data.Vec.html" class="Module">Foundation.Data.Vec</a> <a id="2463" class="Keyword">public</a>
+<pre class="Agda"><a id="3017" class="Keyword">open</a> <a id="3022" class="Keyword">import</a> <a id="3029" href="Foundation.Data.Empty.html" class="Module">Foundation.Data.Empty</a> <a id="3051" class="Keyword">public</a>
+<a id="3058" class="Keyword">open</a> <a id="3063" class="Keyword">import</a> <a id="3070" href="Foundation.Data.Unit.html" class="Module">Foundation.Data.Unit</a> <a id="3091" class="Keyword">public</a>
+<a id="3098" class="Keyword">open</a> <a id="3103" class="Keyword">import</a> <a id="3110" href="Foundation.Data.Bool.html" class="Module">Foundation.Data.Bool</a> <a id="3131" class="Keyword">public</a>
+<a id="3138" class="Keyword">open</a> <a id="3143" class="Keyword">import</a> <a id="3150" href="Foundation.Data.Nat.html" class="Module">Foundation.Data.Nat</a> <a id="3170" class="Keyword">public</a>
+<a id="3177" class="Keyword">open</a> <a id="3182" class="Keyword">import</a> <a id="3189" href="Foundation.Data.Sigma.html" class="Module">Foundation.Data.Sigma</a> <a id="3211" class="Keyword">public</a>
+<a id="3218" class="Keyword">open</a> <a id="3223" class="Keyword">import</a> <a id="3230" href="Foundation.Data.Sum.html" class="Module">Foundation.Data.Sum</a> <a id="3250" class="Keyword">public</a>
+<a id="3257" class="Keyword">open</a> <a id="3262" class="Keyword">import</a> <a id="3269" href="Foundation.Data.List.html" class="Module">Foundation.Data.List</a> <a id="3290" class="Keyword">public</a>
+<a id="3297" class="Keyword">open</a> <a id="3302" class="Keyword">import</a> <a id="3309" href="Foundation.Data.Vec.html" class="Module">Foundation.Data.Vec</a> <a id="3329" class="Keyword">public</a>
 </pre>
 <h3 id="关系">关系</h3>
-<pre class="Agda"><a id="2491" class="Keyword">open</a> <a id="2496" class="Keyword">import</a> <a id="2503" href="Foundation.Relation.Nullary.Negation.html" class="Module">Foundation.Relation.Nullary.Negation</a> <a id="2540" class="Keyword">public</a>
-<a id="2547" class="Keyword">open</a> <a id="2552" class="Keyword">import</a> <a id="2559" href="Foundation.Relation.Nullary.Decidable.html" class="Module">Foundation.Relation.Nullary.Decidable</a> <a id="2597" class="Keyword">public</a>
-<a id="2604" class="Keyword">open</a> <a id="2609" class="Keyword">import</a> <a id="2616" href="Foundation.Relation.Nullary.Discrete.html" class="Module">Foundation.Relation.Nullary.Discrete</a> <a id="2653" class="Keyword">public</a>
+<pre class="Agda"><a id="3357" class="Keyword">open</a> <a id="3362" class="Keyword">import</a> <a id="3369" href="Foundation.Relation.Nullary.Negation.html" class="Module">Foundation.Relation.Nullary.Negation</a> <a id="3406" class="Keyword">public</a>
+<a id="3413" class="Keyword">open</a> <a id="3418" class="Keyword">import</a> <a id="3425" href="Foundation.Relation.Nullary.Decidable.html" class="Module">Foundation.Relation.Nullary.Decidable</a> <a id="3463" class="Keyword">public</a>
+<a id="3470" class="Keyword">open</a> <a id="3475" class="Keyword">import</a> <a id="3482" href="Foundation.Relation.Nullary.Discrete.html" class="Module">Foundation.Relation.Nullary.Discrete</a> <a id="3519" class="Keyword">public</a>
 
-<a id="2661" class="Keyword">open</a> <a id="2666" class="Keyword">import</a> <a id="2673" href="Foundation.Relation.Unary.Countable.html" class="Module">Foundation.Relation.Unary.Countable</a> <a id="2709" class="Keyword">public</a>
-<a id="2716" class="Keyword">open</a> <a id="2721" class="Keyword">import</a> <a id="2728" href="Foundation.Relation.Unary.Enumerable.html" class="Module">Foundation.Relation.Unary.Enumerable</a> <a id="2765" class="Symbol">as</a> <a id="2768" class="Module">E</a> <a id="2770" class="Keyword">public</a>
-<a id="2777" class="Keyword">open</a> <a id="2782" href="Foundation.Relation.Unary.Enumerable.html#2015" class="Module">E.ListView</a> <a id="2793" class="Keyword">public</a>
+<a id="3527" class="Keyword">open</a> <a id="3532" class="Keyword">import</a> <a id="3539" href="Foundation.Relation.Unary.Countable.html" class="Module">Foundation.Relation.Unary.Countable</a> <a id="3575" class="Keyword">public</a>
+<a id="3582" class="Keyword">open</a> <a id="3587" class="Keyword">import</a> <a id="3594" href="Foundation.Relation.Unary.Enumerable.html" class="Module">Foundation.Relation.Unary.Enumerable</a> <a id="3631" class="Symbol">as</a> <a id="3634" class="Module">E</a> <a id="3636" class="Keyword">public</a>
+<a id="3643" class="Keyword">open</a> <a id="3648" href="Foundation.Relation.Unary.Enumerable.html#2015" class="Module">E.ListView</a> <a id="3659" class="Keyword">public</a>
 </pre>
 <blockquote>
 <p>知识共享许可协议: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC-BY-NC-SA 4.0</a><br />
