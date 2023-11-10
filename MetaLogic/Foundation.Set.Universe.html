@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Foundation.Set.Universe</title><link rel="stylesheet" href="Agda.css"><script type="text/javascript" src="highlight-hover.js"></script></head><body><pre class="Agda"><a id="1" class="Keyword">module</a> <a id="8" href="Foundation.Set.Universe.html" class="Module">Foundation.Set.Universe</a> <a id="32" class="Keyword">where</a>
+
+<a id="39" class="Keyword">open</a> <a id="44" class="Keyword">import</a> <a id="51" href="Foundation.Prelude.html" class="Module">Foundation.Prelude</a>
+
+<a id="71" class="Keyword">open</a> <a id="76" class="Keyword">import</a> <a id="83" href="Cubical.Foundations.HLevels.html" class="Module">Cubical.Foundations.HLevels</a> <a id="111" class="Keyword">public</a>
+  <a id="120" class="Keyword">using</a> <a id="126" class="Symbol">()</a>
+  <a id="131" class="Keyword">renaming</a> <a id="140" class="Symbol">(</a><a id="141" href="Cubical.Foundations.HLevels.html#2024" class="Function">hSet</a> <a id="146" class="Symbol">to</a> <a id="149" class="Function">𝕊🧊</a><a id="151" class="Symbol">)</a>
+
+<a id="154" class="Comment">--------------------------------------------------------------------------------</a>
+<a id="235" class="Comment">-- hSet</a>
+
+<a id="𝕊"></a><a id="244" href="Foundation.Set.Universe.html#244" class="Function">𝕊</a> <a id="246" class="Symbol">:</a> <a id="248" class="Symbol">∀</a> <a id="250" href="Foundation.Set.Universe.html#250" class="Bound">ℓ</a> <a id="252" class="Symbol">→</a> <a id="254" href="Agda.Primitive.html#388" class="Primitive">𝕋</a> <a id="256" class="Symbol">(</a><a id="257" href="Foundation.Set.Universe.html#250" class="Bound">ℓ</a> <a id="259" href="Agda.Primitive.html#931" class="Primitive Operator">⁺</a><a id="260" class="Symbol">)</a>
+<a id="262" href="Foundation.Set.Universe.html#244" class="Function">𝕊</a> <a id="264" href="Foundation.Set.Universe.html#264" class="Bound">ℓ</a> <a id="266" class="Symbol">=</a> <a id="268" href="Cubical.Foundations.Structure.html#399" class="Function">TypeWithStr</a> <a id="280" href="Foundation.Set.Universe.html#264" class="Bound">ℓ</a> <a id="282" href="Foundation.Prelude.HLevel.html#889" class="Function">isSet</a>
+
+<a id="𝕊₀"></a><a id="289" href="Foundation.Set.Universe.html#289" class="Function">𝕊₀</a> <a id="292" class="Symbol">:</a> <a id="294" href="Agda.Primitive.html#388" class="Primitive">𝕋</a> <a id="296" class="Symbol">(</a><a id="297" href="Agda.Primitive.html#915" class="Primitive">ℓ0</a> <a id="300" href="Agda.Primitive.html#931" class="Primitive Operator">⁺</a><a id="301" class="Symbol">)</a>
+<a id="303" href="Foundation.Set.Universe.html#289" class="Function">𝕊₀</a> <a id="306" class="Symbol">=</a> <a id="308" href="Foundation.Set.Universe.html#244" class="Function">𝕊</a> <a id="310" href="Agda.Primitive.html#915" class="Primitive">ℓ0</a>
+
+<a id="314" class="Keyword">variable</a>
+  <a id="325" href="Foundation.Set.Universe.html#325" class="Generalizable">𝗔</a> <a id="327" href="Foundation.Set.Universe.html#327" class="Generalizable">𝗕</a> <a id="329" href="Foundation.Set.Universe.html#329" class="Generalizable">𝗖</a> <a id="331" class="Symbol">:</a> <a id="333" href="Foundation.Set.Universe.html#244" class="Function">𝕊</a> <a id="335" href="Foundation.Prelude.Builtin.html#772" class="Generalizable">ℓ</a>
+</pre></body></html>
