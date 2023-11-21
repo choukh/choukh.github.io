@@ -106,7 +106,7 @@
 <h2 id="凡例">凡例</h2>
 <h3 id="定义">定义</h3>
 <p><strong><u>定义</u></strong> 定义名 (<code>definition_name</code>), 当且仅当定义的自然语言表述</p>
-<p><strong><u>定义</u></strong> 定义名 (<code>definition_name : Definition_Type</code>)</p>
+<p><strong><u>定义</u></strong> 定义名 (<code>definition_name = Definition_Term</code>)</p>
 <h3 id="不带证明的定理">不带证明的定理</h3>
 <p>定理的自然语言表述 (<code>theorem_name</code>)</p>
 <p><strong><u>定理</u></strong> 定理名 (<code>theorem_name : Theorem_Type</code>)</p>
@@ -387,6 +387,7 @@ theorem_name = proof</code></pre>
 <p><strong><u>定义</u></strong> 我们说列表的无穷序列 (<code>f : InfSeq (𝕃 A)</code>) 是累积的 (<code>Cumulative</code>), 当且仅当对任意 <code>n</code> 都存在 <code>xs : 𝕃 A</code> 使得 <code>f n ≡ f m ++ xs</code>, 其中 <code>_++_</code> 是列表的拼接操作</p>
 <p><strong><u>定义</u></strong> <code>A</code> 可枚举, 当且仅当存在累积的 <code>f : InfSeq (𝕃 A)</code>, 使得对任意 <code>x : A</code>, 存在 <code>n</code> 满足 <code>x ∈ᴸ f n</code></p>
 <p>这两种定义是逻辑等价的 (<code>enumerable↔︎Ⓜ</code>).</p>
+<hr />
 <blockquote>
 <p>知识共享许可协议: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC-BY-NC-SA 4.0</a><br />
 <a href="https://github.com/choukh/MetaLogic/blob/main/src/Foundation/Essential.lagda.md">GitHub</a> | <a href="https://choukh.github.io/MetaLogic/Foundation.Essential.html">GitHub Pages</a> | <a href="https://www.yuque.com/ocau/metalogic/foundation.essential">语雀</a><br />
