@@ -359,20 +359,25 @@ theorem_name = proof_term</code></pre>
 <h4 id="否定">否定</h4>
 <pre class="Agda"><a id="12368" class="Keyword">open</a> <a id="12373" class="Keyword">import</a> <a id="12380" href="Foundation.Relation.Nullary.Negation.html" class="Module">Foundation.Relation.Nullary.Negation</a> <a id="12417" class="Keyword">public</a>
 </pre>
-<p>否定 <code>¬_</code> 即是取某 <code>A</code> 到 <code>⊥</code> 的函数, 即 <code>¬_ = λ A → A → ⊥</code>.</p>
+<p><strong><u>定义</u></strong> 否定的相关概念</p>
+<ul>
+<li>否定 <code>¬_ = λ A → A → ⊥</code></li>
+<li>非空 <code>nonEmpty = λ A → ¬ ¬ A</code></li>
+<li>稳定 <code>Stable = λ A → nonEmpty A → A</code></li>
+</ul>
 <h4 id="可判定">可判定</h4>
-<pre class="Agda"><a id="12498" class="Keyword">open</a> <a id="12503" class="Keyword">import</a> <a id="12510" href="Foundation.Relation.Nullary.Decidable.html" class="Module">Foundation.Relation.Nullary.Decidable</a> <a id="12548" class="Keyword">public</a>
+<pre class="Agda"><a id="12562" class="Keyword">open</a> <a id="12567" class="Keyword">import</a> <a id="12574" href="Foundation.Relation.Nullary.Decidable.html" class="Module">Foundation.Relation.Nullary.Decidable</a> <a id="12612" class="Keyword">public</a>
 </pre>
 <p><strong><u>定义</u></strong> <code>A</code> 可判定, 记作 <code>Dec A</code>, 当且仅当 <code>A</code> 或 <code>¬ A</code>.</p>
 <p>如果 <code>A</code> 是一个命题, 那么其可判定性 <code>Dec A</code> 也是一个命题 (<code>isPropDec</code>).</p>
 <h4 id="离散">离散</h4>
-<pre class="Agda"><a id="12684" class="Keyword">open</a> <a id="12689" class="Keyword">import</a> <a id="12696" href="Foundation.Relation.Nullary.Discrete.html" class="Module">Foundation.Relation.Nullary.Discrete</a> <a id="12733" class="Keyword">public</a>
+<pre class="Agda"><a id="12748" class="Keyword">open</a> <a id="12753" class="Keyword">import</a> <a id="12760" href="Foundation.Relation.Nullary.Discrete.html" class="Module">Foundation.Relation.Nullary.Discrete</a> <a id="12797" class="Keyword">public</a>
 </pre>
 <p><strong><u>定义</u></strong> <code>A</code> 离散, 当且仅当 <code>A</code> 上的 <code>_≡_</code> 可判定.</p>
 <p>如果一个类型是离散的, 那么它是一个集合 (<code>discrete→isSet</code>). 如果一个类型是集合, 那么它的离散性是一个命题 (<code>isPropDiscrete</code>).</p>
 <h3 id="一元关系">一元关系</h3>
 <h4 id="可数">可数</h4>
-<pre class="Agda"><a id="12904" class="Keyword">open</a> <a id="12909" class="Keyword">import</a> <a id="12916" href="Foundation.Relation.Unary.Countable.html" class="Module">Foundation.Relation.Unary.Countable</a> <a id="12952" class="Keyword">public</a>
+<pre class="Agda"><a id="12968" class="Keyword">open</a> <a id="12973" class="Keyword">import</a> <a id="12980" href="Foundation.Relation.Unary.Countable.html" class="Module">Foundation.Relation.Unary.Countable</a> <a id="13016" class="Keyword">public</a>
 </pre>
 <p><strong><u>定义</u></strong></p>
 <ul>
@@ -381,8 +386,8 @@ theorem_name = proof_term</code></pre>
 <li><code>A</code> 无限 (<code>infinite</code>), 当且仅当存在 <code>ℕ</code> 到 <code>A</code> 的单射 <code>ℕ ↣ A</code></li>
 </ul>
 <h4 id="可枚举">可枚举</h4>
-<pre class="Agda"><a id="13166" class="Keyword">open</a> <a id="13171" class="Keyword">import</a> <a id="13178" href="Foundation.Relation.Unary.Enumerable.html" class="Module">Foundation.Relation.Unary.Enumerable</a> <a id="13215" class="Symbol">as</a> <a id="13218" class="Module">E</a> <a id="13220" class="Keyword">public</a>
-<a id="13227" class="Keyword">open</a> <a id="13232" href="Foundation.Relation.Unary.Enumerable.html#2090" class="Module">E.ListView</a> <a id="13243" class="Keyword">public</a>
+<pre class="Agda"><a id="13230" class="Keyword">open</a> <a id="13235" class="Keyword">import</a> <a id="13242" href="Foundation.Relation.Unary.Enumerable.html" class="Module">Foundation.Relation.Unary.Enumerable</a> <a id="13279" class="Symbol">as</a> <a id="13282" class="Module">E</a> <a id="13284" class="Keyword">public</a>
+<a id="13291" class="Keyword">open</a> <a id="13296" href="Foundation.Relation.Unary.Enumerable.html#2090" class="Module">E.ListView</a> <a id="13307" class="Keyword">public</a>
 </pre>
 <p><strong><u>定义</u></strong> <code>A</code> 可枚举, 当且仅当存在函数 <code>f : ℕ → A ⊎ ⊤</code>, 使得对任意 <code>x : A</code>, 存在 <code>n</code> 满足 <code>f n ≡ x</code>.</p>
 <p><strong><u>定理</u> <code>discr→enum→count</code></strong> 如果 <code>A</code> 离散 (这意味着 <code>A</code> 是集合), 并且 <code>A</code> 可枚举, 那么 <code>A</code> 可数.</p>
