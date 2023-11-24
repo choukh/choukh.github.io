@@ -115,17 +115,17 @@
 <p><strong><u>定理</u> <code>theorem_name</code></strong> 定理的自然语言表述.</p>
 <h3 id="带证明的定理">带证明的定理</h3>
 <p><strong><u>定理</u></strong> 定理的自然语言表述.<br />
-<strong><u>证明</u></strong> 定理的自然语言证明 ∎</p>
+<strong><u>证明</u></strong> 定理的自然语言证明. ∎</p>
 <pre class="plaintext"><code>theorem_name : Theorem_Type
 theorem_name = proof_term</code></pre>
 <h2 id="前奏">前奏</h2>
 <p>前奏 (<code>Prelude</code>) 是基础中的基础, 是定义其他基础概念所必须的基础概念, 以至于有些是原始概念, 如道路类型. 这些原始概念具体涉及到 Cubical 类型论的规则, 这里不深入其细节, 而只作为一个黑盒使用.</p>
 <h3 id="内置">内置</h3>
-<pre class="Agda"><a id="2401" class="Keyword">open</a> <a id="2406" class="Keyword">import</a> <a id="2413" href="Foundation.Prelude.Builtin.html" class="Module">Foundation.Prelude.Builtin</a> <a id="2440" class="Keyword">public</a>
+<pre class="Agda"><a id="2402" class="Keyword">open</a> <a id="2407" class="Keyword">import</a> <a id="2414" href="Foundation.Prelude.Builtin.html" class="Module">Foundation.Prelude.Builtin</a> <a id="2441" class="Keyword">public</a>
 </pre>
 <p>内置 (<code>Builtin</code>) 模块主要包括带魔法 (编译器支持) 的一些原始概念, 如宇宙和道路类型等, 以及一些基本数据类型:</p>
 <ul>
-<li>宇宙: 类型宇宙 <code>𝕋</code>, 宇宙层级 <code>Level</code>, 零级宇宙 <code>0ℓ</code>, 后继宇宙 <code>_⁺</code>, 宇宙二元并 <code>_⊔_</code>, 宇宙提升 <code>Lift</code></li>
+<li>宇宙: 类型宇宙 <code>𝕋</code>, 宇宙层级 <code>Level</code>, 零级宇宙 <code>0ℓ</code>, 后继宇宙 <code>_⁺</code>, 宇宙二元并 <code>_⊔_</code>, 所有有限层级宇宙所居留的宇宙 <code>𝕋ω</code></li>
 <li>同一性类型: 命题相等类型 <code>_≡_</code>, 道路类型 <code>_≡🧊_</code></li>
 <li>基本数据类型: 单元类型 <code>⊤</code>, 布尔类型 <code>𝔹</code>, 自然数类型 <code>ℕ</code>, 列表 (不定长可数有限) 类型 <code>𝕃</code>, Σ类型 <code>Σ</code></li>
 </ul>
@@ -142,7 +142,7 @@ theorem_name = proof_term</code></pre>
 </ul>
 <p>我们约定Σ类型 <code>Σ A (λ x → P)</code>, 即满足 <code>P</code> 的 <code>A</code>, 可以简记为 <code>Σ x ꞉ A ， P</code> 或者 <code>Σ x ， P</code>.</p>
 <h3 id="函数">函数</h3>
-<pre class="Agda"><a id="3069" class="Keyword">open</a> <a id="3074" class="Keyword">import</a> <a id="3081" href="Foundation.Prelude.Function.html" class="Module">Foundation.Prelude.Function</a> <a id="3109" class="Keyword">public</a>
+<pre class="Agda"><a id="3078" class="Keyword">open</a> <a id="3083" class="Keyword">import</a> <a id="3090" href="Foundation.Prelude.Function.html" class="Module">Foundation.Prelude.Function</a> <a id="3118" class="Keyword">public</a>
 </pre>
 <p><strong><u>定义</u></strong> 与函数有关的一些便利记法</p>
 <ul>
@@ -157,7 +157,7 @@ theorem_name = proof_term</code></pre>
 <li>函数应用 <code>f $ x = f x</code>, 用于当参数本身是个函数应用时省略参数外层的括号</li>
 </ul>
 <h3 id="命题相等">命题相等</h3>
-<pre class="Agda"><a id="3416" class="Keyword">open</a> <a id="3421" class="Keyword">import</a> <a id="3428" href="Foundation.Prelude.Equality.html" class="Module">Foundation.Prelude.Equality</a> <a id="3456" class="Keyword">public</a>
+<pre class="Agda"><a id="3425" class="Keyword">open</a> <a id="3430" class="Keyword">import</a> <a id="3437" href="Foundation.Prelude.Equality.html" class="Module">Foundation.Prelude.Equality</a> <a id="3465" class="Keyword">public</a>
 </pre>
 <p><strong><u>定理</u></strong> 相等的基本性质</p>
 <ul>
@@ -182,20 +182,20 @@ theorem_name = proof_term</code></pre>
 </ul>
 <p>其中同构定义为一对互逆的函数; “ua” 是泛等公理 (univalence axiom) 的缩写, 虽然在 Cubical 中它是定理, 出于历史原因仍记作 “ua”.</p>
 <h3 id="同伦层级">同伦层级</h3>
-<pre class="Agda"><a id="4258" class="Keyword">open</a> <a id="4263" class="Keyword">import</a> <a id="4270" href="Foundation.Prelude.HLevel.html" class="Module">Foundation.Prelude.HLevel</a> <a id="4296" class="Keyword">public</a>
+<pre class="Agda"><a id="4267" class="Keyword">open</a> <a id="4272" class="Keyword">import</a> <a id="4279" href="Foundation.Prelude.HLevel.html" class="Module">Foundation.Prelude.HLevel</a> <a id="4305" class="Keyword">public</a>
 </pre>
 <p>如果说宇宙层级是类型宇宙 <code>𝕋 ℓ</code> 所具有的一种属性, 那么同伦层级 (hLevel) 则是类型 <code>A : 𝕋 ℓ</code> 所具有的一种属性. 我们只关心同伦层级为 1 和 2 的两种类型.</p>
 <p>同伦层级为 1 的类型叫做命题, 该类类型的任意两个项都可证相等. “类型 <code>A</code> 是命题” 表达为 <code>isProp A</code>. 如所期待的那样, 类型 <code>isProp A</code> 也是一个命题, 即对任意 <code>A : 𝕋 ℓ</code> 可证 <code>isProp (isProp A)</code>. 我们也说 <code>isProp</code> 是一个谓词.</p>
 <p>同伦层级为 2 的类型叫做集合, 该类类型的任意两个项的相等都是命题, 即给定两个项相等的任意两个证明, 这两个证明是相等的. “类型 <code>A</code> 是集合” 表达为 <code>isSet A</code>. 与 <code>isProp</code> 一样, <code>isSet</code> 也是一个谓词. 此外我们有 <code>isProp→isSet</code>, 即任意命题都是集合. 直观上, 由于命题的任意项都相等, 那么这些项之间的相等的方式也应该是相等的, 所以命题也是集合.</p>
 <p>对于嵌套的Π类型, 不管嵌套多少次, 只要最后的目标是命题 (或集合), 那么整个嵌套Π类型也是命题 (或集合). 如果构成Σ类型的两边都是命题 (或集合), 那么这个Σ类型也是命题 (或集合).</p>
 <h3 id="其他">其他</h3>
-<pre class="Agda"><a id="4881" class="Keyword">open</a> <a id="4886" class="Keyword">import</a> <a id="4893" href="Foundation.Prelude.Misc.html" class="Module">Foundation.Prelude.Misc</a> <a id="4917" class="Keyword">public</a>
+<pre class="Agda"><a id="4890" class="Keyword">open</a> <a id="4895" class="Keyword">import</a> <a id="4902" href="Foundation.Prelude.Misc.html" class="Module">Foundation.Prelude.Misc</a> <a id="4926" class="Keyword">public</a>
 </pre>
 <p>为了编码上的方便, 我们经常需要用 Agda 的反射机制定义的宏 <code>declareRecordIsoΣ</code> 将Σ类型与 record 类型相互转化. 我们把具有某种结构的类型宇宙叫做 <code>TypeWithStr</code>. 它其实就是一个Σ类型, 其左投影 <code>typ</code> 用于取得底类型, 右投影 <code>str</code> 用于取得底类型所带的结构.</p>
 <h2 id="命题">命题</h2>
 <p>元语言中需要能构造数学对象, 并且能谈论这些对象的性质. 前者由同伦层级为 2 的类型 (集合) 承担, 后者则由同伦层级为 1 的类型 (命题) 承担. 它们都是类型, 有统一的一些规则. 例如, 同样一个<strong>类型形成子 (type former)</strong> <code>→</code>, 作用于集合就成了函数, 作用于命题就成了蕴含. 本节将介绍关于命题的基本概念.</p>
 <h3 id="命题截断">命题截断</h3>
-<pre class="Agda"><a id="5291" class="Keyword">open</a> <a id="5296" class="Keyword">import</a> <a id="5303" href="Foundation.Prop.Truncation.html" class="Module">Foundation.Prop.Truncation</a> <a id="5330" class="Keyword">public</a>
+<pre class="Agda"><a id="5300" class="Keyword">open</a> <a id="5305" class="Keyword">import</a> <a id="5312" href="Foundation.Prop.Truncation.html" class="Module">Foundation.Prop.Truncation</a> <a id="5339" class="Keyword">public</a>
 </pre>
 <p>命题截断 <code>∥_∥₁</code> 用于把一个可能不是命题的类型转化为命题. 命题截断是一个高阶归纳类型, 其构造子 <code>∣_∣₁</code> 用于构造命题截断的项, <code>trunct1</code> 用于证明命题截断后的类型的项确实都是相等的.</p>
 <p><strong><u>定理</u></strong> 命题截断的性质</p>
@@ -209,7 +209,7 @@ theorem_name = proof_term</code></pre>
 <li><code>rec1→s</code> : 如果目标 <code>B</code> 是集合, 且 <code>f : A → B</code> 是常函数, 那么我们可以通过 <code>f</code> 来构造 <code>∥ A ∥₁ → B</code></li>
 </ul>
 <h3 id="逻辑">逻辑</h3>
-<pre class="Agda"><a id="5875" class="Keyword">open</a> <a id="5880" class="Keyword">import</a> <a id="5887" href="Foundation.Prop.Logic.html" class="Module">Foundation.Prop.Logic</a> <a id="5909" class="Keyword">public</a>
+<pre class="Agda"><a id="5884" class="Keyword">open</a> <a id="5889" class="Keyword">import</a> <a id="5896" href="Foundation.Prop.Logic.html" class="Module">Foundation.Prop.Logic</a> <a id="5918" class="Keyword">public</a>
 </pre>
 <h4 id="无需截断">无需截断</h4>
 <p>以下逻辑概念由相应的类型形成子直接承担, 而无需截断. 因为这些类型形成子作用于命题之上, 得到的类型也是命题.</p>
@@ -226,12 +226,12 @@ theorem_name = proof_term</code></pre>
 <h4 id="存在量化">存在量化</h4>
 <p>存在量化 <code>∃</code> 定义为<strong>Σ类型 (sigma type)</strong> 的命题截断, 即 <code>∃ A P = ∥ Σ A P ∥₁</code>. 因为Σ类型的项可能存在多种构造方式, 但存在量化不关心具体是哪种, 只要存在就行. 我们有存在量化的引入规则 <code>ex</code>, 对于消去我们直接使用模式匹配. 我们约定 <code>∃ A (λ x → P)</code> 可以简记为 <code>∃ x ꞉ A ， P</code> 或者 <code>∃ x ， P</code>.</p>
 <h3 id="逻辑等价">逻辑等价</h3>
-<pre class="Agda"><a id="6631" class="Keyword">open</a> <a id="6636" class="Keyword">import</a> <a id="6643" href="Foundation.Prop.Iff.html" class="Module">Foundation.Prop.Iff</a> <a id="6663" class="Keyword">public</a>
+<pre class="Agda"><a id="6640" class="Keyword">open</a> <a id="6645" class="Keyword">import</a> <a id="6652" href="Foundation.Prop.Iff.html" class="Module">Foundation.Prop.Iff</a> <a id="6672" class="Keyword">public</a>
 </pre>
 <p>逻辑等价 <code>_↔︎_</code>, 也叫当且仅当 (iff), 定义为双向蕴含, 它是一个等价关系 (<code>↔︎-refl</code>, <code>↔︎-sym</code>, <code>↔︎-trans</code>). 只有当左右两边都是命题的时候, 逻辑等价才有意义. 此时, 它也是一个命题 (<code>isProp↔︎</code>).</p>
 <p>注意, 我们把逻辑等价定义为了一个 record 类型, 必要时可以用宏转化为Σ类型. 该 record 类型的构造子 <code>⇒:_⇐:_</code> 充当了逻辑等价的引入规则, 消去规则则由 record 类型的投影 <code>.⇒</code> 和 <code>.⇐</code> 给出.</p>
 <h3 id="命题宇宙">命题宇宙</h3>
-<pre class="Agda"><a id="6941" class="Keyword">open</a> <a id="6946" class="Keyword">import</a> <a id="6953" href="Foundation.Prop.Universe.html" class="Module">Foundation.Prop.Universe</a> <a id="6978" class="Keyword">public</a>
+<pre class="Agda"><a id="6950" class="Keyword">open</a> <a id="6955" class="Keyword">import</a> <a id="6962" href="Foundation.Prop.Universe.html" class="Module">Foundation.Prop.Universe</a> <a id="6987" class="Keyword">public</a>
 </pre>
 <p>命题宇宙 <code>ℙ ℓ</code> 定义为带结构 <code>isProp</code> 的类型宇宙 <code>𝕋 ℓ</code>, 即 <code>ℙ ℓ = TypeWithStr ℓ isProp</code>. 继承自类型宇宙的层级, 命题宇宙也分层级, 其中最底层记作 <code>ℙ₀</code>.</p>
 <p>我们用粗体的<strong>命题</strong>指代命题宇宙的项, 以区分作为类型的命题. 我们约定使用 <code>𝗣 𝗤 𝗥</code> 等符号表示<strong>命题</strong>. “<strong>命题</strong> <code>𝗣</code> 成立”记作 <code>𝗣 holds</code>, 定义为左投影 <code>typ 𝗣</code>. 而右投影 <code>str 𝗣</code> 则说明了 <code>𝗣 holds</code> 确实是一个命题.</p>
@@ -252,12 +252,12 @@ theorem_name = proof_term</code></pre>
 <h2 id="集合">集合</h2>
 <p>元语言中的集合主要包括一些数据类型, 例如自然数, 列表等, 在后面的小节单独介绍. 除此之外, 我们谈论的集合主要是幂集.</p>
 <h3 id="幂集">幂集</h3>
-<pre class="Agda"><a id="7774" class="Keyword">open</a> <a id="7779" class="Keyword">import</a> <a id="7786" href="Foundation.Set.Powerset.html" class="Module">Foundation.Set.Powerset</a> <a id="7810" class="Keyword">public</a>
+<pre class="Agda"><a id="7783" class="Keyword">open</a> <a id="7788" class="Keyword">import</a> <a id="7795" href="Foundation.Set.Powerset.html" class="Module">Foundation.Set.Powerset</a> <a id="7819" class="Keyword">public</a>
 </pre>
 <p>给定任意类型 <code>X : 𝕋 ℓ</code>, 我们把 <code>X</code> 到命题宇宙 <code>ℙ ℓ</code> 的函数叫做 <code>X</code> 的幂集, 记作 <code>𝒫 X</code>, 它的项也叫 <code>X</code> 的子集. 可以证明幂集确实是一个集合 (<code>isSet𝒫</code>).</p>
 <p>给定项 <code>x : X</code> 和子集 <code>A : 𝒫 X</code>, 属于关系 <code>x ∈ A</code> 定义为 <code>A x holds</code>. <code>A</code> 是取值到 <code>ℙ ℓ</code> 的函数, 这保证了属于关系是取值到命题的 (<code>isProp∈</code>).</p>
 <h3 id="集合截断">集合截断</h3>
-<pre class="Agda"><a id="8052" class="Keyword">open</a> <a id="8057" class="Keyword">import</a> <a id="8064" href="Foundation.Set.Truncation.html" class="Module">Foundation.Set.Truncation</a> <a id="8090" class="Keyword">public</a>
+<pre class="Agda"><a id="8061" class="Keyword">open</a> <a id="8066" class="Keyword">import</a> <a id="8073" href="Foundation.Set.Truncation.html" class="Module">Foundation.Set.Truncation</a> <a id="8099" class="Keyword">public</a>
 </pre>
 <p>与命题截断类似地, 我们有集合截断 <code>∥_∥₂</code>, 它将高阶群胚截断为集合.</p>
 <p><strong><u>定理</u></strong> 集合截断的性质</p>
@@ -270,7 +270,7 @@ theorem_name = proof_term</code></pre>
 <li><code>map2²</code> : 可以通过证明 <code>A → B → C</code> 来证明 <code>∥ A ∥₂ → ∥ B ∥₂ → ∥ C ∥₂</code></li>
 </ul>
 <h3 id="集合宇宙">集合宇宙</h3>
-<pre class="Agda"><a id="8494" class="Keyword">open</a> <a id="8499" class="Keyword">import</a> <a id="8506" href="Foundation.Set.Universe.html" class="Module">Foundation.Set.Universe</a> <a id="8530" class="Keyword">public</a>
+<pre class="Agda"><a id="8503" class="Keyword">open</a> <a id="8508" class="Keyword">import</a> <a id="8515" href="Foundation.Set.Universe.html" class="Module">Foundation.Set.Universe</a> <a id="8539" class="Keyword">public</a>
 </pre>
 <p>与命题宇宙类似地, 集合宇宙 <code>𝕊 ℓ</code> 定义为 <code>𝕋 ℓ</code> 配备上结构 <code>isSet</code>, 即 <code>𝕊 ℓ = TypeWithStr ℓ isSet</code>. 但我们中一般不直接使用 <code>𝕊</code>. 为了方便处理, 我们会尽可能地使用它们的柯里化版本, 即说 “给定类型 <code>A</code>, 如果它是命题 (或集合), 那么怎么怎么样”, 而不说 “给定<strong>命题</strong> (或<strong>集合</strong>) <code>𝗔</code>, 怎么怎么样”. 需要注意的是, 集合宇宙 <code>𝕊 ℓ</code> 本身不是集合, 而是一个群胚.</p>
 <h2 id="数据类型">数据类型</h2>
@@ -278,65 +278,65 @@ theorem_name = proof_term</code></pre>
 <h3 id="命题-1">命题</h3>
 <p>命题数据类型只有两种: 空类型 <code>⊥</code> 与单元类型 <code>⊤</code>, 它们分别具有基数 <span class="math inline">0</span> 和 <span class="math inline">1</span>.</p>
 <h4 id="空类型">空类型</h4>
-<pre class="Agda"><a id="9000" class="Keyword">open</a> <a id="9005" class="Keyword">import</a> <a id="9012" href="Foundation.Data.Empty.html" class="Module">Foundation.Data.Empty</a> <a id="9034" class="Keyword">public</a>
+<pre class="Agda"><a id="9009" class="Keyword">open</a> <a id="9014" class="Keyword">import</a> <a id="9021" href="Foundation.Data.Empty.html" class="Module">Foundation.Data.Empty</a> <a id="9043" class="Keyword">public</a>
 </pre>
 <p>空类型 <code>⊥</code> 没有任何构造子, 所以它没有任何项, 也就是说它是不可证的命题, 即恒假. 空类型 <code>⊥</code> 是命题 (<code>isProp⊥</code>), 也是集合 (<code>isSet⊥</code>). 空类型 <code>⊥</code> 位于 <code>𝕋₀</code>, 但我们还有一个宇宙多态版的空类型 <code>⊥* : 𝕋 ℓ</code>, 它也是命题 (<code>isProp⊥*</code>), 也是集合 (<code>isSet⊥*</code>).</p>
 <h4 id="单元类型">单元类型</h4>
-<pre class="Agda"><a id="9238" class="Keyword">open</a> <a id="9243" class="Keyword">import</a> <a id="9250" href="Foundation.Data.Unit.html" class="Module">Foundation.Data.Unit</a> <a id="9271" class="Keyword">public</a>
+<pre class="Agda"><a id="9247" class="Keyword">open</a> <a id="9252" class="Keyword">import</a> <a id="9259" href="Foundation.Data.Unit.html" class="Module">Foundation.Data.Unit</a> <a id="9280" class="Keyword">public</a>
 </pre>
 <p>单元类型 <code>⊤</code> 只有一个构造子 <code>tt</code>, 所以它只有一个项, 也就是说它是恒真的命题. 单元类型 <code>⊤</code> 是命题 (<code>isProp⊤</code>), 也是集合 (<code>isSet⊤</code>). 单元类型 <code>⊤</code> 位于 <code>𝕋₀</code>, 但我们还有一个宇宙多态版的单元类型 <code>⊤* : 𝕋 ℓ</code>, 它也是命题 (<code>isProp⊤*</code>), 也是集合 (<code>isSet⊤*</code>).</p>
 <h3 id="集合-1">集合</h3>
 <p>集合数据类型有可数多个, 我们主要关心的是布尔类型 <code>𝔹</code> 和自然数类型 <code>ℕ</code>, 它们分别具有基数 <span class="math inline">2</span> 和 <span class="math inline">\aleph_0</span>. 注意这里使用了 <span class="math inline">\LaTeX</span>, 它们是元元语言, 后面也一样.</p>
 <h4 id="布尔类型">布尔类型</h4>
-<pre class="Agda"><a id="9590" class="Keyword">open</a> <a id="9595" class="Keyword">import</a> <a id="9602" href="Foundation.Data.Bool.html" class="Module">Foundation.Data.Bool</a> <a id="9623" class="Keyword">public</a>
+<pre class="Agda"><a id="9599" class="Keyword">open</a> <a id="9604" class="Keyword">import</a> <a id="9611" href="Foundation.Data.Bool.html" class="Module">Foundation.Data.Bool</a> <a id="9632" class="Keyword">public</a>
 </pre>
 <p>布尔类型 <code>𝔹</code> 有两个构造子 <code>true</code> 和 <code>false</code>. 布尔类型 <code>𝔹</code> 是集合 (<code>isSet𝔹</code>).</p>
 <h4 id="自然数类型">自然数类型</h4>
-<pre class="Agda"><a id="9715" class="Keyword">open</a> <a id="9720" class="Keyword">import</a> <a id="9727" href="Foundation.Data.Nat.html" class="Module">Foundation.Data.Nat</a> <a id="9747" class="Keyword">public</a>
+<pre class="Agda"><a id="9724" class="Keyword">open</a> <a id="9729" class="Keyword">import</a> <a id="9736" href="Foundation.Data.Nat.html" class="Module">Foundation.Data.Nat</a> <a id="9756" class="Keyword">public</a>
 </pre>
 <p>自然数类型 <code>ℕ</code> 有两个构造子 <code>zero</code> 和 <code>suc : ℕ → ℕ</code>. 自然数类型 <code>ℕ</code> 是集合 (<code>isSetℕ</code>).</p>
 <h3 id="组合">组合</h3>
 <p>组合数据类型用于对任意给定的两个类型做某种形式的组合.</p>
 <h4 id="σ类型">Σ类型</h4>
-<pre class="Agda"><a id="9882" class="Keyword">open</a> <a id="9887" class="Keyword">import</a> <a id="9894" href="Foundation.Data.Sigma.html" class="Module">Foundation.Data.Sigma</a> <a id="9916" class="Keyword">public</a>
+<pre class="Agda"><a id="9891" class="Keyword">open</a> <a id="9896" class="Keyword">import</a> <a id="9903" href="Foundation.Data.Sigma.html" class="Module">Foundation.Data.Sigma</a> <a id="9925" class="Keyword">public</a>
 </pre>
 <p>Σ类型 <code>Σ A P</code> 的项具有 <code>(x , p)</code> 的形式, 其中 <code>x : A</code> 而 <code>p : P x</code>. Σ类型具有基数 <span class="math inline">\sum_{x \in A} |P(x)|</span>. 如果 <code>A</code> 和 <code>P x</code> 都是命题 (或集合), 那么这个 <code>Σ A P</code> 也是命题 (或集合).</p>
 <p>当 <code>P</code> 不依值于 <code>A</code> 的时候就成了普通的积类型 <code>A × B</code>, 它的项具有 <code>(a , b)</code> 的形式, 其中 <code>a : A</code> 而 <code>b : B</code>. 积类型具有基数 <span class="math inline">|A| \times |B|</span>. 如果 <code>A</code> 和 <code>B</code> 都是命题 (或集合), 那么这个 <code>A × B</code> 也是命题 (或集合).</p>
 <h4 id="和类型">和类型</h4>
-<pre class="Agda"><a id="10245" class="Keyword">open</a> <a id="10250" class="Keyword">import</a> <a id="10257" href="Foundation.Data.Sum.html" class="Module">Foundation.Data.Sum</a> <a id="10277" class="Keyword">public</a>
+<pre class="Agda"><a id="10254" class="Keyword">open</a> <a id="10259" class="Keyword">import</a> <a id="10266" href="Foundation.Data.Sum.html" class="Module">Foundation.Data.Sum</a> <a id="10286" class="Keyword">public</a>
 </pre>
 <p>和类型 <code>A ⊎ B</code> 就是对类型 <code>A</code> 和 <code>B</code> 做不交并, 它的项具有 <code>inl a</code> 或 <code>inr b</code> 的形式, 其中 <code>a : A</code> 而 <code>b : B</code>. 和类型具有基数 <span class="math inline">|A| + |B|</span>. 如果 <code>A</code> 和 <code>B</code> 都是命题且它们互斥, 那么这个 <code>A ⊎ B</code> 是命题; 如果 <code>A</code> 和 <code>B</code> 都是集合, 那么这个 <code>A ⊎ B</code> 是集合.</p>
 <h3 id="容器">容器</h3>
 <p>容器数据类型以某种形式容纳了另一个给定类型 <code>A</code> 的某些项.</p>
 <h4 id="列表">列表</h4>
-<pre class="Agda"><a id="10533" class="Keyword">open</a> <a id="10538" class="Keyword">import</a> <a id="10545" href="Foundation.Data.List.html" class="Module">Foundation.Data.List</a> <a id="10566" class="Keyword">public</a>
+<pre class="Agda"><a id="10542" class="Keyword">open</a> <a id="10547" class="Keyword">import</a> <a id="10554" href="Foundation.Data.List.html" class="Module">Foundation.Data.List</a> <a id="10575" class="Keyword">public</a>
 </pre>
 <p>列表 <code>𝕃 A</code> 是不定长可数有限类型. 不定长是指列表的类型签名中不储存长度信息, 可数是指列表的项有一个典范线序, 有限是指列表的长度是个自然数. 当 <code>A</code> 是集合时, <code>𝕃 A</code> 也是集合 (<code>isSet𝕃</code>).</p>
 <p>我们可以问 <code>x : A</code> 在不在列表 <code>xs : 𝕃 A</code> 中, 这引入了列表的属于关系 <code>x ∈ᴸ xs</code> 以及一系列类比于集合论的概念. 我们把它们放在以下模块. 注意与幂集不同的是, <code>x ∈ᴸ xs</code> 不是命题, 因为 <code>x</code> 不保证在 <code>xs</code> 中只出现一次.</p>
-<pre class="Agda"><a id="10836" class="Keyword">open</a> <a id="10841" class="Keyword">import</a> <a id="10848" href="Foundation.Data.List.SetTheoretic.html" class="Module">Foundation.Data.List.SetTheoretic</a> <a id="10882" class="Keyword">public</a>
-  <a id="10891" class="Keyword">renaming</a> <a id="10900" class="Symbol">(</a><a id="10901" href="Data.List.Membership.Setoid.html#943" class="Function Operator">_∈_</a> <a id="10905" class="Symbol">to</a> <a id="10908" class="Function Operator">_∈ᴸ_</a><a id="10912" class="Symbol">;</a> <a id="10914" href="Data.List.Membership.Setoid.html#992" class="Function Operator">_∉_</a> <a id="10918" class="Symbol">to</a> <a id="10921" class="Function Operator">_∉ᴸ_</a><a id="10925" class="Symbol">)</a>
+<pre class="Agda"><a id="10845" class="Keyword">open</a> <a id="10850" class="Keyword">import</a> <a id="10857" href="Foundation.Data.List.SetTheoretic.html" class="Module">Foundation.Data.List.SetTheoretic</a> <a id="10891" class="Keyword">public</a>
+  <a id="10900" class="Keyword">renaming</a> <a id="10909" class="Symbol">(</a><a id="10910" href="Data.List.Membership.Setoid.html#943" class="Function Operator">_∈_</a> <a id="10914" class="Symbol">to</a> <a id="10917" class="Function Operator">_∈ᴸ_</a><a id="10921" class="Symbol">;</a> <a id="10923" href="Data.List.Membership.Setoid.html#992" class="Function Operator">_∉_</a> <a id="10927" class="Symbol">to</a> <a id="10930" class="Function Operator">_∉ᴸ_</a><a id="10934" class="Symbol">)</a>
 </pre>
 <h4 id="向量">向量</h4>
-<pre class="Agda"><a id="10949" class="Keyword">open</a> <a id="10954" class="Keyword">import</a> <a id="10961" href="Foundation.Data.Vec.html" class="Module">Foundation.Data.Vec</a> <a id="10981" class="Keyword">public</a>
+<pre class="Agda"><a id="10958" class="Keyword">open</a> <a id="10963" class="Keyword">import</a> <a id="10970" href="Foundation.Data.Vec.html" class="Module">Foundation.Data.Vec</a> <a id="10990" class="Keyword">public</a>
 </pre>
 <p>向量 <code>𝕍 A n</code> 是定长可数有限类型. 定长是指向量的类型签名中储存了长度信息 <code>n</code>. 当 <code>A</code> 是集合时, <code>𝕍 A n</code> 也是集合 (<code>isSet𝕍</code>).</p>
 <p>我们可以问 <code>x : A</code> 在不在向量 <code>x⃗ : 𝕍 A n</code> 中, 这引入了向量的属于关系 <code>x ∈⃗ x⃗</code> 以及一系列类比于集合论的概念. 我们把它们放在以下模块. 注意与幂集不同的是, <code>x ∈⃗ x⃗</code> 不是命题, 因为 <code>x</code> 不保证在 <code>x⃗</code> 中只出现一次.</p>
-<pre class="Agda"><a id="11226" class="Keyword">open</a> <a id="11231" class="Keyword">import</a> <a id="11238" href="Foundation.Data.Vec.SetTheoretic.html" class="Module">Foundation.Data.Vec.SetTheoretic</a> <a id="11271" class="Keyword">public</a>
-  <a id="11280" class="Keyword">renaming</a> <a id="11289" class="Symbol">(</a><a id="11290" href="Data.Vec.Membership.Setoid.html#930" class="Function Operator">_∈_</a> <a id="11294" class="Symbol">to</a> <a id="11297" class="Function Operator">_∈⃗_</a><a id="11301" class="Symbol">;</a> <a id="11303" href="Data.Vec.Relation.Unary.Any.html#1085" class="Datatype">Any</a> <a id="11307" class="Symbol">to</a> <a id="11310" class="Datatype">Any⃗</a><a id="11314" class="Symbol">)</a>
+<pre class="Agda"><a id="11235" class="Keyword">open</a> <a id="11240" class="Keyword">import</a> <a id="11247" href="Foundation.Data.Vec.SetTheoretic.html" class="Module">Foundation.Data.Vec.SetTheoretic</a> <a id="11280" class="Keyword">public</a>
+  <a id="11289" class="Keyword">renaming</a> <a id="11298" class="Symbol">(</a><a id="11299" href="Data.Vec.Membership.Setoid.html#930" class="Function Operator">_∈_</a> <a id="11303" class="Symbol">to</a> <a id="11306" class="Function Operator">_∈⃗_</a><a id="11310" class="Symbol">;</a> <a id="11312" href="Data.Vec.Relation.Unary.Any.html#1085" class="Datatype">Any</a> <a id="11316" class="Symbol">to</a> <a id="11319" class="Datatype">Any⃗</a><a id="11323" class="Symbol">)</a>
 </pre>
 <h2 id="函数-1">函数</h2>
 <p>函数 <code>A → B</code> 在我们的元语言里是原始概念. 以下列出一些关于函数的常用概念.</p>
 <h3 id="序列">序列</h3>
-<pre class="Agda"><a id="11388" class="Keyword">open</a> <a id="11393" class="Keyword">import</a> <a id="11400" href="Foundation.Function.Sequance.html" class="Module">Foundation.Function.Sequance</a> <a id="11429" class="Keyword">public</a>
+<pre class="Agda"><a id="11397" class="Keyword">open</a> <a id="11402" class="Keyword">import</a> <a id="11409" href="Foundation.Function.Sequance.html" class="Module">Foundation.Function.Sequance</a> <a id="11438" class="Keyword">public</a>
 </pre>
 <p>我们把函数 <code>ℕ → A</code> 称为无穷序列 <code>InfSeq</code>, 它有 “希尔伯特旅馆”操作 <code>_∷ₙ_</code>, 第一个参数是安排到0号房间的新客人, 第二个参数是原来的客房安排.</p>
 <h3 id="同构">同构</h3>
-<pre class="Agda"><a id="11545" class="Keyword">open</a> <a id="11550" class="Keyword">import</a> <a id="11557" href="Foundation.Function.Isomorphism.html" class="Module">Foundation.Function.Isomorphism</a> <a id="11589" class="Keyword">public</a>
+<pre class="Agda"><a id="11554" class="Keyword">open</a> <a id="11559" class="Keyword">import</a> <a id="11566" href="Foundation.Function.Isomorphism.html" class="Module">Foundation.Function.Isomorphism</a> <a id="11598" class="Keyword">public</a>
 </pre>
 <p>同构 (<code>_≅_</code>) 是类型间的一对互逆的函数, 它构成了类型宇宙中的一种等价关系 (<code>idIso</code>, <code>invIso</code>, <code>compIso</code>).</p>
 <p><strong><u>定理</u> <code>univalence</code></strong> 当 <code>A</code> 是集合的时候, <code>A ≡ B</code> 与 <code>A ≅ B</code> 同构.</p>
 <h3 id="双射">双射</h3>
-<pre class="Agda"><a id="11756" class="Keyword">open</a> <a id="11761" class="Keyword">import</a> <a id="11768" href="Foundation.Function.Bijection.html" class="Module">Foundation.Function.Bijection</a> <a id="11798" class="Keyword">public</a>
+<pre class="Agda"><a id="11765" class="Keyword">open</a> <a id="11770" class="Keyword">import</a> <a id="11777" href="Foundation.Function.Bijection.html" class="Module">Foundation.Function.Bijection</a> <a id="11807" class="Keyword">public</a>
 </pre>
 <p><strong><u>定义</u></strong></p>
 <ul>
@@ -357,7 +357,7 @@ theorem_name = proof_term</code></pre>
 <h3 id="零元关系">零元关系</h3>
 <p>零元关系就是命题. 我们主要关心 <code>⊥</code> 这个命题, 并把它的衍生概念都放在零元关系 <code>Nullary</code> 模块中.</p>
 <h4 id="否定">否定</h4>
-<pre class="Agda"><a id="12368" class="Keyword">open</a> <a id="12373" class="Keyword">import</a> <a id="12380" href="Foundation.Relation.Nullary.Negation.html" class="Module">Foundation.Relation.Nullary.Negation</a> <a id="12417" class="Keyword">public</a>
+<pre class="Agda"><a id="12377" class="Keyword">open</a> <a id="12382" class="Keyword">import</a> <a id="12389" href="Foundation.Relation.Nullary.Negation.html" class="Module">Foundation.Relation.Nullary.Negation</a> <a id="12426" class="Keyword">public</a>
 </pre>
 <p><strong><u>定义</u></strong> 否定的相关概念</p>
 <ul>
@@ -366,18 +366,18 @@ theorem_name = proof_term</code></pre>
 <li>稳定 <code>Stable = λ A → nonEmpty A → A</code></li>
 </ul>
 <h4 id="可判定">可判定</h4>
-<pre class="Agda"><a id="12562" class="Keyword">open</a> <a id="12567" class="Keyword">import</a> <a id="12574" href="Foundation.Relation.Nullary.Decidable.html" class="Module">Foundation.Relation.Nullary.Decidable</a> <a id="12612" class="Keyword">public</a>
+<pre class="Agda"><a id="12571" class="Keyword">open</a> <a id="12576" class="Keyword">import</a> <a id="12583" href="Foundation.Relation.Nullary.Decidable.html" class="Module">Foundation.Relation.Nullary.Decidable</a> <a id="12621" class="Keyword">public</a>
 </pre>
 <p><strong><u>定义</u></strong> <code>A</code> 可判定, 记作 <code>Dec A</code>, 当且仅当 <code>A</code> 或 <code>¬ A</code>.</p>
 <p>如果 <code>A</code> 是一个命题, 那么其可判定性 <code>Dec A</code> 也是一个命题 (<code>isPropDec</code>).</p>
 <h4 id="离散">离散</h4>
-<pre class="Agda"><a id="12748" class="Keyword">open</a> <a id="12753" class="Keyword">import</a> <a id="12760" href="Foundation.Relation.Nullary.Discrete.html" class="Module">Foundation.Relation.Nullary.Discrete</a> <a id="12797" class="Keyword">public</a>
+<pre class="Agda"><a id="12757" class="Keyword">open</a> <a id="12762" class="Keyword">import</a> <a id="12769" href="Foundation.Relation.Nullary.Discrete.html" class="Module">Foundation.Relation.Nullary.Discrete</a> <a id="12806" class="Keyword">public</a>
 </pre>
 <p><strong><u>定义</u></strong> <code>A</code> 离散, 当且仅当 <code>A</code> 上的 <code>_≡_</code> 可判定.</p>
 <p>如果一个类型是离散的, 那么它是一个集合 (<code>discrete→isSet</code>). 如果一个类型是集合, 那么它的离散性是一个命题 (<code>isPropDiscrete</code>).</p>
 <h3 id="一元关系">一元关系</h3>
 <h4 id="可数">可数</h4>
-<pre class="Agda"><a id="12968" class="Keyword">open</a> <a id="12973" class="Keyword">import</a> <a id="12980" href="Foundation.Relation.Unary.Countable.html" class="Module">Foundation.Relation.Unary.Countable</a> <a id="13016" class="Keyword">public</a>
+<pre class="Agda"><a id="12977" class="Keyword">open</a> <a id="12982" class="Keyword">import</a> <a id="12989" href="Foundation.Relation.Unary.Countable.html" class="Module">Foundation.Relation.Unary.Countable</a> <a id="13025" class="Keyword">public</a>
 </pre>
 <p><strong><u>定义</u></strong></p>
 <ul>
@@ -386,8 +386,8 @@ theorem_name = proof_term</code></pre>
 <li><code>A</code> 无限 (<code>infinite</code>), 当且仅当存在 <code>ℕ</code> 到 <code>A</code> 的单射 <code>ℕ ↣ A</code></li>
 </ul>
 <h4 id="可枚举">可枚举</h4>
-<pre class="Agda"><a id="13230" class="Keyword">open</a> <a id="13235" class="Keyword">import</a> <a id="13242" href="Foundation.Relation.Unary.Enumerable.html" class="Module">Foundation.Relation.Unary.Enumerable</a> <a id="13279" class="Symbol">as</a> <a id="13282" class="Module">E</a> <a id="13284" class="Keyword">public</a>
-<a id="13291" class="Keyword">open</a> <a id="13296" href="Foundation.Relation.Unary.Enumerable.html#2090" class="Module">E.ListView</a> <a id="13307" class="Keyword">public</a>
+<pre class="Agda"><a id="13239" class="Keyword">open</a> <a id="13244" class="Keyword">import</a> <a id="13251" href="Foundation.Relation.Unary.Enumerable.html" class="Module">Foundation.Relation.Unary.Enumerable</a> <a id="13288" class="Symbol">as</a> <a id="13291" class="Module">E</a> <a id="13293" class="Keyword">public</a>
+<a id="13300" class="Keyword">open</a> <a id="13305" href="Foundation.Relation.Unary.Enumerable.html#2090" class="Module">E.ListView</a> <a id="13316" class="Keyword">public</a>
 </pre>
 <p><strong><u>定义</u></strong> <code>A</code> 可枚举, 当且仅当存在函数 <code>f : ℕ → A ⊎ ⊤</code>, 使得对任意 <code>x : A</code>, 存在 <code>n</code> 满足 <code>f n ≡ x</code>.</p>
 <p><strong><u>定理</u> <code>discr→enum→count</code></strong> 如果 <code>A</code> 离散 (这意味着 <code>A</code> 是集合), 并且 <code>A</code> 可枚举, 那么 <code>A</code> 可数.</p>
