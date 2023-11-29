@@ -56,7 +56,7 @@
 
 <main>
 <h1 id="一阶逻辑-语法">一阶逻辑 ▸ 语法</h1>
-<p>本篇引入一阶逻辑的<strong>项 (term)</strong>, <strong>公式 (formula)</strong>和<strong>证明 (proof)</strong>, 它们共同构成了一阶逻辑的语法部分. 项由变量和函数符号构成; 公式则由关系符号和逻辑符号构成. 粗略类比, 如果说符号相当于字, 那么项和公式则相当于词和句. 注意本篇所有内容都是以语言 <code>ℒ</code> 为参数的.</p>
+<p>本篇引入一阶逻辑的<strong>项 (term)</strong>, <strong>公式 (formula)</strong>和<strong>证明 (proof)</strong>, 它们共同构成了一阶逻辑的语法部分. 项由变元和函数符号构成; 公式则由关系符号和逻辑符号构成. 粗略类比, 如果说符号相当于字, 那么项和公式则相当于词和句. 注意本篇所有内容都是以语言 <code>ℒ</code> 为参数的.</p>
 <pre class="Agda"><a id="208" class="Keyword">open</a> <a id="213" class="Keyword">import</a> <a id="220" href="Foundation.Essential.html" class="Module">Foundation.Essential</a>
 <a id="241" class="Keyword">open</a> <a id="246" class="Keyword">import</a> <a id="253" href="FOL.Language.html" class="Module">FOL.Language</a>
 <a id="266" class="Keyword">module</a> <a id="273" href="FOL.Syntax.html" class="Module">FOL.Syntax</a> <a id="284" class="Symbol">(</a><a id="285" href="FOL.Syntax.html#285" class="Bound">ℒ</a> <a id="287" class="Symbol">:</a> <a id="289" href="FOL.Language.html#750" class="Record">Language</a><a id="297" class="Symbol">)</a> <a id="299" class="Keyword">where</a>
@@ -68,10 +68,10 @@
 <a id="441" class="Keyword">infix</a> <a id="447" class="Number">30</a> <a id="450" href="FOL.Syntax.html#1103" class="Function Operator">_[_]ₜ</a> <a id="456" href="FOL.Syntax.html#1131" class="Function Operator">_[_]ₜ⃗</a> <a id="463" href="FOL.Syntax.html#3398" class="Function Operator">_[_]ᵩ</a>
 </pre>
 <h2 id="项">项</h2>
-<p>我们将使用 <a href="https://en.wikipedia.org/wiki/De_Bruijn_index">De Brujin编码</a> 实现量词的绑定, 因此项中使用自然数作为变量(名).</p>
+<p>我们将使用 <a href="https://en.wikipedia.org/wiki/De_Bruijn_index">De Brujin编码</a> 实现量词的绑定, 因此项中使用自然数作为变元(名).</p>
 <p><strong><u>归纳定义</u></strong> 项</p>
 <ul>
-<li>对任意自然数 <code>n</code>, <code># n</code> 是项 (变量)</li>
+<li>对任意自然数 <code>n</code>, <code># n</code> 是项 (变元)</li>
 <li>对任意 <code>l</code> 元函数符号 <code>f</code>, <code>f $̇ t⃗</code> 是项 (函数应用), 其中 <code>t⃗</code> 是项的 <code>l</code> 维向量</li>
 </ul>
 <pre class="Agda"><a id="693" class="Keyword">data</a> <a id="Term"></a><a id="698" href="FOL.Syntax.html#698" class="Datatype">Term</a> <a id="703" class="Symbol">:</a> <a id="705" href="Agda.Primitive.html#388" class="Primitive">𝕋</a> <a id="707" class="Keyword">where</a>
@@ -79,12 +79,12 @@
   <a id="Term._$̇_"></a><a id="731" href="FOL.Syntax.html#731" class="InductiveConstructor Operator">_$̇_</a> <a id="736" class="Symbol">:</a> <a id="738" class="Symbol">(</a><a id="739" href="FOL.Syntax.html#739" class="Bound">f</a> <a id="741" class="Symbol">:</a> <a id="743" href="FOL.Language.html#782" class="Field">𝓕</a><a id="744" class="Symbol">)</a> <a id="746" class="Symbol">→</a> <a id="748" href="Data.Vec.Base.html#1107" class="Datatype">𝕍</a> <a id="750" href="FOL.Syntax.html#698" class="Datatype">Term</a> <a id="755" href="FOL.Language.html#802" class="Field Operator">∣</a> <a id="757" href="FOL.Syntax.html#739" class="Bound">f</a> <a id="759" href="FOL.Language.html#802" class="Field Operator">∣ᶠ</a> <a id="762" class="Symbol">→</a> <a id="764" href="FOL.Syntax.html#698" class="Datatype">Term</a>
 </pre>
 <h3 id="项的替换">项的替换</h3>
-<p>项的替换是指把一个项中所使用的所有变量分别替换成一些别的项. 这一操作是 De Brujin编码方案的一部分, 目的是为了实现量词绑定, 具体用法会在后面逐步说明. 首先为了实现项的替换, 我们需要一套替换规则, 它记录了全体自然数 (变量) 与项的一套对应关系.</p>
-<p><strong><u>定义</u></strong> 变量替换表 (<code>σ : Subst</code>) 是一个将变量映射到项的函数 <code>ℕ → Term</code>.</p>
+<p>项的替换是指把一个项中所使用的所有变元分别替换成一些别的项. 这一操作是 De Brujin编码方案的一部分, 目的是为了实现量词绑定, 具体用法会在后面逐步说明. 首先为了实现项的替换, 我们需要一套替换规则, 它记录了全体自然数 (变元) 与项的一套对应关系.</p>
+<p><strong><u>定义</u></strong> 变元替换表 (<code>σ : Subst</code>) 是一个将变元映射到项的函数 <code>ℕ → Term</code>.</p>
 <pre class="Agda"><a id="Subst"></a><a id="987" href="FOL.Syntax.html#987" class="Function">Subst</a> <a id="993" class="Symbol">:</a> <a id="995" href="Agda.Primitive.html#388" class="Primitive">𝕋</a>
 <a id="997" href="FOL.Syntax.html#987" class="Function">Subst</a> <a id="1003" class="Symbol">=</a> <a id="1005" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="1007" class="Symbol">→</a> <a id="1009" href="FOL.Syntax.html#698" class="Datatype">Term</a>
 </pre>
-<p>我们想要把变量替换表作用到项上, 这需要同时 (互递归) 定义单个项的替换 <code>t [ σ ]ₜ</code> 以及项的向量整体的替换 <code>t⃗ [ σ ]ₜ⃗</code>.</p>
+<p>我们想要把变元替换表作用到项上, 这需要同时 (互递归) 定义单个项的替换 <code>t [ σ ]ₜ</code> 以及项的向量整体的替换 <code>t⃗ [ σ ]ₜ⃗</code>.</p>
 <pre class="Agda"><a id="_[_]ₜ"></a><a id="1103" href="FOL.Syntax.html#1103" class="Function Operator">_[_]ₜ</a> <a id="1109" class="Symbol">:</a> <a id="1111" href="FOL.Syntax.html#698" class="Datatype">Term</a> <a id="1116" class="Symbol">→</a> <a id="1118" href="FOL.Syntax.html#987" class="Function">Subst</a> <a id="1124" class="Symbol">→</a> <a id="1126" href="FOL.Syntax.html#698" class="Datatype">Term</a>
 <a id="_[_]ₜ⃗"></a><a id="1131" href="FOL.Syntax.html#1131" class="Function Operator">_[_]ₜ⃗</a> <a id="1138" class="Symbol">:</a> <a id="1140" class="Symbol">∀</a> <a id="1142" class="Symbol">{</a><a id="1143" href="FOL.Syntax.html#1143" class="Bound">n</a><a id="1144" class="Symbol">}</a> <a id="1146" class="Symbol">→</a> <a id="1148" href="Data.Vec.Base.html#1107" class="Datatype">𝕍</a> <a id="1150" href="FOL.Syntax.html#698" class="Datatype">Term</a> <a id="1155" href="FOL.Syntax.html#1143" class="Bound">n</a> <a id="1157" class="Symbol">→</a> <a id="1159" href="FOL.Syntax.html#987" class="Function">Subst</a> <a id="1165" class="Symbol">→</a> <a id="1167" href="Data.Vec.Base.html#1107" class="Datatype">𝕍</a> <a id="1169" href="FOL.Syntax.html#698" class="Datatype">Term</a> <a id="1174" href="FOL.Syntax.html#1143" class="Bound">n</a>
 </pre>
@@ -113,16 +113,16 @@
 <a id="1777" href="FOL.Syntax.html#1686" class="Function">[]ₜ⃗≡map⃗</a> <a id="1787" class="Symbol">(_</a> <a id="1790" href="Data.Vec.Base.html#1162" class="InductiveConstructor Operator">∷</a> <a id="1792" href="FOL.Syntax.html#1792" class="Bound">t⃗</a><a id="1794" class="Symbol">)</a> <a id="1796" href="FOL.Syntax.html#1796" class="Bound">σ</a> <a id="1798" class="Symbol">=</a> <a id="1800" href="Relation.Binary.PropositionalEquality.Core.html#1158" class="Function">cong</a> <a id="1805" class="Symbol">(_</a> <a id="1808" href="Data.Vec.Base.html#1162" class="InductiveConstructor Operator">∷_</a><a id="1810" class="Symbol">)</a> <a id="1812" href="Function.Base.html#1974" class="Function Operator">$</a> <a id="1814" href="FOL.Syntax.html#1686" class="Function">[]ₜ⃗≡map⃗</a> <a id="1824" href="FOL.Syntax.html#1792" class="Bound">t⃗</a> <a id="1827" href="FOL.Syntax.html#1796" class="Bound">σ</a>
 </pre>
 <h3 id="项的提升">项的提升</h3>
-<p><strong><u>定义</u></strong> 项 <code>t</code> 的提升 <code>↑ₜ t</code> 是指将 <code>t</code> 中涉及的所有变量 (自然数) 替换为其后继.</p>
+<p><strong><u>定义</u></strong> 项 <code>t</code> 的提升 <code>↑ₜ t</code> 是指将 <code>t</code> 中涉及的所有变元 (自然数) 替换为其后继.</p>
 <pre class="Agda"><a id="↑ₜ"></a><a id="1915" href="FOL.Syntax.html#1915" class="Function">↑ₜ</a> <a id="1918" class="Symbol">:</a> <a id="1920" href="FOL.Syntax.html#698" class="Datatype">Term</a> <a id="1925" class="Symbol">→</a> <a id="1927" href="FOL.Syntax.html#698" class="Datatype">Term</a>
 <a id="1932" href="FOL.Syntax.html#1915" class="Function">↑ₜ</a> <a id="1935" class="Symbol">=</a> <a id="1937" href="FOL.Syntax.html#1103" class="Function Operator">_[</a> <a id="1940" href="FOL.Syntax.html#715" class="InductiveConstructor Operator">#_</a> <a id="1943" href="Function.Base.html#1115" class="Function Operator">∘</a> <a id="1945" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="1949" href="FOL.Syntax.html#1103" class="Function Operator">]ₜ</a>
 </pre>
 <p>例如, 若 <code>t</code> = <code>g $ (f $̇ # 0) ∷ [ # 1 ]</code>, 那么 <code>↑ₜ t</code> = <code>g $ (f $̇ # 1) ∷ [ # 2 ]</code>.</p>
-<p><strong><u>定义</u></strong> 替换表 <code>σ</code> 的提升 <code>↑ₛ σ</code> 是指对 <code>σ</code> 的值域中的项全部做一次提升, 得到替换表 <code>↑ₜ ∘ σ</code>, 然后使用希尔伯特旅馆操作把变量 <code># 0</code> 插入到 <code>↑ₜ ∘ σ</code> 的头部, 得到 <code># 0 ∷ₙ ↑ₜ ∘ σ</code>.</p>
+<p><strong><u>定义</u></strong> 替换表 <code>σ</code> 的提升 <code>↑ₛ σ</code> 是指对 <code>σ</code> 的值域中的项全部做一次提升, 得到替换表 <code>↑ₜ ∘ σ</code>, 然后使用希尔伯特旅馆操作把变元 <code># 0</code> 插入到 <code>↑ₜ ∘ σ</code> 的头部, 得到 <code># 0 ∷ₙ ↑ₜ ∘ σ</code>.</p>
 <pre class="Agda"><a id="↑ₛ"></a><a id="2179" href="FOL.Syntax.html#2179" class="Function">↑ₛ</a> <a id="2182" class="Symbol">:</a> <a id="2184" href="FOL.Syntax.html#987" class="Function">Subst</a> <a id="2190" class="Symbol">→</a> <a id="2192" href="FOL.Syntax.html#987" class="Function">Subst</a>
 <a id="2198" href="FOL.Syntax.html#2179" class="Function">↑ₛ</a> <a id="2201" href="FOL.Syntax.html#2201" class="Bound">σ</a> <a id="2203" class="Symbol">=</a> <a id="2205" href="FOL.Syntax.html#715" class="InductiveConstructor Operator">#</a> <a id="2207" class="Number">0</a> <a id="2209" href="Foundation.Function.Sequance.html#127" class="Function Operator">∷ₙ</a> <a id="2212" href="FOL.Syntax.html#1915" class="Function">↑ₜ</a> <a id="2215" href="Function.Base.html#1115" class="Function Operator">∘</a> <a id="2217" href="FOL.Syntax.html#2201" class="Bound">σ</a>
 </pre>
-<p>之所以要做此种看似复杂的操作, 是因为后面我们会如此定义量词, 使得量词作用下的 <code># 0</code> 被解释为量词的绑定变量, 它不应该受替换操作影响. 可以看到, <code>↑ₛ σ</code> 确实不会替换 <code># 0</code>, 或者说替换后仍是 <code># 0</code>. 而对于非绑定变量 (<code># 1</code>, <code># 2</code>, …) 的替换, 需要保证替换后不会变成 <code># 0</code>, 因此需要对 <code>σ</code> 的值域中的项全部做一次提升, 得到 <code>↑ₜ ∘ σ</code>, 以把 <code># 0</code> 空出来. 总而言之, <code>↑ₛ σ</code> 对 <code>σ</code> 的定义域和值域都整体做了一次提升, 而空出来的 0 的位置仍然是 <code># 0</code>.</p>
+<p>之所以要做此种看似复杂的操作, 是因为后面我们会如此定义量词, 使得量词作用下的 <code># 0</code> 被解释为量词的绑定变元, 它不应该受替换操作影响. 可以看到, <code>↑ₛ σ</code> 确实不会替换 <code># 0</code>, 或者说替换后仍是 <code># 0</code>. 而对于非绑定变元 (<code># 1</code>, <code># 2</code>, …) 的替换, 需要保证替换后不会变成 <code># 0</code>, 因此需要对 <code>σ</code> 的值域中的项全部做一次提升, 得到 <code>↑ₜ ∘ σ</code>, 以把 <code># 0</code> 空出来. 总而言之, <code>↑ₛ σ</code> 对 <code>σ</code> 的定义域和值域都整体做了一次提升, 而空出来的 0 的位置仍然是 <code># 0</code>.</p>
 <h2 id="公式">公式</h2>
 <p>公式是定义逻辑符号的地方. 一般来说一阶逻辑的逻辑符号有</p>
 <ul>
@@ -156,7 +156,7 @@
   <a id="Formula._$̇_"></a><a id="3082" href="FOL.Syntax.html#3082" class="InductiveConstructor Operator">_$̇_</a> <a id="3087" class="Symbol">:</a> <a id="3089" class="Symbol">(</a><a id="3090" href="FOL.Syntax.html#3090" class="Bound">R</a> <a id="3092" class="Symbol">:</a> <a id="3094" href="FOL.Language.html#792" class="Field">𝓡</a><a id="3095" class="Symbol">)</a> <a id="3097" class="Symbol">→</a> <a id="3099" href="Data.Vec.Base.html#1107" class="Datatype">𝕍</a> <a id="3101" href="FOL.Syntax.html#698" class="Datatype">Term</a> <a id="3106" href="FOL.Language.html#819" class="Field Operator">∣</a> <a id="3108" href="FOL.Syntax.html#3090" class="Bound">R</a> <a id="3110" href="FOL.Language.html#819" class="Field Operator">∣ᴿ</a> <a id="3113" class="Symbol">→</a> <a id="3115" href="FOL.Syntax.html#2984" class="Datatype">Formula</a>
 </pre>
 <h3 id="公式的替换">公式的替换</h3>
-<p><strong><u>递归定义</u></strong> 公式的替换 <code>φ [ σ ]ᵩ</code> 是指把变量替换表 <code>σ</code> 作用到公式 <code>φ</code> 中的所有项上.</p>
+<p><strong><u>递归定义</u></strong> 公式的替换 <code>φ [ σ ]ᵩ</code> 是指把变元替换表 <code>σ</code> 作用到公式 <code>φ</code> 中的所有项上.</p>
 <ul>
 <li>如果 <code>φ</code> = <code>⊥̇</code>, 则没有项可被替换, 所以仍为 <code>⊥̇</code></li>
 <li>如果 <code>φ</code> = <code>φ →̇ ψ</code>, 则分别替换 <code>_→̇_</code> 两边的公式, 再用 <code>_→̇_</code> 连接</li>
@@ -171,7 +171,7 @@
 </pre>
 <p>注意思考上面全称量化的情况是如何完成替换的, 结合 <code>↑ₛ σ</code> 的定义应该不难理解.</p>
 <p>上面一系列提升和替换最终是为了实现以下概念.</p>
-<p><strong><u>定义</u></strong> 绑定变量的实例化 <code>φ [ t ∷]</code> 是指把公式 <code>φ</code> 中的 <code># 0</code> 替换为项 <code>t</code>, 其他变量保持不变.</p>
+<p><strong><u>定义</u></strong> 绑定变元的实例化 <code>φ [ t ∷]</code> 是指把公式 <code>φ</code> 中的 <code># 0</code> 替换为项 <code>t</code>, 其他变元保持不变.</p>
 <pre class="Agda"><a id="_[_∷]"></a><a id="3723" href="FOL.Syntax.html#3723" class="Function Operator">_[_∷]</a> <a id="3729" class="Symbol">:</a> <a id="3731" href="FOL.Syntax.html#2984" class="Datatype">Formula</a> <a id="3739" class="Symbol">→</a> <a id="3741" href="FOL.Syntax.html#698" class="Datatype">Term</a> <a id="3746" class="Symbol">→</a> <a id="3748" href="FOL.Syntax.html#2984" class="Datatype">Formula</a>
 <a id="3756" href="FOL.Syntax.html#3756" class="Bound">φ</a> <a id="3758" href="FOL.Syntax.html#3723" class="Function Operator">[</a> <a id="3760" href="FOL.Syntax.html#3760" class="Bound">t</a> <a id="3762" href="FOL.Syntax.html#3723" class="Function Operator">∷]</a> <a id="3765" class="Symbol">=</a> <a id="3767" href="FOL.Syntax.html#3756" class="Bound">φ</a> <a id="3769" href="FOL.Syntax.html#3398" class="Function Operator">[</a> <a id="3771" href="FOL.Syntax.html#3760" class="Bound">t</a> <a id="3773" href="Foundation.Function.Sequance.html#127" class="Function Operator">∷ₙ</a> <a id="3776" href="FOL.Syntax.html#715" class="InductiveConstructor Operator">#_</a> <a id="3779" href="FOL.Syntax.html#3398" class="Function Operator">]ᵩ</a>
 </pre>
@@ -186,7 +186,7 @@
 </pre>
 <p>这两种概念仅仅是实用上的区别, 而没有本质不同. 语境和理论中的公式又叫做<strong>公理 (axiom)</strong>.</p>
 <p>全称量化的引入规则中需要用到语境提升的概念, 而这又需要公式的提升, 它们都只是项的提升的简单推广.</p>
-<p><strong><u>定义</u></strong> 公式 <code>φ</code> 的提升 <code>↑ᵩ φ</code> 是指将 <code>φ</code> 中涉及的所有变量 (自然数) 替换为其后继.</p>
+<p><strong><u>定义</u></strong> 公式 <code>φ</code> 的提升 <code>↑ᵩ φ</code> 是指将 <code>φ</code> 中涉及的所有变元 (自然数) 替换为其后继.</p>
 <pre class="Agda"><a id="↑ᵩ"></a><a id="4207" href="FOL.Syntax.html#4207" class="Function">↑ᵩ</a> <a id="4210" class="Symbol">:</a> <a id="4212" href="FOL.Syntax.html#2984" class="Datatype">Formula</a> <a id="4220" class="Symbol">→</a> <a id="4222" href="FOL.Syntax.html#2984" class="Datatype">Formula</a>
 <a id="4230" href="FOL.Syntax.html#4207" class="Function">↑ᵩ</a> <a id="4233" class="Symbol">=</a> <a id="4235" href="FOL.Syntax.html#3398" class="Function Operator">_[</a> <a id="4238" href="FOL.Syntax.html#715" class="InductiveConstructor Operator">#_</a> <a id="4241" href="Function.Base.html#1115" class="Function Operator">∘</a> <a id="4243" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="4247" href="FOL.Syntax.html#3398" class="Function Operator">]ᵩ</a>
 </pre>
