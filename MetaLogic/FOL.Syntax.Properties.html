@@ -27,7 +27,7 @@
 
 <main>
 <h1 id="一阶逻辑-语法-性质">一阶逻辑 ▸ 语法 ▸⁻ 性质</h1>
-<p>这是一篇标题中带上标减号 (⁻) 的章节. 这通常意味着这种章节不推荐线性阅读, 读者应该在需要时再回来查阅. 因其通常是一些枯燥引理及其证明的简单罗列, 而不包含动机的说明. 读者应该在使用这些引理的章节中寻找动机.</p>
+<p>这是一篇标题中带上标减号 (⁻) 的章节. 这表示这种章节不推荐线性阅读, 读者应该在需要时再回来查看. 因为这种章节只是一些枯燥引理及其证明的简单罗列, 而不包含动机的说明. 读者应该在使用这些引理的章节中寻找动机.</p>
 <pre class="Agda"><a id="175" class="Keyword">open</a> <a id="180" class="Keyword">import</a> <a id="187" href="Foundation.Essential.html" class="Module">Foundation.Essential</a>
 <a id="208" class="Keyword">open</a> <a id="213" class="Keyword">import</a> <a id="220" href="Foundation.Data.Vec.SetTheoretic.html" class="Module">Foundation.Data.Vec.SetTheoretic</a>
   <a id="255" class="Keyword">renaming</a> <a id="264" class="Symbol">(</a><a id="265" href="Data.Vec.Membership.Setoid.html#930" class="Function Operator">_∈_</a> <a id="269" class="Symbol">to</a> <a id="272" class="Function Operator">_∈⃗_</a><a id="276" class="Symbol">)</a>
@@ -48,7 +48,7 @@
 <li>当项是函数应用 <code>f $̇ t⃗</code> 时, 由前提2, 只要证 <code>P</code> 对所有 <code>t ∈⃗ t⃗</code> 成立, 把它视作一个内部引理, 命名为 <code>H</code>. 我们递归证明 <code>H</code>, 给定 <code>t ∈⃗ t⃗</code>, 又分两种情况
 <ul>
 <li>当 <code>t</code> 位于 <code>t⃗</code> 的头部时, 用项的归纳法即证</li>
-<li>当 <code>t</code> 位于 <code>t⃗</code> 的尾部时, 递归调用 <code>H</code> 即证 ∎</li>
+<li>当 <code>t</code> 位于 <code>t⃗</code> 的尾部时, 递归使用 <code>H</code> 即证 ∎</li>
 </ul></li>
 </ul>
 <pre class="Agda"><a id="term-elim"></a><a id="753" href="FOL.Syntax.Properties.html#753" class="Function">term-elim</a> <a id="763" class="Symbol">:</a> <a id="765" class="Symbol">{</a><a id="766" href="FOL.Syntax.Properties.html#766" class="Bound">P</a> <a id="768" class="Symbol">:</a> <a id="770" href="FOL.Syntax.html#698" class="Datatype">Term</a> <a id="775" class="Symbol">→</a> <a id="777" href="Agda.Primitive.html#388" class="Primitive">𝕋</a> <a id="779" href="Foundation.Prelude.Builtin.html#796" class="Generalizable">ℓ</a><a id="780" class="Symbol">}</a> <a id="782" class="Symbol">→</a> <a id="784" class="Symbol">(∀</a> <a id="787" href="FOL.Syntax.Properties.html#787" class="Bound">n</a> <a id="789" class="Symbol">→</a> <a id="791" href="FOL.Syntax.Properties.html#766" class="Bound">P</a> <a id="793" class="Symbol">(</a><a id="794" href="FOL.Syntax.html#715" class="InductiveConstructor Operator">#</a> <a id="796" href="FOL.Syntax.Properties.html#787" class="Bound">n</a><a id="797" class="Symbol">))</a> <a id="800" class="Symbol">→</a>
