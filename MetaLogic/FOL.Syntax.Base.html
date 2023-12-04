@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>FOL.Syntax.Base</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+</head>
+<body>
+
+<header>
+<h1 class="title"></h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <strong>Contents</strong><label for="contents">⊕</label>
+  <input type="checkbox" id="contents">
+  <ul>
+  <li><a href="#一阶逻辑-语法-定义" id="toc-一阶逻辑-语法-定义">一阶逻辑 ▸ 语法 ▸ 定义</a>
+  <ul>
+  <li><a href="#项" id="toc-项">项</a>
+  <ul>
+  <li><a href="#项的替换" id="toc-项的替换">项的替换</a></li>
+  <li><a href="#项的提升" id="toc-项的提升">项的提升</a></li>
+  </ul></li>
+  <li><a href="#公式" id="toc-公式">公式</a>
+  <ul>
+  <li><a href="#公式的替换" id="toc-公式的替换">公式的替换</a></li>
+  </ul></li>
+  <li><a href="#语境与理论" id="toc-语境与理论">语境与理论</a></li>
+  <li><a href="#语法蕴含" id="toc-语法蕴含">语法蕴含</a></li>
+  </ul></li>
+  </ul>
+</nav>
+
+<main>
+<h1 id="一阶逻辑-语法-定义">一阶逻辑 ▸ 语法 ▸ 定义</h1>
+<p>本篇引入一阶逻辑的<strong>项 (term)</strong>, <strong>公式 (formula)</strong>和<strong>证明 (proof)</strong>, 它们共同构成了一阶逻辑的语法部分. 项由变元和函数符号构成; 公式则由关系符号和逻辑符号构成. 粗略类比, 如果说符号相当于字, 那么项和公式则相当于词和句. 注意本篇所有内容都是以语言 <code>ℒ</code> 为参数的.</p>
+<pre class="Agda"><a id="218" class="Keyword">open</a> <a id="223" class="Keyword">import</a> <a id="230" href="Foundation.Essential.html" class="Module">Foundation.Essential</a>
+<a id="251" class="Keyword">open</a> <a id="256" class="Keyword">import</a> <a id="263" href="FOL.Language.html" class="Module">FOL.Language</a>
+<a id="276" class="Keyword">module</a> <a id="283" href="FOL.Syntax.Base.html" class="Module">FOL.Syntax.Base</a> <a id="299" class="Symbol">(</a><a id="300" href="FOL.Syntax.Base.html#300" class="Bound">ℒ</a> <a id="302" class="Symbol">:</a> <a id="304" href="FOL.Language.html#750" class="Record">Language</a><a id="312" class="Symbol">)</a> <a id="314" class="Keyword">where</a>
+<a id="320" class="Keyword">open</a> <a id="325" href="FOL.Language.html#750" class="Module">Language</a> <a id="334" href="FOL.Syntax.Base.html#300" class="Bound">ℒ</a>
+</pre>
+<p>以下列出了本篇所引入的符号的优先级. 数字越大则优先级越高, 未列出的符号默认具有 20 的优先级. 它们的具体定义会在后文给出.</p>
+<pre class="Agda"><a id="416" class="Keyword">infix</a> <a id="422" class="Number">10</a> <a id="425" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">_⊢_</a> <a id="429" href="FOL.Syntax.Base.html#5724" class="Function Operator">_⊬_</a> <a id="433" href="FOL.Syntax.Base.html#5952" class="Function Operator">_⊩_</a> <a id="437" href="FOL.Syntax.Base.html#5956" class="Function Operator">_⊮_</a>
+<a id="441" class="Keyword">infixl</a> <a id="448" class="Number">15</a> <a id="451" href="FOL.Syntax.Base.html#3036" class="InductiveConstructor Operator">_→̇_</a>
+<a id="456" class="Keyword">infix</a> <a id="462" class="Number">30</a> <a id="465" href="FOL.Syntax.Base.html#1118" class="Function Operator">_[_]ₜ</a> <a id="471" href="FOL.Syntax.Base.html#1146" class="Function Operator">_[_]ₜ⃗</a> <a id="478" href="FOL.Syntax.Base.html#3415" class="Function Operator">_[_]ᵩ</a>
+</pre>
+<h2 id="项">项</h2>
+<p>我们将使用 <a href="https://en.wikipedia.org/wiki/De_Bruijn_index">De Brujin编码</a> 实现量词的绑定, 因此项中使用自然数作为变元(名).</p>
+<p><strong><u>归纳定义</u></strong> 项</p>
+<ul>
+<li>对任意自然数 <code>n</code>, <code># n</code> 是项 (变元)</li>
+<li>对任意 <code>l</code> 元函数符号 <code>f</code>, <code>f $̇ t⃗</code> 是项 (函数应用), 其中 <code>t⃗</code> 是项的 <code>l</code> 维向量</li>
+</ul>
+<pre class="Agda"><a id="708" class="Keyword">data</a> <a id="Term"></a><a id="713" href="FOL.Syntax.Base.html#713" class="Datatype">Term</a> <a id="718" class="Symbol">:</a> <a id="720" href="Agda.Primitive.html#388" class="Primitive">𝕋</a> <a id="722" class="Keyword">where</a>
+  <a id="Term.#_"></a><a id="730" href="FOL.Syntax.Base.html#730" class="InductiveConstructor Operator">#_</a> <a id="733" class="Symbol">:</a> <a id="735" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="737" class="Symbol">→</a> <a id="739" href="FOL.Syntax.Base.html#713" class="Datatype">Term</a>
+  <a id="Term._$̇_"></a><a id="746" href="FOL.Syntax.Base.html#746" class="InductiveConstructor Operator">_$̇_</a> <a id="751" class="Symbol">:</a> <a id="753" class="Symbol">(</a><a id="754" href="FOL.Syntax.Base.html#754" class="Bound">f</a> <a id="756" class="Symbol">:</a> <a id="758" href="FOL.Language.html#782" class="Field">𝓕</a><a id="759" class="Symbol">)</a> <a id="761" class="Symbol">→</a> <a id="763" href="Data.Vec.Base.html#1107" class="Datatype">𝕍</a> <a id="765" href="FOL.Syntax.Base.html#713" class="Datatype">Term</a> <a id="770" href="FOL.Language.html#802" class="Field Operator">∣</a> <a id="772" href="FOL.Syntax.Base.html#754" class="Bound">f</a> <a id="774" href="FOL.Language.html#802" class="Field Operator">∣ᶠ</a> <a id="777" class="Symbol">→</a> <a id="779" href="FOL.Syntax.Base.html#713" class="Datatype">Term</a>
+</pre>
+<h3 id="项的替换">项的替换</h3>
+<p>项的替换是指把一个项中所使用的所有变元分别替换成一些别的项. 这一操作是 De Brujin编码方案的一部分, 目的是为了实现量词绑定, 具体用法会在后面逐步说明. 首先为了实现项的替换, 我们需要一套替换规则, 它记录了全体自然数 (变元) 与项的一套对应关系.</p>
+<p><strong><u>定义</u></strong> 变元替换表 (<code>σ : Subst</code>) 是一个将变元映射到项的函数 <code>ℕ → Term</code>.</p>
+<pre class="Agda"><a id="Subst"></a><a id="1002" href="FOL.Syntax.Base.html#1002" class="Function">Subst</a> <a id="1008" class="Symbol">:</a> <a id="1010" href="Agda.Primitive.html#388" class="Primitive">𝕋</a>
+<a id="1012" href="FOL.Syntax.Base.html#1002" class="Function">Subst</a> <a id="1018" class="Symbol">=</a> <a id="1020" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="1022" class="Symbol">→</a> <a id="1024" href="FOL.Syntax.Base.html#713" class="Datatype">Term</a>
+</pre>
+<p>我们想要把变元替换表作用到项上, 这需要同时 (互递归) 定义单个项的替换 <code>t [ σ ]ₜ</code> 以及项的向量整体的替换 <code>t⃗ [ σ ]ₜ⃗</code>.</p>
+<pre class="Agda"><a id="_[_]ₜ"></a><a id="1118" href="FOL.Syntax.Base.html#1118" class="Function Operator">_[_]ₜ</a> <a id="1124" class="Symbol">:</a> <a id="1126" href="FOL.Syntax.Base.html#713" class="Datatype">Term</a> <a id="1131" class="Symbol">→</a> <a id="1133" href="FOL.Syntax.Base.html#1002" class="Function">Subst</a> <a id="1139" class="Symbol">→</a> <a id="1141" href="FOL.Syntax.Base.html#713" class="Datatype">Term</a>
+<a id="_[_]ₜ⃗"></a><a id="1146" href="FOL.Syntax.Base.html#1146" class="Function Operator">_[_]ₜ⃗</a> <a id="1153" class="Symbol">:</a> <a id="1155" class="Symbol">∀</a> <a id="1157" class="Symbol">{</a><a id="1158" href="FOL.Syntax.Base.html#1158" class="Bound">n</a><a id="1159" class="Symbol">}</a> <a id="1161" class="Symbol">→</a> <a id="1163" href="Data.Vec.Base.html#1107" class="Datatype">𝕍</a> <a id="1165" href="FOL.Syntax.Base.html#713" class="Datatype">Term</a> <a id="1170" href="FOL.Syntax.Base.html#1158" class="Bound">n</a> <a id="1172" class="Symbol">→</a> <a id="1174" href="FOL.Syntax.Base.html#1002" class="Function">Subst</a> <a id="1180" class="Symbol">→</a> <a id="1182" href="Data.Vec.Base.html#1107" class="Datatype">𝕍</a> <a id="1184" href="FOL.Syntax.Base.html#713" class="Datatype">Term</a> <a id="1189" href="FOL.Syntax.Base.html#1158" class="Bound">n</a>
+</pre>
+<p><strong><u>互递归定义</u></strong> 项的替换</p>
+<ul>
+<li>单个项的替换 <code>t [ σ ]ₜ</code>:
+<ul>
+<li>如果 <code>t</code> = <code># n</code>, 则替换后为 <code>σ n</code></li>
+<li>如果 <code>t</code> = <code>f $̇ t⃗</code>, 则替换后为 <code>f $̇ t⃗ [ σ ]ₜ⃗</code></li>
+</ul></li>
+<li>项的向量整体的替换 <code>t⃗ [ σ ]ₜ⃗</code>:
+<ul>
+<li>如果 <code>t⃗</code> = <code>[]</code>, 则替换后为 <code>[]</code></li>
+<li>如果 <code>t⃗</code> = <code>t ∷ t⃗</code>, 则替换后为 <code>t [ σ ]ₜ ∷ t⃗ [ σ ]ₜ⃗</code></li>
+</ul></li>
+</ul>
+<pre class="Agda"><a id="1440" class="Symbol">(</a><a id="1441" href="FOL.Syntax.Base.html#730" class="InductiveConstructor Operator">#</a> <a id="1443" href="FOL.Syntax.Base.html#1443" class="Bound">n</a><a id="1444" class="Symbol">)</a>   <a id="1448" href="FOL.Syntax.Base.html#1118" class="Function Operator">[</a> <a id="1450" href="FOL.Syntax.Base.html#1450" class="Bound">σ</a> <a id="1452" href="FOL.Syntax.Base.html#1118" class="Function Operator">]ₜ</a> <a id="1455" class="Symbol">=</a> <a id="1457" href="FOL.Syntax.Base.html#1450" class="Bound">σ</a> <a id="1459" href="FOL.Syntax.Base.html#1443" class="Bound">n</a>
+<a id="1461" class="Symbol">(</a><a id="1462" href="FOL.Syntax.Base.html#1462" class="Bound">f</a> <a id="1464" href="FOL.Syntax.Base.html#746" class="InductiveConstructor Operator">$̇</a> <a id="1467" href="FOL.Syntax.Base.html#1467" class="Bound">t⃗</a><a id="1469" class="Symbol">)</a> <a id="1471" href="FOL.Syntax.Base.html#1118" class="Function Operator">[</a> <a id="1473" href="FOL.Syntax.Base.html#1473" class="Bound">σ</a> <a id="1475" href="FOL.Syntax.Base.html#1118" class="Function Operator">]ₜ</a> <a id="1478" class="Symbol">=</a> <a id="1480" href="FOL.Syntax.Base.html#1462" class="Bound">f</a> <a id="1482" href="FOL.Syntax.Base.html#746" class="InductiveConstructor Operator">$̇</a> <a id="1485" href="FOL.Syntax.Base.html#1467" class="Bound">t⃗</a> <a id="1488" href="FOL.Syntax.Base.html#1146" class="Function Operator">[</a> <a id="1490" href="FOL.Syntax.Base.html#1473" class="Bound">σ</a> <a id="1492" href="FOL.Syntax.Base.html#1146" class="Function Operator">]ₜ⃗</a>
+
+<a id="1497" href="Data.Vec.Base.html#1143" class="InductiveConstructor">[]</a> <a id="1500" href="FOL.Syntax.Base.html#1146" class="Function Operator">[</a> <a id="1502" href="FOL.Syntax.Base.html#1502" class="Bound">σ</a> <a id="1504" href="FOL.Syntax.Base.html#1146" class="Function Operator">]ₜ⃗</a> <a id="1508" class="Symbol">=</a> <a id="1510" href="Data.Vec.Base.html#1143" class="InductiveConstructor">[]</a>
+<a id="1513" class="Symbol">(</a><a id="1514" href="FOL.Syntax.Base.html#1514" class="Bound">t</a> <a id="1516" href="Data.Vec.Base.html#1162" class="InductiveConstructor Operator">∷</a> <a id="1518" href="FOL.Syntax.Base.html#1518" class="Bound">t⃗</a><a id="1520" class="Symbol">)</a> <a id="1522" href="FOL.Syntax.Base.html#1146" class="Function Operator">[</a> <a id="1524" href="FOL.Syntax.Base.html#1524" class="Bound">σ</a> <a id="1526" href="FOL.Syntax.Base.html#1146" class="Function Operator">]ₜ⃗</a> <a id="1530" class="Symbol">=</a> <a id="1532" href="FOL.Syntax.Base.html#1514" class="Bound">t</a> <a id="1534" href="FOL.Syntax.Base.html#1118" class="Function Operator">[</a> <a id="1536" href="FOL.Syntax.Base.html#1524" class="Bound">σ</a> <a id="1538" href="FOL.Syntax.Base.html#1118" class="Function Operator">]ₜ</a> <a id="1541" href="Data.Vec.Base.html#1162" class="InductiveConstructor Operator">∷</a> <a id="1543" href="FOL.Syntax.Base.html#1518" class="Bound">t⃗</a> <a id="1546" href="FOL.Syntax.Base.html#1146" class="Function Operator">[</a> <a id="1548" href="FOL.Syntax.Base.html#1524" class="Bound">σ</a> <a id="1550" href="FOL.Syntax.Base.html#1146" class="Function Operator">]ₜ⃗</a>
+</pre>
+<p>标准库中定义了向量的高阶函数 <code>map⃗</code>, 用于对向量 <code>x⃗</code> 中的每个元素做相同变换 <code>f</code>, 所得到的向量记作 <code>map⃗ f x⃗</code>. 项的向量整体的替换 <code>t⃗ [ σ ]ₜ⃗</code> 也可以用 <code>map⃗</code> 来表示, 以套用库中关于 <code>map⃗</code> 的引理.</p>
+<pre class="Agda"><a id="[]ₜ⃗≡map⃗"></a><a id="1701" href="FOL.Syntax.Base.html#1701" class="Function">[]ₜ⃗≡map⃗</a> <a id="1711" class="Symbol">:</a> <a id="1713" class="Symbol">∀</a> <a id="1715" class="Symbol">{</a><a id="1716" href="FOL.Syntax.Base.html#1716" class="Bound">n</a><a id="1717" class="Symbol">}</a> <a id="1719" class="Symbol">(</a><a id="1720" href="FOL.Syntax.Base.html#1720" class="Bound">t⃗</a> <a id="1723" class="Symbol">:</a> <a id="1725" href="Data.Vec.Base.html#1107" class="Datatype">𝕍</a> <a id="1727" href="FOL.Syntax.Base.html#713" class="Datatype">Term</a> <a id="1732" href="FOL.Syntax.Base.html#1716" class="Bound">n</a><a id="1733" class="Symbol">)</a> <a id="1735" href="FOL.Syntax.Base.html#1735" class="Bound">σ</a> <a id="1737" class="Symbol">→</a> <a id="1739" href="FOL.Syntax.Base.html#1720" class="Bound">t⃗</a> <a id="1742" href="FOL.Syntax.Base.html#1146" class="Function Operator">[</a> <a id="1744" href="FOL.Syntax.Base.html#1735" class="Bound">σ</a> <a id="1746" href="FOL.Syntax.Base.html#1146" class="Function Operator">]ₜ⃗</a> <a id="1750" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="1752" href="Foundation.Data.Vec.html#142" class="Function">map⃗</a> <a id="1757" class="Symbol">(</a><a id="1758" href="FOL.Syntax.Base.html#1118" class="Function Operator">_[</a> <a id="1761" href="FOL.Syntax.Base.html#1735" class="Bound">σ</a> <a id="1763" href="FOL.Syntax.Base.html#1118" class="Function Operator">]ₜ</a><a id="1765" class="Symbol">)</a> <a id="1767" href="FOL.Syntax.Base.html#1720" class="Bound">t⃗</a>
+<a id="1770" href="FOL.Syntax.Base.html#1701" class="Function">[]ₜ⃗≡map⃗</a> <a id="1780" href="Data.Vec.Base.html#1143" class="InductiveConstructor">[]</a> <a id="1783" href="FOL.Syntax.Base.html#1783" class="Bound">σ</a> <a id="1785" class="Symbol">=</a> <a id="1787" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+<a id="1792" href="FOL.Syntax.Base.html#1701" class="Function">[]ₜ⃗≡map⃗</a> <a id="1802" class="Symbol">(_</a> <a id="1805" href="Data.Vec.Base.html#1162" class="InductiveConstructor Operator">∷</a> <a id="1807" href="FOL.Syntax.Base.html#1807" class="Bound">t⃗</a><a id="1809" class="Symbol">)</a> <a id="1811" href="FOL.Syntax.Base.html#1811" class="Bound">σ</a> <a id="1813" class="Symbol">=</a> <a id="1815" href="Relation.Binary.PropositionalEquality.Core.html#1158" class="Function">cong</a> <a id="1820" class="Symbol">(_</a> <a id="1823" href="Data.Vec.Base.html#1162" class="InductiveConstructor Operator">∷_</a><a id="1825" class="Symbol">)</a> <a id="1827" href="Function.Base.html#1974" class="Function Operator">$</a> <a id="1829" href="FOL.Syntax.Base.html#1701" class="Function">[]ₜ⃗≡map⃗</a> <a id="1839" href="FOL.Syntax.Base.html#1807" class="Bound">t⃗</a> <a id="1842" href="FOL.Syntax.Base.html#1811" class="Bound">σ</a>
+</pre>
+<h3 id="项的提升">项的提升</h3>
+<p><strong><u>定义</u></strong> 项 <code>t</code> 的提升 <code>↑ₜ t</code> 是指将 <code>t</code> 中涉及的所有变元 (自然数) 替换为其后继.</p>
+<pre class="Agda"><a id="↑ₜ"></a><a id="1930" href="FOL.Syntax.Base.html#1930" class="Function">↑ₜ</a> <a id="1933" class="Symbol">:</a> <a id="1935" href="FOL.Syntax.Base.html#713" class="Datatype">Term</a> <a id="1940" class="Symbol">→</a> <a id="1942" href="FOL.Syntax.Base.html#713" class="Datatype">Term</a>
+<a id="1947" href="FOL.Syntax.Base.html#1930" class="Function">↑ₜ</a> <a id="1950" class="Symbol">=</a> <a id="1952" href="FOL.Syntax.Base.html#1118" class="Function Operator">_[</a> <a id="1955" href="FOL.Syntax.Base.html#730" class="InductiveConstructor Operator">#_</a> <a id="1958" href="Function.Base.html#1115" class="Function Operator">∘</a> <a id="1960" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="1964" href="FOL.Syntax.Base.html#1118" class="Function Operator">]ₜ</a>
+</pre>
+<p>例如, 若 <code>t</code> = <code>g $̇ (f $̇ # 0) ∷ [ # 1 ]</code>, 那么 <code>↑ₜ t</code> = <code>g $̇ (f $̇ # 1) ∷ [ # 2 ]</code>.</p>
+<p><strong><u>定义</u></strong> 替换表 <code>σ</code> 的提升 <code>↑ₛ σ</code> 是指对 <code>σ</code> 的值域中的项全部做一次提升, 得到替换表 <code>↑ₜ ∘ σ</code>, 然后使用希尔伯特旅馆操作把变元 <code># 0</code> 插入到 <code>↑ₜ ∘ σ</code> 的头部, 得到 <code># 0 ∷ₙ ↑ₜ ∘ σ</code>.</p>
+<pre class="Agda"><a id="↑ₛ"></a><a id="2196" href="FOL.Syntax.Base.html#2196" class="Function">↑ₛ</a> <a id="2199" class="Symbol">:</a> <a id="2201" href="FOL.Syntax.Base.html#1002" class="Function">Subst</a> <a id="2207" class="Symbol">→</a> <a id="2209" href="FOL.Syntax.Base.html#1002" class="Function">Subst</a>
+<a id="2215" href="FOL.Syntax.Base.html#2196" class="Function">↑ₛ</a> <a id="2218" href="FOL.Syntax.Base.html#2218" class="Bound">σ</a> <a id="2220" class="Symbol">=</a> <a id="2222" href="FOL.Syntax.Base.html#730" class="InductiveConstructor Operator">#</a> <a id="2224" class="Number">0</a> <a id="2226" href="Foundation.Function.Sequance.html#127" class="Function Operator">∷ₙ</a> <a id="2229" href="FOL.Syntax.Base.html#1930" class="Function">↑ₜ</a> <a id="2232" href="Function.Base.html#1115" class="Function Operator">∘</a> <a id="2234" href="FOL.Syntax.Base.html#2218" class="Bound">σ</a>
+</pre>
+<p>之所以要做此种看似复杂的操作, 是因为后面我们会如此定义量词, 使得量词作用下的 <code># 0</code> 被解释为量词的绑定变元, 它不应该受替换操作影响. 可以看到, <code>↑ₛ σ</code> 确实不会替换 <code># 0</code>, 或者说替换后仍是 <code># 0</code>. 而对于非绑定变元 (<code># 1</code>, <code># 2</code>, …) 的替换, 需要保证替换后不会变成 <code># 0</code>, 因此需要对 <code>σ</code> 的值域中的项全部做一次提升, 得到 <code>↑ₜ ∘ σ</code>, 以把 <code># 0</code> 空出来. 总而言之, <code>↑ₛ σ</code> 对 <code>σ</code> 的定义域和值域都整体做了一次提升, 而空出来的 0 的位置仍然是 <code># 0</code>.</p>
+<h2 id="公式">公式</h2>
+<p>公式是定义逻辑符号的地方. 一般来说一阶逻辑的逻辑符号有</p>
+<ul>
+<li>连词
+<ul>
+<li>否定 <span class="math inline">\neg</span></li>
+<li>合取 <span class="math inline">\land</span></li>
+<li>析取 <span class="math inline">\lor</span></li>
+<li>蕴含 <span class="math inline">\to</span></li>
+<li>逻辑等价 <span class="math inline">\leftrightarrow</span></li>
+</ul></li>
+<li>量词
+<ul>
+<li>全称量化 <span class="math inline">\forall</span></li>
+<li>存在量化 <span class="math inline">\exists</span></li>
+</ul></li>
+<li>等词 <span class="math inline">=</span></li>
+</ul>
+<p>我们采用极简形式的公式定义, 只使用恒假 <code>⊥̇</code>, 蕴含 <code>→̇</code> 和全称量化 <code>∀̇</code> 这三个符号, 以方便证明一阶逻辑的元性质. 实际使用时, 否定, 合取, 析取, 逻辑等价和存在量化都可以用这三个符号来定义, 而等词则需要作为二元关系符号加入到语言中.</p>
+<p><strong><u>归纳定义</u></strong> 公式</p>
+<ul>
+<li>恒假 <code>⊥̇</code> 是公式</li>
+<li>如果 <code>φ</code> 和 <code>ψ</code> 是公式, 那么 <code>φ →̇ ψ</code> 是公式</li>
+<li>如果 <code>φ</code> 是公式, 那么 <code>∀̇ φ</code> 是公式</li>
+<li>对任意 <code>l</code> 元关系符号 <code>R</code>, <code>R $̇ t⃗</code> 是公式, 其中 <code>t⃗</code> 是项的 <code>l</code> 维向量</li>
+</ul>
+<pre class="Agda"><a id="2996" class="Keyword">data</a> <a id="Formula"></a><a id="3001" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a> <a id="3009" class="Symbol">:</a> <a id="3011" href="Agda.Primitive.html#388" class="Primitive">𝕋</a> <a id="3013" class="Keyword">where</a>
+  <a id="Formula.⊥̇"></a><a id="3021" href="FOL.Syntax.Base.html#3021" class="InductiveConstructor">⊥̇</a> <a id="3024" class="Symbol">:</a> <a id="3026" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a>
+  <a id="Formula._→̇_"></a><a id="3036" href="FOL.Syntax.Base.html#3036" class="InductiveConstructor Operator">_→̇_</a> <a id="3041" class="Symbol">:</a> <a id="3043" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a> <a id="3051" class="Symbol">→</a> <a id="3053" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a> <a id="3061" class="Symbol">→</a> <a id="3063" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a>
+  <a id="Formula.∀̇_"></a><a id="3073" href="FOL.Syntax.Base.html#3073" class="InductiveConstructor Operator">∀̇_</a> <a id="3077" class="Symbol">:</a> <a id="3079" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a> <a id="3087" class="Symbol">→</a> <a id="3089" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a>
+  <a id="Formula._$̇_"></a><a id="3099" href="FOL.Syntax.Base.html#3099" class="InductiveConstructor Operator">_$̇_</a> <a id="3104" class="Symbol">:</a> <a id="3106" class="Symbol">(</a><a id="3107" href="FOL.Syntax.Base.html#3107" class="Bound">R</a> <a id="3109" class="Symbol">:</a> <a id="3111" href="FOL.Language.html#792" class="Field">𝓡</a><a id="3112" class="Symbol">)</a> <a id="3114" class="Symbol">→</a> <a id="3116" href="Data.Vec.Base.html#1107" class="Datatype">𝕍</a> <a id="3118" href="FOL.Syntax.Base.html#713" class="Datatype">Term</a> <a id="3123" href="FOL.Language.html#819" class="Field Operator">∣</a> <a id="3125" href="FOL.Syntax.Base.html#3107" class="Bound">R</a> <a id="3127" href="FOL.Language.html#819" class="Field Operator">∣ᴿ</a> <a id="3130" class="Symbol">→</a> <a id="3132" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a>
+</pre>
+<h3 id="公式的替换">公式的替换</h3>
+<p><strong><u>递归定义</u></strong> 公式的替换 <code>φ [ σ ]ᵩ</code> 是指把变元替换表 <code>σ</code> 作用到公式 <code>φ</code> 中的所有项上.</p>
+<ul>
+<li>如果 <code>φ</code> = <code>⊥̇</code>, 则没有项可被替换, 所以仍为 <code>⊥̇</code></li>
+<li>如果 <code>φ</code> = <code>φ →̇ ψ</code>, 则分别替换 <code>_→̇_</code> 两边的公式, 再用 <code>_→̇_</code> 连接</li>
+<li>如果 <code>φ</code> = <code>∀̇ φ</code>, 则使用提升后的替换表 <code>↑ₛ σ</code> 替换 <code>φ</code> 后再做全称量化</li>
+<li>如果 <code>φ</code> = <code>R $̇ t⃗</code>, 则替换向量 <code>t⃗</code>, 再应用 <code>R</code></li>
+</ul>
+<pre class="Agda"><a id="_[_]ᵩ"></a><a id="3415" href="FOL.Syntax.Base.html#3415" class="Function Operator">_[_]ᵩ</a> <a id="3421" class="Symbol">:</a> <a id="3423" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a> <a id="3431" class="Symbol">→</a> <a id="3433" href="FOL.Syntax.Base.html#1002" class="Function">Subst</a> <a id="3439" class="Symbol">→</a> <a id="3441" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a>
+<a id="3449" href="FOL.Syntax.Base.html#3021" class="InductiveConstructor">⊥̇</a>       <a id="3458" href="FOL.Syntax.Base.html#3415" class="Function Operator">[</a> <a id="3460" href="FOL.Syntax.Base.html#3460" class="Bound">σ</a> <a id="3462" href="FOL.Syntax.Base.html#3415" class="Function Operator">]ᵩ</a> <a id="3465" class="Symbol">=</a> <a id="3467" href="FOL.Syntax.Base.html#3021" class="InductiveConstructor">⊥̇</a>
+<a id="3470" class="Symbol">(</a><a id="3471" href="FOL.Syntax.Base.html#3471" class="Bound">φ</a> <a id="3473" href="FOL.Syntax.Base.html#3036" class="InductiveConstructor Operator">→̇</a> <a id="3476" href="FOL.Syntax.Base.html#3476" class="Bound">ψ</a><a id="3477" class="Symbol">)</a> <a id="3479" href="FOL.Syntax.Base.html#3415" class="Function Operator">[</a> <a id="3481" href="FOL.Syntax.Base.html#3481" class="Bound">σ</a> <a id="3483" href="FOL.Syntax.Base.html#3415" class="Function Operator">]ᵩ</a> <a id="3486" class="Symbol">=</a> <a id="3488" href="FOL.Syntax.Base.html#3471" class="Bound">φ</a> <a id="3490" href="FOL.Syntax.Base.html#3415" class="Function Operator">[</a> <a id="3492" href="FOL.Syntax.Base.html#3481" class="Bound">σ</a> <a id="3494" href="FOL.Syntax.Base.html#3415" class="Function Operator">]ᵩ</a> <a id="3497" href="FOL.Syntax.Base.html#3036" class="InductiveConstructor Operator">→̇</a> <a id="3500" href="FOL.Syntax.Base.html#3476" class="Bound">ψ</a> <a id="3502" href="FOL.Syntax.Base.html#3415" class="Function Operator">[</a> <a id="3504" href="FOL.Syntax.Base.html#3481" class="Bound">σ</a> <a id="3506" href="FOL.Syntax.Base.html#3415" class="Function Operator">]ᵩ</a>
+<a id="3509" class="Symbol">(</a><a id="3510" href="FOL.Syntax.Base.html#3073" class="InductiveConstructor Operator">∀̇</a> <a id="3513" href="FOL.Syntax.Base.html#3513" class="Bound">φ</a><a id="3514" class="Symbol">)</a>   <a id="3518" href="FOL.Syntax.Base.html#3415" class="Function Operator">[</a> <a id="3520" href="FOL.Syntax.Base.html#3520" class="Bound">σ</a> <a id="3522" href="FOL.Syntax.Base.html#3415" class="Function Operator">]ᵩ</a> <a id="3525" class="Symbol">=</a> <a id="3527" href="FOL.Syntax.Base.html#3073" class="InductiveConstructor Operator">∀̇</a> <a id="3530" href="FOL.Syntax.Base.html#3513" class="Bound">φ</a> <a id="3532" href="FOL.Syntax.Base.html#3415" class="Function Operator">[</a> <a id="3534" href="FOL.Syntax.Base.html#2196" class="Function">↑ₛ</a> <a id="3537" href="FOL.Syntax.Base.html#3520" class="Bound">σ</a> <a id="3539" href="FOL.Syntax.Base.html#3415" class="Function Operator">]ᵩ</a>
+<a id="3542" class="Symbol">(</a><a id="3543" href="FOL.Syntax.Base.html#3543" class="Bound">R</a> <a id="3545" href="FOL.Syntax.Base.html#3099" class="InductiveConstructor Operator">$̇</a> <a id="3548" href="FOL.Syntax.Base.html#3548" class="Bound">t⃗</a><a id="3550" class="Symbol">)</a> <a id="3552" href="FOL.Syntax.Base.html#3415" class="Function Operator">[</a> <a id="3554" href="FOL.Syntax.Base.html#3554" class="Bound">σ</a> <a id="3556" href="FOL.Syntax.Base.html#3415" class="Function Operator">]ᵩ</a> <a id="3559" class="Symbol">=</a> <a id="3561" href="FOL.Syntax.Base.html#3543" class="Bound">R</a> <a id="3563" href="FOL.Syntax.Base.html#3099" class="InductiveConstructor Operator">$̇</a> <a id="3566" href="Foundation.Data.Vec.html#142" class="Function">map⃗</a> <a id="3571" class="Symbol">(</a><a id="3572" href="FOL.Syntax.Base.html#1118" class="Function Operator">_[</a> <a id="3575" href="FOL.Syntax.Base.html#3554" class="Bound">σ</a> <a id="3577" href="FOL.Syntax.Base.html#1118" class="Function Operator">]ₜ</a><a id="3579" class="Symbol">)</a> <a id="3581" href="FOL.Syntax.Base.html#3548" class="Bound">t⃗</a>
+</pre>
+<p>注意思考上面全称量化的情况是如何完成替换的, 结合 <code>↑ₛ σ</code> 的定义应该不难理解.</p>
+<p>上面一系列提升和替换最终是为了实现以下概念.</p>
+<p><strong><u>定义</u></strong> 绑定变元的实例化 <code>φ [ t ∷]</code> 是指把公式 <code>φ</code> 中的 <code># 0</code> 替换为项 <code>t</code>, 其他变元保持不变.</p>
+<pre class="Agda"><a id="_[_∷]"></a><a id="3740" href="FOL.Syntax.Base.html#3740" class="Function Operator">_[_∷]</a> <a id="3746" class="Symbol">:</a> <a id="3748" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a> <a id="3756" class="Symbol">→</a> <a id="3758" href="FOL.Syntax.Base.html#713" class="Datatype">Term</a> <a id="3763" class="Symbol">→</a> <a id="3765" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a>
+<a id="3773" href="FOL.Syntax.Base.html#3773" class="Bound">φ</a> <a id="3775" href="FOL.Syntax.Base.html#3740" class="Function Operator">[</a> <a id="3777" href="FOL.Syntax.Base.html#3777" class="Bound">t</a> <a id="3779" href="FOL.Syntax.Base.html#3740" class="Function Operator">∷]</a> <a id="3782" class="Symbol">=</a> <a id="3784" href="FOL.Syntax.Base.html#3773" class="Bound">φ</a> <a id="3786" href="FOL.Syntax.Base.html#3415" class="Function Operator">[</a> <a id="3788" href="FOL.Syntax.Base.html#3777" class="Bound">t</a> <a id="3790" href="Foundation.Function.Sequance.html#127" class="Function Operator">∷ₙ</a> <a id="3793" href="FOL.Syntax.Base.html#730" class="InductiveConstructor Operator">#_</a> <a id="3796" href="FOL.Syntax.Base.html#3415" class="Function Operator">]ᵩ</a>
+</pre>
+<p>有了 <code>φ [ t ∷]</code> 的概念, 我们就可以说, 如果 <code>∀̇ φ</code> 成立, 那么对任意 <code>t</code>, <code>φ [ t ∷]</code> 也成立. 这就是全称量化的消去规则, 将加入到后文关于证明的定义中.</p>
+<h2 id="语境与理论">语境与理论</h2>
+<p><strong><u>定义</u></strong> 公式的列表叫做语境 <code>Context</code>; 公式的集合叫做理论 <code>Theory</code>.</p>
+<pre class="Agda"><a id="Context"></a><a id="3977" href="FOL.Syntax.Base.html#3977" class="Function">Context</a> <a id="3985" class="Symbol">:</a> <a id="3987" href="Agda.Primitive.html#388" class="Primitive">𝕋</a>
+<a id="3989" href="FOL.Syntax.Base.html#3977" class="Function">Context</a> <a id="3997" class="Symbol">=</a> <a id="3999" href="Agda.Builtin.List.html#147" class="Datatype">𝕃</a> <a id="4001" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a>
+
+<a id="Theory"></a><a id="4010" href="FOL.Syntax.Base.html#4010" class="Function">Theory</a> <a id="4017" class="Symbol">:</a> <a id="4019" href="Agda.Primitive.html#388" class="Primitive">𝕋₁</a>
+<a id="4022" href="FOL.Syntax.Base.html#4010" class="Function">Theory</a> <a id="4029" class="Symbol">=</a> <a id="4031" href="Foundation.Set.Powerset.html#150" class="Function">𝒫</a> <a id="4033" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a>
+</pre>
+<p>这两种概念的区别在于, 语境是保证有限的, 而理论则可能是无限集. 语境和理论中的元素又叫做<strong>公理 (axiom)</strong>.</p>
+<p>全称量化的引入规则中需要用到语境提升的概念, 而这又需要公式的提升, 它们都只是项的提升的简单推广.</p>
+<p><strong><u>定义</u></strong> 公式 <code>φ</code> 的提升 <code>↑ᵩ φ</code> 是指将 <code>φ</code> 中涉及的所有变元 (自然数) 替换为其后继.</p>
+<pre class="Agda"><a id="↑ᵩ"></a><a id="4233" href="FOL.Syntax.Base.html#4233" class="Function">↑ᵩ</a> <a id="4236" class="Symbol">:</a> <a id="4238" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a> <a id="4246" class="Symbol">→</a> <a id="4248" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a>
+<a id="4256" href="FOL.Syntax.Base.html#4233" class="Function">↑ᵩ</a> <a id="4259" class="Symbol">=</a> <a id="4261" href="FOL.Syntax.Base.html#3415" class="Function Operator">_[</a> <a id="4264" href="FOL.Syntax.Base.html#730" class="InductiveConstructor Operator">#_</a> <a id="4267" href="Function.Base.html#1115" class="Function Operator">∘</a> <a id="4269" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="4273" href="FOL.Syntax.Base.html#3415" class="Function Operator">]ᵩ</a>
+</pre>
+<p><strong><u>定义</u></strong> 语境 <code>Γ</code> 的提升 <code>↑ Γ</code> 是指提升 <code>Γ</code> 中所有的公式所得到的语境.</p>
+<pre class="Agda"><a id="↑"></a><a id="4344" href="FOL.Syntax.Base.html#4344" class="Function">↑</a> <a id="4346" class="Symbol">:</a> <a id="4348" href="FOL.Syntax.Base.html#3977" class="Function">Context</a> <a id="4356" class="Symbol">→</a> <a id="4358" href="FOL.Syntax.Base.html#3977" class="Function">Context</a>
+<a id="4366" href="FOL.Syntax.Base.html#4344" class="Function">↑</a> <a id="4368" class="Symbol">=</a> <a id="4370" href="Data.List.Base.html#1627" class="Function">map</a> <a id="4374" href="FOL.Syntax.Base.html#4233" class="Function">↑ᵩ</a>
+</pre>
+<p>为了使后文更加简洁, 我们规定以下记号的类型:</p>
+<pre class="Agda"><a id="4415" class="Keyword">variable</a>
+  <a id="4426" href="FOL.Syntax.Base.html#4426" class="Generalizable">t</a> <a id="4428" class="Symbol">:</a> <a id="4430" href="FOL.Syntax.Base.html#713" class="Datatype">Term</a>
+  <a id="4437" href="FOL.Syntax.Base.html#4437" class="Generalizable">φ</a> <a id="4439" href="FOL.Syntax.Base.html#4439" class="Generalizable">ψ</a> <a id="4441" class="Symbol">:</a> <a id="4443" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a>
+  <a id="4453" href="FOL.Syntax.Base.html#4453" class="Generalizable">Γ</a> <a id="4455" class="Symbol">:</a> <a id="4457" href="FOL.Syntax.Base.html#3977" class="Function">Context</a>
+  <a id="4467" href="FOL.Syntax.Base.html#4467" class="Generalizable">𝒯</a> <a id="4469" class="Symbol">:</a> <a id="4471" href="FOL.Syntax.Base.html#4010" class="Function">Theory</a>
+</pre>
+<h2 id="语法蕴含">语法蕴含</h2>
+<p>有了以上准备, 我们终于可以定义什么叫证明, 也叫<strong>语法蕴含 (syntactic consequence)</strong>. 我们采用所谓<a href="https://zh.m.wikipedia.org/zh/%E8%87%AA%E7%84%B6%E6%BC%94%E7%BB%8E"><strong>自然演绎 (natural deduction)</strong></a>的方案.</p>
+<p><strong><u>归纳定义</u></strong> 语境 <code>Γ</code> 下对公式 <code>φ</code> 的证明树记作 <code>Γ ⊢ φ</code>, 它由且只由以下规则构造:</p>
+<ul>
+<li>语境规则 <code>Ctx</code> : 如果 <code>φ</code> 是 <code>Γ</code> 中的公理, 那么有 <code>Γ ⊢ φ</code></li>
+<li>蕴含的引入规则 <code>ImpI</code> : 如果 <code>φ</code> 加入到 <code>Γ</code> 后有 <code>ψ</code> 的证明树, 那么有 <code>Γ ⊢ φ →̇ ψ</code></li>
+<li>蕴含的消去规则 <code>ImpE</code> : 如果有 <code>Γ ⊢ φ →̇ ψ</code> 且有 <code>Γ ⊢ φ</code>, 那么有 <code>Γ ⊢ ψ</code></li>
+<li>全称量化的引入规则 <code>AllI</code> : 如果 <code>Γ</code> 在提升后有 <code>φ</code> 的证明树, 那么有 <code>Γ ⊢ ∀̇ φ</code></li>
+<li>全称量化的消去规则 <code>AllE</code> : 如果有 <code>Γ ⊢ ∀̇ φ</code>, 那么对任意 <code>t</code> 有 <code>Γ ⊢ φ [ t ∷]</code></li>
+<li>恒假的消去规则 (爆炸律) <code>FalseE</code> : 如果有 <code>Γ</code> 下对恒假的证明树, 那么有 <code>Γ</code> 下对任意 <code>φ</code> 的证明树</li>
+<li>皮尔士公理 (排中律) <code>Peirce</code> : 无条件地, 有 <code>Γ ⊢ ((φ →̇ ψ) →̇ φ) →̇ φ</code></li>
+</ul>
+<pre class="Agda"><a id="5153" class="Keyword">data</a> <a id="_⊢_"></a><a id="5158" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">_⊢_</a> <a id="5162" class="Symbol">:</a> <a id="5164" href="FOL.Syntax.Base.html#3977" class="Function">Context</a> <a id="5172" class="Symbol">→</a> <a id="5174" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a> <a id="5182" class="Symbol">→</a> <a id="5184" href="Agda.Primitive.html#388" class="Primitive">𝕋</a> <a id="5186" class="Keyword">where</a>
+  <a id="_⊢_.Ctx"></a><a id="5194" href="FOL.Syntax.Base.html#5194" class="InductiveConstructor">Ctx</a>     <a id="5202" class="Symbol">:</a> <a id="5204" href="FOL.Syntax.Base.html#4437" class="Generalizable">φ</a> <a id="5206" href="Data.List.Membership.Setoid.html#943" class="Function Operator">∈ᴸ</a> <a id="5209" href="FOL.Syntax.Base.html#4453" class="Generalizable">Γ</a>            <a id="5222" class="Symbol">→</a> <a id="5224" href="FOL.Syntax.Base.html#4453" class="Generalizable">Γ</a> <a id="5226" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">⊢</a> <a id="5228" href="FOL.Syntax.Base.html#4437" class="Generalizable">φ</a>
+  <a id="_⊢_.ImpI"></a><a id="5232" href="FOL.Syntax.Base.html#5232" class="InductiveConstructor">ImpI</a>    <a id="5240" class="Symbol">:</a> <a id="5242" class="Symbol">(</a><a id="5243" href="FOL.Syntax.Base.html#4437" class="Generalizable">φ</a> <a id="5245" href="Agda.Builtin.List.html#199" class="InductiveConstructor Operator">∷</a> <a id="5247" href="FOL.Syntax.Base.html#4453" class="Generalizable">Γ</a><a id="5248" class="Symbol">)</a> <a id="5250" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">⊢</a> <a id="5252" href="FOL.Syntax.Base.html#4439" class="Generalizable">ψ</a>       <a id="5260" class="Symbol">→</a> <a id="5262" href="FOL.Syntax.Base.html#4453" class="Generalizable">Γ</a> <a id="5264" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">⊢</a> <a id="5266" href="FOL.Syntax.Base.html#4437" class="Generalizable">φ</a> <a id="5268" href="FOL.Syntax.Base.html#3036" class="InductiveConstructor Operator">→̇</a> <a id="5271" href="FOL.Syntax.Base.html#4439" class="Generalizable">ψ</a>
+  <a id="_⊢_.ImpE"></a><a id="5275" href="FOL.Syntax.Base.html#5275" class="InductiveConstructor">ImpE</a>    <a id="5283" class="Symbol">:</a> <a id="5285" href="FOL.Syntax.Base.html#4453" class="Generalizable">Γ</a> <a id="5287" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">⊢</a> <a id="5289" href="FOL.Syntax.Base.html#4437" class="Generalizable">φ</a> <a id="5291" href="FOL.Syntax.Base.html#3036" class="InductiveConstructor Operator">→̇</a> <a id="5294" href="FOL.Syntax.Base.html#4439" class="Generalizable">ψ</a> <a id="5296" class="Symbol">→</a> <a id="5298" href="FOL.Syntax.Base.html#4453" class="Generalizable">Γ</a> <a id="5300" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">⊢</a> <a id="5302" href="FOL.Syntax.Base.html#4437" class="Generalizable">φ</a> <a id="5304" class="Symbol">→</a> <a id="5306" href="FOL.Syntax.Base.html#4453" class="Generalizable">Γ</a> <a id="5308" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">⊢</a> <a id="5310" href="FOL.Syntax.Base.html#4439" class="Generalizable">ψ</a>
+  <a id="_⊢_.AllI"></a><a id="5314" href="FOL.Syntax.Base.html#5314" class="InductiveConstructor">AllI</a>    <a id="5322" class="Symbol">:</a> <a id="5324" href="FOL.Syntax.Base.html#4344" class="Function">↑</a> <a id="5326" href="FOL.Syntax.Base.html#4453" class="Generalizable">Γ</a> <a id="5328" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">⊢</a> <a id="5330" href="FOL.Syntax.Base.html#4437" class="Generalizable">φ</a>           <a id="5342" class="Symbol">→</a> <a id="5344" href="FOL.Syntax.Base.html#4453" class="Generalizable">Γ</a> <a id="5346" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">⊢</a> <a id="5348" href="FOL.Syntax.Base.html#3073" class="InductiveConstructor Operator">∀̇</a> <a id="5351" href="FOL.Syntax.Base.html#4437" class="Generalizable">φ</a>
+  <a id="_⊢_.AllE"></a><a id="5355" href="FOL.Syntax.Base.html#5355" class="InductiveConstructor">AllE</a>    <a id="5363" class="Symbol">:</a> <a id="5365" href="FOL.Syntax.Base.html#4453" class="Generalizable">Γ</a> <a id="5367" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">⊢</a> <a id="5369" href="FOL.Syntax.Base.html#3073" class="InductiveConstructor Operator">∀̇</a> <a id="5372" href="FOL.Syntax.Base.html#4437" class="Generalizable">φ</a>           <a id="5384" class="Symbol">→</a> <a id="5386" href="FOL.Syntax.Base.html#4453" class="Generalizable">Γ</a> <a id="5388" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">⊢</a> <a id="5390" href="FOL.Syntax.Base.html#4437" class="Generalizable">φ</a> <a id="5392" href="FOL.Syntax.Base.html#3740" class="Function Operator">[</a> <a id="5394" href="FOL.Syntax.Base.html#4426" class="Generalizable">t</a> <a id="5396" href="FOL.Syntax.Base.html#3740" class="Function Operator">∷]</a>
+  <a id="_⊢_.FalseE"></a><a id="5401" href="FOL.Syntax.Base.html#5401" class="InductiveConstructor">FalseE</a>  <a id="5409" class="Symbol">:</a> <a id="5411" href="FOL.Syntax.Base.html#4453" class="Generalizable">Γ</a> <a id="5413" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">⊢</a> <a id="5415" href="FOL.Syntax.Base.html#3021" class="InductiveConstructor">⊥̇</a>             <a id="5430" class="Symbol">→</a> <a id="5432" href="FOL.Syntax.Base.html#4453" class="Generalizable">Γ</a> <a id="5434" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">⊢</a> <a id="5436" href="FOL.Syntax.Base.html#4437" class="Generalizable">φ</a>
+  <a id="_⊢_.Peirce"></a><a id="5440" href="FOL.Syntax.Base.html#5440" class="InductiveConstructor">Peirce</a>  <a id="5448" class="Symbol">:</a> <a id="5450" class="Symbol">∀</a> <a id="5452" href="FOL.Syntax.Base.html#5452" class="Bound">φ</a> <a id="5454" href="FOL.Syntax.Base.html#5454" class="Bound">ψ</a> <a id="5456" class="Symbol">→</a> <a id="5458" href="FOL.Syntax.Base.html#4453" class="Generalizable">Γ</a> <a id="5460" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">⊢</a> <a id="5462" class="Symbol">((</a><a id="5464" href="FOL.Syntax.Base.html#5452" class="Bound">φ</a> <a id="5466" href="FOL.Syntax.Base.html#3036" class="InductiveConstructor Operator">→̇</a> <a id="5469" href="FOL.Syntax.Base.html#5454" class="Bound">ψ</a><a id="5470" class="Symbol">)</a> <a id="5472" href="FOL.Syntax.Base.html#3036" class="InductiveConstructor Operator">→̇</a> <a id="5475" href="FOL.Syntax.Base.html#5452" class="Bound">φ</a><a id="5476" class="Symbol">)</a> <a id="5478" href="FOL.Syntax.Base.html#3036" class="InductiveConstructor Operator">→̇</a> <a id="5481" href="FOL.Syntax.Base.html#5452" class="Bound">φ</a>
+</pre>
+<p><strong><u>注意</u></strong> 此处定义的 <code>Γ ⊢ φ</code> 是证明树, 它可能有多种构造方式, 也就是说它是<strong>证明相关 (proof relevant)</strong> 的. 它与传统上<strong>证明无关 (proof irrelevant)</strong> 的 <span class="math inline">Γ ⊢ φ</span> 略有不同. 对 <code>Γ ⊢ φ</code> 做命题截断就得到证明无关的版本 <code>∥ Γ ⊢ φ ∥₁</code>. 我们整体上采用延迟截断的方针, 不到必要时不截断.</p>
+<p>我们把“不能构造 <code>Γ ⊢ φ</code>” 记作 <code>Γ ⊬ φ</code>.</p>
+<pre class="Agda"><a id="_⊬_"></a><a id="5724" href="FOL.Syntax.Base.html#5724" class="Function Operator">_⊬_</a> <a id="5728" class="Symbol">:</a> <a id="5730" href="FOL.Syntax.Base.html#3977" class="Function">Context</a> <a id="5738" class="Symbol">→</a> <a id="5740" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a> <a id="5748" class="Symbol">→</a> <a id="5750" href="Agda.Primitive.html#388" class="Primitive">𝕋</a>
+<a id="5752" href="FOL.Syntax.Base.html#5752" class="Bound">Γ</a> <a id="5754" href="FOL.Syntax.Base.html#5724" class="Function Operator">⊬</a> <a id="5756" href="FOL.Syntax.Base.html#5756" class="Bound">φ</a> <a id="5758" class="Symbol">=</a> <a id="5760" href="Relation.Nullary.Negation.Core.html#698" class="Function Operator">¬</a> <a id="5762" class="Symbol">(</a><a id="5763" href="FOL.Syntax.Base.html#5752" class="Bound">Γ</a> <a id="5765" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">⊢</a> <a id="5767" href="FOL.Syntax.Base.html#5756" class="Bound">φ</a><a id="5768" class="Symbol">)</a>
+</pre>
+<p><strong><u>定义</u></strong> 理论 <code>𝒯</code> 下对公式 <code>φ</code> 的证明树, 记作 <code>𝒯 ⊩ φ</code> (“不能构造 <code>𝒯 ⊩ φ</code>” 记作 <code>𝒯 ⊮ φ</code>), 是一个二元组</p>
+<ul>
+<li>包含于 <code>𝒯</code> 的语境 <code>Γ</code></li>
+<li><code>Γ</code> 下对 <code>φ</code> 的证明树 <code>Γ ⊢ φ</code></li>
+</ul>
+<p>其中语境 <code>Γ</code> 包含于理论 <code>𝒯</code> 是指 <code>Γ</code> 中的公理都属于 <code>𝒯</code>.</p>
+<pre class="Agda"><a id="_⊩_"></a><a id="5952" href="FOL.Syntax.Base.html#5952" class="Function Operator">_⊩_</a> <a id="_⊮_"></a><a id="5956" href="FOL.Syntax.Base.html#5956" class="Function Operator">_⊮_</a> <a id="5960" class="Symbol">:</a> <a id="5962" href="FOL.Syntax.Base.html#4010" class="Function">Theory</a> <a id="5969" class="Symbol">→</a> <a id="5971" href="FOL.Syntax.Base.html#3001" class="Datatype">Formula</a> <a id="5979" class="Symbol">→</a> <a id="5981" href="Agda.Primitive.html#388" class="Primitive">𝕋</a>
+<a id="5983" href="FOL.Syntax.Base.html#5983" class="Bound">𝒯</a> <a id="5985" href="FOL.Syntax.Base.html#5952" class="Function Operator">⊩</a> <a id="5987" href="FOL.Syntax.Base.html#5987" class="Bound">φ</a> <a id="5989" class="Symbol">=</a> <a id="5991" href="Foundation.Prelude.Builtin.html#924" class="Function">Σ̅</a> <a id="5994" class="Symbol">λ</a> <a id="5996" href="FOL.Syntax.Base.html#5996" class="Bound">Γ</a> <a id="5998" class="Symbol">→</a> <a id="6000" class="Symbol">(∀</a> <a id="6003" href="FOL.Syntax.Base.html#6003" class="Bound">φ</a> <a id="6005" class="Symbol">→</a> <a id="6007" href="FOL.Syntax.Base.html#6003" class="Bound">φ</a> <a id="6009" href="Data.List.Membership.Setoid.html#943" class="Function Operator">∈ᴸ</a> <a id="6012" href="FOL.Syntax.Base.html#5996" class="Bound">Γ</a> <a id="6014" class="Symbol">→</a> <a id="6016" href="FOL.Syntax.Base.html#6003" class="Bound">φ</a> <a id="6018" href="Foundation.Set.Powerset.html#228" class="Function Operator">∈</a> <a id="6020" href="FOL.Syntax.Base.html#5983" class="Bound">𝒯</a><a id="6021" class="Symbol">)</a> <a id="6023" href="Foundation.Prop.Logic.html#436" class="Function Operator">∧</a> <a id="6025" href="FOL.Syntax.Base.html#5996" class="Bound">Γ</a> <a id="6027" href="FOL.Syntax.Base.html#5158" class="Datatype Operator">⊢</a> <a id="6029" href="FOL.Syntax.Base.html#5987" class="Bound">φ</a>
+<a id="6031" href="FOL.Syntax.Base.html#6031" class="Bound">𝒯</a> <a id="6033" href="FOL.Syntax.Base.html#5956" class="Function Operator">⊮</a> <a id="6035" href="FOL.Syntax.Base.html#6035" class="Bound">φ</a> <a id="6037" class="Symbol">=</a> <a id="6039" href="Relation.Nullary.Negation.Core.html#698" class="Function Operator">¬</a> <a id="6041" class="Symbol">(</a><a id="6042" href="FOL.Syntax.Base.html#6031" class="Bound">𝒯</a> <a id="6044" href="FOL.Syntax.Base.html#5952" class="Function Operator">⊩</a> <a id="6046" href="FOL.Syntax.Base.html#6035" class="Bound">φ</a><a id="6047" class="Symbol">)</a>
+</pre>
+<hr />
+<blockquote>
+<p>知识共享许可协议: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC-BY-NC-SA 4.0</a><br />
+<a href="https://github.com/choukh/MetaLogic/blob/main/src/FOL/Syntax/Base.lagda.md">GitHub</a> | <a href="https://choukh.github.io/MetaLogic/FOL.Syntax.Base.html">GitHub Pages</a> | <a href="https://www.yuque.com/ocau/metalogic/fol.syntax.base">语雀</a><br />
+交流Q群: 893531731</p>
+</blockquote>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>
