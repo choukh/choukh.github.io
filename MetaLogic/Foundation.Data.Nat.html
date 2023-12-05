@@ -4,14 +4,17 @@
 <a id="35" class="Keyword">open</a> <a id="40" class="Keyword">import</a> <a id="47" href="Foundation.Prelude.html" class="Module">Foundation.Prelude</a>
 <a id="66" class="Keyword">open</a> <a id="71" class="Keyword">import</a> <a id="78" href="Foundation.Relation.Nullary.Discrete.html" class="Module">Foundation.Relation.Nullary.Discrete</a>
 
-<a id="116" class="Keyword">open</a> <a id="121" class="Keyword">import</a> <a id="128" href="Data.Nat.Properties.html" class="Module">Data.Nat.Properties</a> <a id="148" class="Symbol">as</a> <a id="151" class="Module">ℕ</a> <a id="153" class="Keyword">public</a>
-  <a id="162" class="Keyword">using</a> <a id="168" class="Symbol">(</a>
-    <a id="174" href="Data.Nat.Properties.html#14663" class="Function">+-suc</a><a id="179" class="Symbol">;</a> <a id="181" href="Data.Nat.Properties.html#15204" class="Function">+-comm</a>
-  <a id="190" class="Symbol">)</a>
+<a id="116" class="Keyword">open</a> <a id="121" class="Keyword">import</a> <a id="128" href="Data.Nat.Base.html" class="Module">Data.Nat.Base</a> <a id="142" class="Keyword">public</a>
+  <a id="151" class="Keyword">using</a> <a id="157" class="Symbol">(</a><a id="158" href="Data.Nat.Base.html#3308" class="Primitive Operator">_∸_</a><a id="161" class="Symbol">)</a>
 
-<a id="discreteℕ"></a><a id="193" href="Foundation.Data.Nat.html#193" class="Function">discreteℕ</a> <a id="203" class="Symbol">:</a> <a id="205" href="Relation.Binary.Definitions.html#6468" class="Function">discrete</a> <a id="214" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
-<a id="216" href="Foundation.Data.Nat.html#193" class="Function">discreteℕ</a> <a id="226" class="Symbol">=</a> <a id="228" href="Data.Nat.Properties.html#3568" class="Function Operator">ℕ._≟_</a>
+<a id="164" class="Keyword">open</a> <a id="169" class="Keyword">import</a> <a id="176" href="Data.Nat.Properties.html" class="Module">Data.Nat.Properties</a> <a id="196" class="Symbol">as</a> <a id="199" class="Module">ℕ</a> <a id="201" class="Keyword">public</a>
+  <a id="210" class="Keyword">using</a> <a id="216" class="Symbol">(</a>
+    <a id="222" href="Data.Nat.Properties.html#14663" class="Function">+-suc</a><a id="227" class="Symbol">;</a> <a id="229" href="Data.Nat.Properties.html#15204" class="Function">+-comm</a>
+  <a id="238" class="Symbol">)</a>
 
-<a id="isSetℕ"></a><a id="235" href="Foundation.Data.Nat.html#235" class="Function">isSetℕ</a> <a id="242" class="Symbol">:</a> <a id="244" href="Foundation.Prelude.HLevel.html#889" class="Function">isSet</a> <a id="250" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
-<a id="252" href="Foundation.Data.Nat.html#235" class="Function">isSetℕ</a> <a id="259" class="Symbol">=</a> <a id="261" href="Foundation.Relation.Nullary.Discrete.html#547" class="Function">discrete→isSet</a> <a id="276" href="Foundation.Data.Nat.html#193" class="Function">discreteℕ</a>
+<a id="discreteℕ"></a><a id="241" href="Foundation.Data.Nat.html#241" class="Function">discreteℕ</a> <a id="251" class="Symbol">:</a> <a id="253" href="Relation.Binary.Definitions.html#6468" class="Function">discrete</a> <a id="262" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+<a id="264" href="Foundation.Data.Nat.html#241" class="Function">discreteℕ</a> <a id="274" class="Symbol">=</a> <a id="276" href="Data.Nat.Properties.html#3568" class="Function Operator">ℕ._≟_</a>
+
+<a id="isSetℕ"></a><a id="283" href="Foundation.Data.Nat.html#283" class="Function">isSetℕ</a> <a id="290" class="Symbol">:</a> <a id="292" href="Foundation.Prelude.HLevel.html#889" class="Function">isSet</a> <a id="298" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+<a id="300" href="Foundation.Data.Nat.html#283" class="Function">isSetℕ</a> <a id="307" class="Symbol">=</a> <a id="309" href="Foundation.Relation.Nullary.Discrete.html#547" class="Function">discrete→isSet</a> <a id="324" href="Foundation.Data.Nat.html#241" class="Function">discreteℕ</a>
 </pre></body></html>

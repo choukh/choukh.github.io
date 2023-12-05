@@ -34,7 +34,7 @@
 
 <a id="284" class="Keyword">open</a> <a id="289" class="Keyword">import</a> <a id="296" href="FOL.Syntax.Base.html" class="Module">FOL.Syntax.Base</a> <a id="312" href="FOL.Syntax.Properties.html#263" class="Bound">ℒ</a>
 </pre>
-<p><strong><u>引理</u></strong> 项的归纳法: 任意给定项的性质 <code>P</code>, 可以证明任意项都满足 <code>P</code>, 只要证明以下两点</p>
+<p><strong><u>引理</u></strong> 项的结构归纳法: 任意给定项的性质 <code>P</code>, 可以证明任意项都满足 <code>P</code>, 只要证明以下两点</p>
 <ol type="1">
 <li><code>P</code> 对所有变元成立</li>
 <li><code>P</code> 对所有形如 <code>f $̇ t⃗</code> 的项成立, 只要 <code>P</code> 对所有 <code>t ∈⃗ t⃗</code> 成立</li>
@@ -44,7 +44,7 @@
 <li>当项是变元时, 由前提1即证</li>
 <li>当项是函数应用 <code>f $̇ t⃗</code> 时, 由前提2, 只要证 <code>P</code> 对所有 <code>t ∈⃗ t⃗</code> 成立, 把它视作一个内部引理, 命名为 <code>H</code>. 我们递归证明 <code>H</code>, 给定 <code>t ∈⃗ t⃗</code>, 又分两种情况
 <ul>
-<li>当 <code>t</code> 位于 <code>t⃗</code> 的头部时, 用项的归纳法即证</li>
+<li>当 <code>t</code> 位于 <code>t⃗</code> 的头部时, 用项的结构归纳法即证</li>
 <li>当 <code>t</code> 位于 <code>t⃗</code> 的尾部时, 递归使用 <code>H</code> 即证 ∎</li>
 </ul></li>
 </ul>
