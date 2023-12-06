@@ -375,10 +375,10 @@ theorem_name = proof_term</code></pre>
 <pre class="Agda"><a id="12985" class="Keyword">open</a> <a id="12990" class="Keyword">import</a> <a id="12997" href="Foundation.Relation.Nullary.Discrete.html" class="Module">Foundation.Relation.Nullary.Discrete</a> <a id="13034" class="Keyword">public</a>
 </pre>
 <p><strong><u>定义</u></strong> <code>A</code> 离散, 当且仅当 <code>A</code> 上的 <code>_≡_</code> 可判定.</p>
-<p>如果一个类型是离散的, 那么它是一个集合 (<code>discrete→isSet</code>). 如果一个类型是集合, 那么它的离散性是一个命题 (<code>isPropDiscrete</code>).</p>
+<p>如果一个类型是离散的, 那么它是一个集合 (<code>discrete→isSet</code>). 如果一个类型是集合, 那么它的离散性是一个命题 (<code>isPropDiscrete</code>). 离散集合宇宙 <code>𝔻 ℓ</code> 定义为 <code>TypeWithStr ℓ discrete</code>, 也叫经典集合宇宙.</p>
 <h3 id="一元关系">一元关系</h3>
 <h4 id="可数">可数</h4>
-<pre class="Agda"><a id="13205" class="Keyword">open</a> <a id="13210" class="Keyword">import</a> <a id="13217" href="Foundation.Relation.Unary.Countable.html" class="Module">Foundation.Relation.Unary.Countable</a> <a id="13253" class="Keyword">public</a>
+<pre class="Agda"><a id="13258" class="Keyword">open</a> <a id="13263" class="Keyword">import</a> <a id="13270" href="Foundation.Relation.Unary.Countable.html" class="Module">Foundation.Relation.Unary.Countable</a> <a id="13306" class="Keyword">public</a>
 </pre>
 <p><strong><u>定义</u></strong></p>
 <ul>
@@ -387,8 +387,8 @@ theorem_name = proof_term</code></pre>
 <li><code>A</code> 无限 (<code>infinite</code>), 当且仅当存在 <code>ℕ</code> 到 <code>A</code> 的单射 <code>ℕ ↣ A</code></li>
 </ul>
 <h4 id="可枚举">可枚举</h4>
-<pre class="Agda"><a id="13467" class="Keyword">open</a> <a id="13472" class="Keyword">import</a> <a id="13479" href="Foundation.Relation.Unary.Enumerable.html" class="Module">Foundation.Relation.Unary.Enumerable</a> <a id="13516" class="Symbol">as</a> <a id="13519" class="Module">E</a> <a id="13521" class="Keyword">public</a>
-<a id="13528" class="Keyword">open</a> <a id="13533" href="Foundation.Relation.Unary.Enumerable.html#2090" class="Module">E.ListView</a> <a id="13544" class="Keyword">public</a>
+<pre class="Agda"><a id="13520" class="Keyword">open</a> <a id="13525" class="Keyword">import</a> <a id="13532" href="Foundation.Relation.Unary.Enumerable.html" class="Module">Foundation.Relation.Unary.Enumerable</a> <a id="13569" class="Symbol">as</a> <a id="13572" class="Module">E</a> <a id="13574" class="Keyword">public</a>
+<a id="13581" class="Keyword">open</a> <a id="13586" href="Foundation.Relation.Unary.Enumerable.html#2090" class="Module">E.ListView</a> <a id="13597" class="Keyword">public</a>
 </pre>
 <p><strong><u>定义</u></strong> <code>A</code> 可枚举, 当且仅当存在函数 <code>f : ℕ → A ⊎ ⊤</code>, 使得对任意 <code>x : A</code>, 存在 <code>n</code> 满足 <code>f n ≡ x</code>.</p>
 <p><strong><u>定理</u> <code>discr→enum→count</code></strong> 如果 <code>A</code> 离散 (这意味着 <code>A</code> 是集合), 并且 <code>A</code> 可枚举, 那么 <code>A</code> 可数.</p>
