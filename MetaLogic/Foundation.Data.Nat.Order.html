@@ -1,15 +1,23 @@
 <!DOCTYPE HTML>
 <html><head><meta charset="utf-8"><title>Foundation.Data.Nat.Order</title><link rel="stylesheet" href="Agda.css"><script type="text/javascript" src="highlight-hover.js"></script></head><body><pre class="Agda"><a id="1" class="Keyword">module</a> <a id="8" href="Foundation.Data.Nat.Order.html" class="Module">Foundation.Data.Nat.Order</a> <a id="34" class="Keyword">where</a>
 
-<a id="41" class="Keyword">open</a> <a id="46" class="Keyword">import</a> <a id="53" href="Data.Nat.html" class="Module">Data.Nat</a> <a id="62" class="Keyword">public</a>
-  <a id="71" class="Keyword">using</a> <a id="77" class="Symbol">(</a>
-    <a id="83" href="Data.Nat.Base.html#1640" class="Datatype Operator">_≤_</a><a id="86" class="Symbol">;</a> <a id="88" href="Data.Nat.Base.html#1663" class="InductiveConstructor">z≤n</a>
-    <a id="96" class="Symbol">)</a>
-<a id="98" class="Keyword">open</a> <a id="103" class="Keyword">import</a> <a id="110" href="Data.Nat.Properties.html" class="Module">Data.Nat.Properties</a> <a id="130" class="Keyword">public</a>
-  <a id="139" class="Keyword">using</a> <a id="145" class="Symbol">(</a>
-    <a id="151" href="Data.Nat.Properties.html#5682" class="Function">≤-trans</a><a id="158" class="Symbol">;</a>
-    <a id="164" href="Data.Nat.Properties.html#8262" class="Function">n≤1+n</a><a id="169" class="Symbol">;</a> <a id="171" href="Data.Nat.Properties.html#8314" class="Function">1+n≰n</a><a id="176" class="Symbol">;</a>
-    <a id="182" href="Data.Nat.Properties.html#18740" class="Function">m≤m+n</a><a id="187" class="Symbol">;</a> <a id="189" href="Data.Nat.Properties.html#18823" class="Function">m≤n+m</a><a id="194" class="Symbol">;</a>
-    <a id="200" href="Data.Nat.Properties.html#19404" class="Function">+-monoʳ-≤</a><a id="209" class="Symbol">;</a>
-    <a id="215" href="Data.Nat.Properties.html#45405" class="Function">n∸n≡0</a><a id="220" class="Symbol">;</a> <a id="222" href="Data.Nat.Properties.html#49032" class="Function">∸-+-assoc</a><a id="231" class="Symbol">;</a> <a id="233" href="Data.Nat.Properties.html#49958" class="Function">m≤n+m∸n</a><a id="240" class="Symbol">)</a>
+<a id="41" class="Keyword">open</a> <a id="46" class="Keyword">import</a> <a id="53" href="Foundation.Data.Nat.html" class="Module">Foundation.Data.Nat</a>
+
+<a id="74" class="Keyword">open</a> <a id="79" class="Keyword">import</a> <a id="86" href="Data.Nat.html" class="Module">Data.Nat</a> <a id="95" class="Keyword">public</a>
+  <a id="104" class="Keyword">using</a> <a id="110" class="Symbol">(</a>
+    <a id="116" href="Data.Nat.Base.html#1640" class="Datatype Operator">_≤_</a><a id="119" class="Symbol">;</a> <a id="121" href="Data.Nat.Base.html#1663" class="InductiveConstructor">z≤n</a>
+    <a id="129" class="Symbol">)</a>
+<a id="131" class="Keyword">open</a> <a id="136" class="Keyword">import</a> <a id="143" href="Data.Nat.Properties.html" class="Module">Data.Nat.Properties</a> <a id="163" class="Symbol">as</a> <a id="166" class="Module">ℕ</a> <a id="168" class="Keyword">public</a>
+  <a id="177" class="Keyword">using</a> <a id="183" class="Symbol">(</a>
+    <a id="189" href="Data.Nat.Properties.html#5499" class="Function">≤-refl</a><a id="195" class="Symbol">;</a> <a id="197" href="Data.Nat.Properties.html#5682" class="Function">≤-trans</a><a id="204" class="Symbol">;</a>
+    <a id="210" href="Data.Nat.Properties.html#8262" class="Function">n≤1+n</a><a id="215" class="Symbol">;</a> <a id="217" href="Data.Nat.Properties.html#8314" class="Function">1+n≰n</a><a id="222" class="Symbol">;</a>
+    <a id="228" href="Data.Nat.Properties.html#18740" class="Function">m≤m+n</a><a id="233" class="Symbol">;</a> <a id="235" href="Data.Nat.Properties.html#18823" class="Function">m≤n+m</a><a id="240" class="Symbol">;</a>
+    <a id="246" href="Data.Nat.Properties.html#19404" class="Function">+-monoʳ-≤</a><a id="255" class="Symbol">;</a>
+    <a id="261" href="Data.Nat.Properties.html#45405" class="Function">n∸n≡0</a><a id="266" class="Symbol">;</a> <a id="268" href="Data.Nat.Properties.html#49032" class="Function">∸-+-assoc</a><a id="277" class="Symbol">;</a> <a id="279" href="Data.Nat.Properties.html#49958" class="Function">m≤n+m∸n</a><a id="286" class="Symbol">)</a>
+
+<a id="≤maxˡ"></a><a id="289" href="Foundation.Data.Nat.Order.html#289" class="Function">≤maxˡ</a> <a id="295" class="Symbol">:</a> <a id="297" class="Symbol">∀</a> <a id="299" class="Symbol">{</a><a id="300" href="Foundation.Data.Nat.Order.html#300" class="Bound">m</a> <a id="302" href="Foundation.Data.Nat.Order.html#302" class="Bound">n</a><a id="303" class="Symbol">}</a> <a id="305" class="Symbol">→</a> <a id="307" href="Foundation.Data.Nat.Order.html#300" class="Bound">m</a> <a id="309" href="Data.Nat.Base.html#1640" class="Datatype Operator">≤</a> <a id="311" href="Foundation.Data.Nat.html#139" class="Function">max</a> <a id="315" href="Foundation.Data.Nat.Order.html#300" class="Bound">m</a> <a id="317" href="Foundation.Data.Nat.Order.html#302" class="Bound">n</a>
+<a id="319" href="Foundation.Data.Nat.Order.html#289" class="Function">≤maxˡ</a> <a id="325" class="Symbol">=</a> <a id="327" href="Data.Nat.Properties.html#36613" class="Function">ℕ.m≤m⊔n</a> <a id="335" class="Symbol">_</a> <a id="337" class="Symbol">_</a>
+
+<a id="≤maxʳ"></a><a id="340" href="Foundation.Data.Nat.Order.html#340" class="Function">≤maxʳ</a> <a id="346" class="Symbol">:</a> <a id="348" class="Symbol">∀</a> <a id="350" class="Symbol">{</a><a id="351" href="Foundation.Data.Nat.Order.html#351" class="Bound">m</a> <a id="353" href="Foundation.Data.Nat.Order.html#353" class="Bound">n</a><a id="354" class="Symbol">}</a> <a id="356" class="Symbol">→</a> <a id="358" href="Foundation.Data.Nat.Order.html#351" class="Bound">m</a> <a id="360" href="Data.Nat.Base.html#1640" class="Datatype Operator">≤</a> <a id="362" href="Foundation.Data.Nat.html#139" class="Function">max</a> <a id="366" href="Foundation.Data.Nat.Order.html#353" class="Bound">n</a> <a id="368" href="Foundation.Data.Nat.Order.html#351" class="Bound">m</a>
+<a id="370" href="Foundation.Data.Nat.Order.html#340" class="Function">≤maxʳ</a> <a id="376" class="Symbol">=</a> <a id="378" href="Data.Nat.Properties.html#36666" class="Function">ℕ.m≤n⊔m</a> <a id="386" class="Symbol">_</a> <a id="388" class="Symbol">_</a>
 </pre></body></html>
