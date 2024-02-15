@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>FOL.Syntax.Stability</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+</head>
+<body>
+
+<header>
+<h1 class="title"></h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <strong>Contents</strong><label for="contents">⊕</label>
+  <input type="checkbox" id="contents">
+  <ul>
+  <li><a href="#一阶逻辑-语法-稳定性" id="toc-一阶逻辑-语法-稳定性">一阶逻辑 ▸ 语法 ▸ 稳定性</a>
+  <ul>
+  <li><a href="#𝐓-稳定性" id="toc-𝐓-稳定性">𝐓-稳定性</a></li>
+  <li><a href="#𝐔-稳定性" id="toc-𝐔-稳定性">𝐔-稳定性</a></li>
+  <li><a href="#𝐅-稳定性" id="toc-𝐅-稳定性">𝐅-稳定性</a></li>
+  <li><a href="#𝐄-稳定性" id="toc-𝐄-稳定性">𝐄-稳定性</a></li>
+  </ul></li>
+  </ul>
+</nav>
+
+<main>
+<h1 id="一阶逻辑-语法-稳定性">一阶逻辑 ▸ 语法 ▸ 稳定性</h1>
+<pre class="Agda"><a id="63" class="Symbol">{-#</a> <a id="67" class="Keyword">OPTIONS</a> <a id="75" class="Pragma">--lossy-unification</a> <a id="95" class="Symbol">#-}</a>
+<a id="99" class="Keyword">open</a> <a id="104" class="Keyword">import</a> <a id="111" href="Foundation.Essential.html" class="Module">Foundation.Essential</a>
+<a id="132" class="Keyword">open</a> <a id="137" class="Keyword">import</a> <a id="144" href="Foundation.ReverseMaths.html" class="Module">Foundation.ReverseMaths</a>
+
+<a id="169" class="Keyword">open</a> <a id="174" class="Keyword">import</a> <a id="181" href="FOL.Language.Base.html" class="Module">FOL.Language.Base</a>
+<a id="199" class="Keyword">module</a> <a id="206" href="FOL.Syntax.Stability.html" class="Module">FOL.Syntax.Stability</a> <a id="227" class="Symbol">(</a><a id="228" href="FOL.Syntax.Stability.html#228" class="Bound">ℒ</a> <a id="230" class="Symbol">:</a> <a id="232" href="FOL.Language.Base.html#786" class="Record">Language</a><a id="240" class="Symbol">)</a> <a id="242" class="Keyword">where</a>
+
+<a id="249" class="Keyword">open</a> <a id="254" class="Keyword">import</a> <a id="261" href="FOL.Syntax.Base.html" class="Module">FOL.Syntax.Base</a> <a id="277" href="FOL.Syntax.Stability.html#228" class="Bound">ℒ</a>
+<a id="279" class="Keyword">open</a> <a id="284" class="Keyword">import</a> <a id="291" href="FOL.Syntax.Discrete.html" class="Module">FOL.Syntax.Discrete</a> <a id="311" href="FOL.Syntax.Stability.html#228" class="Bound">ℒ</a>
+<a id="313" class="Keyword">open</a> <a id="318" class="Keyword">import</a> <a id="325" href="FOL.Syntax.AdmissibleRules.html" class="Module">FOL.Syntax.AdmissibleRules</a> <a id="352" href="FOL.Syntax.Stability.html#228" class="Bound">ℒ</a>
+<a id="354" class="Keyword">open</a> <a id="359" class="Keyword">import</a> <a id="366" href="FOL.Soundness.html" class="Module">FOL.Soundness</a> <a id="380" href="FOL.Syntax.Stability.html#228" class="Bound">ℒ</a>
+</pre>
+<h2 id="𝐓-稳定性">𝐓-稳定性</h2>
+<pre class="Agda"><a id="Theories"></a><a id="405" href="FOL.Syntax.Stability.html#405" class="Function">Theories</a> <a id="414" class="Symbol">:</a> <a id="416" href="Agda.Primitive.html#388" class="Primitive">𝕋₂</a>
+<a id="419" href="FOL.Syntax.Stability.html#405" class="Function">Theories</a> <a id="428" class="Symbol">=</a> <a id="430" href="Foundation.Set.Powerset.html#513" class="Function">𝒫</a> <a id="432" href="FOL.Syntax.Base.html#4807" class="Function">Theory</a>
+</pre>
+<pre class="Agda"><a id="⟨_⟩-stability"></a><a id="452" href="FOL.Syntax.Stability.html#452" class="Function Operator">⟨_⟩-stability</a> <a id="466" class="Symbol">:</a> <a id="468" href="FOL.Syntax.Stability.html#405" class="Function">Theories</a> <a id="477" class="Symbol">→</a> <a id="479" href="Agda.Primitive.html#388" class="Primitive">𝕋₁</a>
+<a id="482" href="FOL.Syntax.Stability.html#452" class="Function Operator">⟨</a> <a id="484" href="FOL.Syntax.Stability.html#484" class="Bound">𝐓</a> <a id="486" href="FOL.Syntax.Stability.html#452" class="Function Operator">⟩-stability</a> <a id="498" class="Symbol">=</a> <a id="500" class="Symbol">∀</a> <a id="502" class="Symbol">{</a><a id="503" href="FOL.Syntax.Stability.html#503" class="Bound">𝒯</a> <a id="505" href="FOL.Syntax.Stability.html#505" class="Bound">φ</a><a id="506" class="Symbol">}</a> <a id="508" class="Symbol">→</a> <a id="510" href="FOL.Syntax.Stability.html#503" class="Bound">𝒯</a> <a id="512" href="Foundation.Set.Powerset.html#705" class="Function Operator">∈</a> <a id="514" href="FOL.Syntax.Stability.html#484" class="Bound">𝐓</a> <a id="516" class="Symbol">→</a> <a id="518" href="Foundation.ReverseMaths.html#1248" class="Function">stable₁</a> <a id="526" class="Symbol">(</a><a id="527" href="FOL.Syntax.Stability.html#503" class="Bound">𝒯</a> <a id="529" href="FOL.Syntax.Base.html#6760" class="Function Operator">⊩</a> <a id="531" href="FOL.Syntax.Stability.html#505" class="Bound">φ</a><a id="532" class="Symbol">)</a>
+</pre>
+<pre class="Agda"><a id="𝐔"></a><a id="547" href="FOL.Syntax.Stability.html#547" class="Function">𝐔</a> <a id="549" class="Symbol">:</a> <a id="551" href="FOL.Syntax.Stability.html#405" class="Function">Theories</a>
+<a id="560" href="FOL.Syntax.Stability.html#547" class="Function">𝐔</a> <a id="562" class="Symbol">=</a> <a id="564" class="Symbol">λ</a> <a id="566" href="FOL.Syntax.Stability.html#566" class="Bound">_</a> <a id="568" class="Symbol">→</a> <a id="570" href="Foundation.Prop.Universe.html#878" class="Function">⊤ₚ*</a>
+</pre>
+<pre class="Agda"><a id="enclose"></a><a id="587" href="FOL.Syntax.Stability.html#587" class="Function">enclose</a> <a id="595" class="Symbol">:</a> <a id="597" href="Foundation.Prop.Universe.html#572" class="Function">ℙ₀</a> <a id="600" class="Symbol">→</a> <a id="602" href="FOL.Syntax.Base.html#4807" class="Function">Theory</a>
+<a id="609" href="FOL.Syntax.Stability.html#587" class="Function">enclose</a> <a id="617" href="FOL.Syntax.Stability.html#617" class="Bound">𝗣</a> <a id="619" href="FOL.Syntax.Stability.html#619" class="Bound">φ</a> <a id="621" class="Symbol">=</a> <a id="623" href="FOL.Syntax.Stability.html#619" class="Bound">φ</a> <a id="625" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="627" href="FOL.Syntax.Base.html#3811" class="InductiveConstructor">⊥̇</a> <a id="630" href="Foundation.Prop.Logic.html#473" class="Function Operator">∧</a> <a id="632" href="FOL.Syntax.Stability.html#617" class="Bound">𝗣</a> <a id="634" href="Foundation.Prop.Universe.html#591" class="Function Operator">holds</a> <a id="640" href="Foundation.Prelude.Builtin.html#870" class="InductiveConstructor Operator">,</a> <a id="642" href="Foundation.Data.Sigma.html#606" class="Function">isProp×</a> <a id="650" class="Symbol">(</a><a id="651" href="Foundation.Relation.Nullary.Discrete.Base.html#1631" class="Function">discreteSet</a> <a id="663" class="Symbol">_</a> <a id="665" class="Symbol">_)</a> <a id="668" class="Symbol">(</a><a id="669" href="Foundation.Prop.Universe.html#624" class="Function">isPredHolds</a> <a id="681" href="FOL.Syntax.Stability.html#617" class="Bound">𝗣</a><a id="682" class="Symbol">)</a>
+</pre>
+<pre class="Agda"><a id="enclose↔"></a><a id="697" href="FOL.Syntax.Stability.html#697" class="Function">enclose↔</a> <a id="706" class="Symbol">:</a> <a id="708" class="Symbol">∀</a> <a id="710" href="FOL.Syntax.Stability.html#710" class="Bound">𝗣</a> <a id="712" class="Symbol">→</a> <a id="714" href="Cubical.HITs.PropositionalTruncation.Base.html#249" class="Datatype Operator">∥</a> <a id="716" href="FOL.Syntax.Stability.html#587" class="Function">enclose</a> <a id="724" href="FOL.Syntax.Stability.html#710" class="Bound">𝗣</a> <a id="726" href="FOL.Syntax.Base.html#6760" class="Function Operator">⊩</a> <a id="728" href="FOL.Syntax.Base.html#3811" class="InductiveConstructor">⊥̇</a> <a id="731" href="Cubical.HITs.PropositionalTruncation.Base.html#249" class="Datatype Operator">∥₁</a> <a id="734" href="Foundation.Prop.Iff.html#296" class="Record Operator">↔</a> <a id="736" href="FOL.Syntax.Stability.html#710" class="Bound">𝗣</a> <a id="738" href="Foundation.Prop.Universe.html#591" class="Function Operator">holds</a>
+<a id="744" href="FOL.Syntax.Stability.html#697" class="Function">enclose↔</a> <a id="753" href="FOL.Syntax.Stability.html#753" class="Bound">𝗣</a> <a id="755" class="Symbol">.</a><a id="756" href="Foundation.Prop.Iff.html#373" class="Field">⇒</a> <a id="758" class="Symbol">=</a> <a id="760" href="Foundation.Prop.Truncation.html#350" class="Function">𝟙.rec</a> <a id="766" class="Symbol">(</a><a id="767" href="Foundation.Prop.Universe.html#624" class="Function">isPredHolds</a> <a id="779" href="FOL.Syntax.Stability.html#753" class="Bound">𝗣</a><a id="780" class="Symbol">)</a>
+  <a id="784" class="Symbol">λ</a> <a id="786" class="Symbol">{</a> <a id="788" class="Symbol">(</a><a id="789" href="Agda.Builtin.List.html#184" class="InductiveConstructor">[]</a> <a id="792" href="Foundation.Prelude.Builtin.html#870" class="InductiveConstructor Operator">,</a> <a id="794" href="FOL.Syntax.Stability.html#794" class="Bound">Γ⊆</a> <a id="797" href="Foundation.Prelude.Builtin.html#870" class="InductiveConstructor Operator">,</a> <a id="799" href="FOL.Syntax.Stability.html#799" class="Bound">Γ⊢</a><a id="801" class="Symbol">)</a> <a id="803" class="Symbol">→</a> <a id="805" href="Foundation.Data.Empty.html#133" class="Function">exfalso</a> <a id="813" class="Symbol">(</a><a id="814" href="FOL.Soundness.html#5325" class="Function">consistency</a> <a id="826" href="FOL.Syntax.Stability.html#799" class="Bound">Γ⊢</a><a id="828" class="Symbol">)</a>
+    <a id="834" class="Symbol">;</a> <a id="836" class="Symbol">(</a><a id="837" href="FOL.Syntax.Stability.html#837" class="Bound">φ</a> <a id="839" href="Agda.Builtin.List.html#199" class="InductiveConstructor Operator">∷</a> <a id="841" href="FOL.Syntax.Stability.html#841" class="Bound">Γ</a> <a id="843" href="Foundation.Prelude.Builtin.html#870" class="InductiveConstructor Operator">,</a> <a id="845" href="FOL.Syntax.Stability.html#845" class="Bound">Γ⊆</a> <a id="848" href="Foundation.Prelude.Builtin.html#870" class="InductiveConstructor Operator">,</a> <a id="850" href="FOL.Syntax.Stability.html#850" class="Bound">Γ⊢</a><a id="852" class="Symbol">)</a> <a id="854" class="Symbol">→</a> <a id="856" href="FOL.Syntax.Stability.html#845" class="Bound">Γ⊆</a> <a id="859" class="Symbol">(</a><a id="860" href="Data.List.Relation.Unary.Any.html#1226" class="InductiveConstructor">here</a> <a id="865" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a><a id="869" class="Symbol">)</a> <a id="871" class="Symbol">.</a><a id="872" href="Agda.Builtin.Sigma.html#263" class="Field">snd</a> <a id="876" class="Symbol">}</a>
+<a id="878" href="FOL.Syntax.Stability.html#697" class="Function">enclose↔</a> <a id="887" href="FOL.Syntax.Stability.html#887" class="Bound">𝗣</a> <a id="889" class="Symbol">.</a><a id="890" href="Foundation.Prop.Iff.html#387" class="Field">⇐</a> <a id="892" href="FOL.Syntax.Stability.html#892" class="Bound">p</a> <a id="894" class="Symbol">=</a> <a id="896" href="Cubical.HITs.PropositionalTruncation.Base.html#288" class="InductiveConstructor Operator">∣_∣₁</a> <a id="901" href="Function.Base.html#1974" class="Function Operator">$</a> <a id="903" href="Data.List.Base.html#5240" class="Function Operator">[</a> <a id="905" href="FOL.Syntax.Base.html#3811" class="InductiveConstructor">⊥̇</a> <a id="908" href="Data.List.Base.html#5240" class="Function Operator">]</a> <a id="910" href="Foundation.Prelude.Builtin.html#870" class="InductiveConstructor Operator">,</a> <a id="912" class="Symbol">(λ</a> <a id="915" class="Symbol">{</a> <a id="917" class="Symbol">(</a><a id="918" href="Data.List.Relation.Unary.Any.html#1226" class="InductiveConstructor">here</a> <a id="923" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a><a id="927" class="Symbol">)</a> <a id="929" class="Symbol">→</a> <a id="931" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a> <a id="936" href="Foundation.Prelude.Builtin.html#870" class="InductiveConstructor Operator">,</a> <a id="938" href="FOL.Syntax.Stability.html#892" class="Bound">p</a> <a id="940" class="Symbol">})</a> <a id="943" href="Foundation.Prelude.Builtin.html#870" class="InductiveConstructor Operator">,</a> <a id="945" href="FOL.Syntax.AdmissibleRules.html#827" class="Function">Ctx0</a>
+</pre>
+<h2 id="𝐔-稳定性">𝐔-稳定性</h2>
+<pre class="Agda"><a id="𝗗𝗡𝗘↔𝐔-stability"></a><a id="973" href="FOL.Syntax.Stability.html#973" class="Function">𝗗𝗡𝗘↔𝐔-stability</a> <a id="989" class="Symbol">:</a> <a id="991" href="Foundation.ReverseMaths.html#2323" class="Function">𝗗𝗡𝗘</a> <a id="995" href="Foundation.Prop.Iff.html#296" class="Record Operator">↔</a> <a id="997" href="FOL.Syntax.Stability.html#452" class="Function Operator">⟨</a> <a id="999" href="FOL.Syntax.Stability.html#547" class="Function">𝐔</a> <a id="1001" href="FOL.Syntax.Stability.html#452" class="Function Operator">⟩-stability</a>
+<a id="1013" href="FOL.Syntax.Stability.html#973" class="Function">𝗗𝗡𝗘↔𝐔-stability</a> <a id="1029" class="Symbol">.</a><a id="1030" href="Foundation.Prop.Iff.html#373" class="Field">⇒</a> <a id="1032" href="FOL.Syntax.Stability.html#1032" class="Bound">dne</a> <a id="1036" class="Symbol">_</a> <a id="1038" class="Symbol">=</a> <a id="1040" href="Foundation.ReverseMaths.html#2467" class="Function">𝗗𝗡𝗘↔𝗗𝗡𝗘₁</a> <a id="1049" class="Symbol">.</a><a id="1050" href="Foundation.Prop.Iff.html#373" class="Field">⇒</a> <a id="1052" href="FOL.Syntax.Stability.html#1032" class="Bound">dne</a> <a id="1056" class="Symbol">_</a>
+<a id="1058" href="FOL.Syntax.Stability.html#973" class="Function">𝗗𝗡𝗘↔𝐔-stability</a> <a id="1074" class="Symbol">.</a><a id="1075" href="Foundation.Prop.Iff.html#387" class="Field">⇐</a> <a id="1077" href="FOL.Syntax.Stability.html#1077" class="Bound">u-stb</a> <a id="1083" href="FOL.Syntax.Stability.html#1083" class="Bound">P</a> <a id="1085" href="FOL.Syntax.Stability.html#1085" class="Bound">propP</a> <a id="1091" class="Symbol">=</a> <a id="1093" href="Foundation.ReverseMaths.html#1427" class="Function">stable-subst</a> <a id="1106" class="Symbol">(</a><a id="1107" href="FOL.Syntax.Stability.html#697" class="Function">enclose↔</a> <a id="1116" class="Symbol">(</a><a id="1117" href="FOL.Syntax.Stability.html#1083" class="Bound">P</a> <a id="1119" href="Foundation.Prelude.Builtin.html#870" class="InductiveConstructor Operator">,</a> <a id="1121" href="FOL.Syntax.Stability.html#1085" class="Bound">propP</a><a id="1126" class="Symbol">))</a> <a id="1129" href="Function.Base.html#1974" class="Function Operator">$</a> <a id="1131" href="Foundation.ReverseMaths.html#1708" class="Function">stableInhabitation</a> <a id="1150" class="Symbol">.</a><a id="1151" href="Foundation.Prop.Iff.html#373" class="Field">⇒</a> <a id="1153" href="Function.Base.html#1974" class="Function Operator">$</a> <a id="1155" href="FOL.Syntax.Stability.html#1077" class="Bound">u-stb</a> <a id="1161" class="Symbol">_</a>
+</pre>
+<h2 id="𝐅-稳定性">𝐅-稳定性</h2>
+<pre class="Agda">
+</pre>
+<h2 id="𝐄-稳定性">𝐄-稳定性</h2>
+<hr />
+<blockquote>
+<p>知识共享许可协议: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC-BY-NC-SA 4.0</a><br />
+<a href="https://github.com/choukh/MetaLogic/blob/main/src/FOL/Syntax/Stability.lagda.md">GitHub</a> | <a href="https://choukh.github.io/MetaLogic/FOL.Syntax.Stability.html">GitHub Pages</a> | <a href="https://www.yuque.com/ocau/metalogic/fol.syntax.stability">语雀</a><br />
+交流Q群: 893531731</p>
+</blockquote>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>
