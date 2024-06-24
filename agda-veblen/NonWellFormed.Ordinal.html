@@ -63,11 +63,11 @@
 高亮渲染: <a href="https://choukh.github.io/agda-veblen/NonWellFormed.Ordinal.html">Ordinal.html</a></p>
 </blockquote>
 <h2 id="前言">前言</h2>
-<p>本系列文章介绍一种基于类型论的序数理论, 并以实现大 Veblen 序数, 即 <a href="https://en.wikipedia.org/wiki/Large_Veblen_ordinal">LVO</a> 的形式化为最终目标. 我们采用标准 Agda 作为基础, 仅依赖于标准库 <a href="https://agda.github.io/agda-stdlib/index">agda-stdlib</a>, 并且打开了社区公认安全 (可期待一致性) 的 flag</p>
+<p>本系列文章介绍一种基于类型论的序数理论, 并以实现 <a href="https://en.wikipedia.org/wiki/Veblen_function">Veblen 函数</a> 的形式化为最终目标. 我们采用标准 Agda 作为基础, 仅依赖于标准库 <a href="https://agda.github.io/agda-stdlib/index">agda-stdlib</a>, 并且打开了社区公认安全 (可期待一致性) 的 flag</p>
 <pre class="Agda"><a id="668" class="Symbol">{-#</a> <a id="672" class="Keyword">OPTIONS</a> <a id="680" class="Pragma">--without-K</a> <a id="692" class="Pragma">--safe</a> <a id="699" class="Symbol">#-}</a>
 </pre>
 <p>以实现无公理且构造主义的直谓可计算序数.</p>
-<p>具体地, 我们实现了超限归纳法的类型论对应, 以及序数算术和 Veblen 不动点理论, 并以此定义了二元 Veblen 函数, n元 Veblen 函数乃至序数元 Veblen 函数. 得益于其可计算特性, 我们的序数可用于快速增长层级等大数函数,并得到可计算的大数, 如 <span class="math inline">f_{LVO}(3)</span>. 虽然现实中计算不出来, 但其停机性由 Agda 的 <a href="https://agda.readthedocs.io/en/v2.6.2.2/language/termination-checking.html">Termination Checking</a> 保证.</p>
+<p>具体地, 我们实现了超限归纳法的类型论对应, 以及序数算术和 Veblen 不动点理论, 并以此定义了二元 Veblen 函数. 得益于其可计算特性, 我们的序数可用于快速增长层级等大数函数,并得到可计算的大数, 如 <span class="math inline">f_{\Gamma_0}(3)</span>. 虽然现实中计算不出来, 但其停机性由 Agda 的 <a href="https://agda.readthedocs.io/en/v2.6.2.2/language/termination-checking.html">Termination Checking</a> 保证.</p>
 <p>本文为文学Agda脚本, 既是 markdown 文件, 也是可通过类型检查的 Agda 源码. 原文件托管于本项目的 Github 仓库 <a href="https://github.com/choukh/agda-veblen">agda-veblen</a>.</p>
 <pre class="Agda"><a id="1139" class="Keyword">module</a> <a id="1146" href="NonWellFormed.Ordinal.html" class="Module">NonWellFormed.Ordinal</a> <a id="1168" class="Keyword">where</a>
 </pre>
