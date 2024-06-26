@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>形式化大数数学 (1.3 - 任意有限元Veblen函数)</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+</head>
+<body>
+
+<header>
+<h1 class="title">形式化大数数学 (1.3 - 任意有限元Veblen函数)</h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <strong>Contents</strong><label for="contents">⊕</label>
+  <input type="checkbox" id="contents">
+  <ul>
+  <li><a href="#形式化大数数学-1.3---任意有限元veblen函数" id="toc-形式化大数数学-1.3---任意有限元veblen函数">形式化大数数学 (1.3 - 任意有限元Veblen函数)</a></li>
+  </ul>
+</nav>
+
+<main>
+<h1 id="形式化大数数学-1.3---任意有限元veblen函数">形式化大数数学 (1.3 - 任意有限元Veblen函数)</h1>
+<blockquote>
+<p>交流Q群: 893531731<br />
+本文源码: <a href="https://github.com/choukh/agda-googology/blob/main/src/Veblen/Finitary.lagda.md">Finitary.lagda.md</a><br />
+高亮渲染: <a href="https://choukh.github.io/agda-googology/Veblen.Finitary.html">Finitary.html</a></p>
+</blockquote>
+<pre class="Agda"><a id="335" class="Keyword">module</a> <a id="342" href="Veblen.Finitary.html" class="Module">Veblen.Finitary</a> <a id="358" class="Keyword">where</a>
+<a id="364" class="Keyword">open</a> <a id="369" class="Keyword">import</a> <a id="376" href="Veblen.Multinary.html" class="Module">Veblen.Multinary</a> <a id="393" class="Keyword">public</a>
+<a id="400" class="Keyword">module</a> <a id="Bin"></a><a id="407" href="Veblen.Finitary.html#407" class="Module">Bin</a> <a id="411" class="Symbol">=</a> <a id="413" href="Veblen.Multinary.html#2103" class="Module">BinaryVeblen</a>
+<a id="426" class="Keyword">module</a> <a id="Tri"></a><a id="433" href="Veblen.Finitary.html#433" class="Module">Tri</a> <a id="437" class="Symbol">=</a> <a id="439" href="Veblen.Multinary.html#6296" class="Module">TrinaryVeblen</a>
+<a id="453" class="Keyword">module</a> <a id="Qua"></a><a id="460" href="Veblen.Finitary.html#460" class="Module">Qua</a> <a id="464" class="Symbol">=</a> <a id="466" href="Veblen.Multinary.html#9998" class="Module">QuaternaryVeblen</a>
+</pre>
+<p>任意有限元Veblen函数 (Finitary Veblen Function) 也叫扩展Veblen函数 (Extended Veblen Function).</p>
+<pre class="Agda"><a id="_→ⁿ_"></a><a id="579" href="Veblen.Finitary.html#579" class="Function Operator">_→ⁿ_</a> <a id="584" class="Symbol">:</a> <a id="586" href="Agda.Primitive.html#388" class="Primitive">Set</a> <a id="590" class="Symbol">→</a> <a id="592" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="594" class="Symbol">→</a> <a id="596" href="Agda.Primitive.html#388" class="Primitive">Set</a>
+<a id="600" href="Veblen.Finitary.html#600" class="Bound">A</a> <a id="602" href="Veblen.Finitary.html#579" class="Function Operator">→ⁿ</a> <a id="605" href="Agda.Builtin.Nat.html#221" class="InductiveConstructor">zero</a> <a id="610" class="Symbol">=</a> <a id="612" href="Veblen.Finitary.html#600" class="Bound">A</a>
+<a id="614" href="Veblen.Finitary.html#614" class="Bound">A</a> <a id="616" href="Veblen.Finitary.html#579" class="Function Operator">→ⁿ</a> <a id="619" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="623" href="Veblen.Finitary.html#623" class="Bound">n</a> <a id="625" class="Symbol">=</a> <a id="627" href="Veblen.Basic.html#3243" class="Datatype">Ord</a> <a id="631" class="Symbol">→</a> <a id="633" href="Veblen.Finitary.html#614" class="Bound">A</a> <a id="635" href="Veblen.Finitary.html#579" class="Function Operator">→ⁿ</a> <a id="638" href="Veblen.Finitary.html#623" class="Bound">n</a>
+</pre>
+<pre class="Agda"><a id="_0⋯0"></a><a id="653" href="Veblen.Finitary.html#653" class="Function Operator">_0⋯0</a> <a id="658" class="Symbol">:</a> <a id="660" href="Veblen.Basic.html#5086" class="Generalizable">A</a> <a id="662" href="Veblen.Finitary.html#579" class="Function Operator">→ⁿ</a> <a id="665" href="Veblen.Basic.html#4168" class="Generalizable">n</a> <a id="667" class="Symbol">→</a> <a id="669" href="Veblen.Basic.html#5086" class="Generalizable">A</a>
+<a id="671" href="Veblen.Finitary.html#653" class="Function Operator">_0⋯0</a> <a id="676" class="Symbol">{</a><a id="677" class="Argument">n</a> <a id="679" class="Symbol">=</a> <a id="681" href="Agda.Builtin.Nat.html#221" class="InductiveConstructor">zero</a><a id="685" class="Symbol">}</a> <a id="687" class="Symbol">=</a> <a id="689" href="Function.Base.html#704" class="Function">id</a>
+<a id="692" href="Veblen.Finitary.html#653" class="Function Operator">_0⋯0</a> <a id="697" class="Symbol">{</a><a id="698" class="Argument">n</a> <a id="700" class="Symbol">=</a> <a id="702" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="706" href="Veblen.Finitary.html#706" class="Bound">n</a><a id="707" class="Symbol">}</a> <a id="709" href="Veblen.Finitary.html#709" class="Bound">F</a> <a id="711" class="Symbol">=</a> <a id="713" href="Veblen.Finitary.html#709" class="Bound">F</a> <a id="715" class="Number">0</a> <a id="717" href="Veblen.Finitary.html#653" class="Function Operator">0⋯0</a>
+</pre>
+<pre class="Agda"><a id="_0⋯_"></a><a id="734" href="Veblen.Finitary.html#734" class="Function Operator">_0⋯_</a> <a id="739" class="Symbol">:</a> <a id="741" href="Veblen.Basic.html#5086" class="Generalizable">A</a> <a id="743" href="Veblen.Finitary.html#579" class="Function Operator">→ⁿ</a> <a id="746" class="Symbol">(</a><a id="747" class="InductiveConstructor">suc</a> <a id="751" href="Veblen.Basic.html#4168" class="Generalizable">n</a><a id="752" class="Symbol">)</a> <a id="754" class="Symbol">→</a> <a id="756" href="Veblen.Basic.html#5086" class="Generalizable">A</a> <a id="758" href="Veblen.Finitary.html#579" class="Function Operator">→ⁿ</a> <a id="761" class="Number">1</a>
+<a id="763" href="Veblen.Finitary.html#734" class="Function Operator">_0⋯_</a> <a id="768" class="Symbol">{</a><a id="769" class="Argument">n</a> <a id="771" class="Symbol">=</a> <a id="773" href="Agda.Builtin.Nat.html#221" class="InductiveConstructor">zero</a><a id="777" class="Symbol">}</a> <a id="779" class="Symbol">=</a> <a id="781" href="Function.Base.html#704" class="Function">id</a>
+<a id="784" href="Veblen.Finitary.html#734" class="Function Operator">_0⋯_</a> <a id="789" class="Symbol">{</a><a id="790" class="Argument">n</a> <a id="792" class="Symbol">=</a> <a id="794" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="798" href="Veblen.Finitary.html#798" class="Bound">n</a><a id="799" class="Symbol">}</a> <a id="801" href="Veblen.Finitary.html#801" class="Bound">F</a> <a id="803" class="Symbol">=</a> <a id="805" href="Veblen.Finitary.html#801" class="Bound">F</a> <a id="807" class="Number">0</a> <a id="809" href="Veblen.Finitary.html#734" class="Function Operator">0⋯_</a>
+</pre>
+<pre class="Agda"><a id="_0⋯_,_"></a><a id="826" href="Veblen.Finitary.html#826" class="Function Operator">_0⋯_,_</a> <a id="833" class="Symbol">:</a> <a id="835" href="Veblen.Basic.html#5086" class="Generalizable">A</a> <a id="837" href="Veblen.Finitary.html#579" class="Function Operator">→ⁿ</a> <a id="840" class="Symbol">(</a><a id="841" href="Data.Nat.Base.html#1095" class="InductiveConstructor">2+</a> <a id="844" href="Veblen.Basic.html#4168" class="Generalizable">n</a><a id="845" class="Symbol">)</a> <a id="847" class="Symbol">→</a> <a id="849" href="Veblen.Basic.html#5086" class="Generalizable">A</a> <a id="851" href="Veblen.Finitary.html#579" class="Function Operator">→ⁿ</a> <a id="854" class="Number">2</a>
+<a id="856" href="Veblen.Finitary.html#826" class="Function Operator">_0⋯_,_</a> <a id="863" class="Symbol">{</a><a id="864" class="Argument">n</a> <a id="866" class="Symbol">=</a> <a id="868" href="Agda.Builtin.Nat.html#221" class="InductiveConstructor">zero</a><a id="872" class="Symbol">}</a> <a id="874" class="Symbol">=</a> <a id="876" href="Function.Base.html#704" class="Function">id</a>
+<a id="879" href="Veblen.Finitary.html#826" class="Function Operator">_0⋯_,_</a> <a id="886" class="Symbol">{</a><a id="887" class="Argument">n</a> <a id="889" class="Symbol">=</a> <a id="891" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="895" href="Veblen.Finitary.html#895" class="Bound">n</a><a id="896" class="Symbol">}</a> <a id="898" href="Veblen.Finitary.html#898" class="Bound">F</a> <a id="900" class="Symbol">=</a> <a id="902" href="Veblen.Finitary.html#898" class="Bound">F</a> <a id="904" class="Number">0</a> <a id="906" href="Veblen.Finitary.html#826" class="Function Operator">0⋯_,_</a>
+</pre>
+<pre class="Agda"><a id="Φ"></a><a id="925" href="Veblen.Finitary.html#925" class="Function">Φ</a> <a id="927" class="Symbol">:</a> <a id="929" href="Veblen.Basic.html#3243" class="Datatype">Ord</a> <a id="933" href="Veblen.Finitary.html#579" class="Function Operator">→ⁿ</a> <a id="936" class="InductiveConstructor">suc</a> <a id="940" href="Veblen.Basic.html#4168" class="Generalizable">n</a> <a id="942" class="Symbol">→</a> <a id="944" href="Veblen.Basic.html#3243" class="Datatype">Ord</a> <a id="948" href="Veblen.Finitary.html#579" class="Function Operator">→ⁿ</a> <a id="951" href="Data.Nat.Base.html#1095" class="InductiveConstructor">2+</a> <a id="954" href="Veblen.Basic.html#4168" class="Generalizable">n</a>
+<a id="Ψ"></a><a id="956" href="Veblen.Finitary.html#956" class="Function">Ψ</a> <a id="958" class="Symbol">:</a> <a id="960" href="Veblen.Basic.html#3243" class="Datatype">Ord</a> <a id="964" href="Veblen.Finitary.html#579" class="Function Operator">→ⁿ</a> <a id="967" class="Number">1</a> <a id="969" class="Symbol">→</a> <a id="971" href="Veblen.Basic.html#3243" class="Datatype">Ord</a> <a id="975" href="Veblen.Finitary.html#579" class="Function Operator">→ⁿ</a> <a id="978" class="InductiveConstructor">suc</a> <a id="982" href="Veblen.Basic.html#4168" class="Generalizable">n</a>
+</pre>
+<pre class="Agda"><a id="997" href="Veblen.Finitary.html#925" class="Function">Φ</a> <a id="999" href="Veblen.Finitary.html#999" class="Bound">F</a> <a id="1001" class="Symbol">=</a> <a id="1003" href="Veblen.Basic.html#8953" class="Function">rec</a> <a id="1007" href="Veblen.Finitary.html#999" class="Bound">F</a>
+  <a id="1011" class="Symbol">(λ</a> <a id="1014" href="Veblen.Finitary.html#1014" class="Bound">φ-α</a>  <a id="1019" class="Symbol">→</a> <a id="1021" href="Veblen.Finitary.html#956" class="Function">Ψ</a> <a id="1023" href="Function.Base.html#1974" class="Function Operator">$</a> <a id="1025" href="Veblen.Basic.html#13103" class="Function">fixpt</a> <a id="1031" class="Symbol">λ</a> <a id="1033" href="Veblen.Finitary.html#1033" class="Bound">β</a> <a id="1035" class="Symbol">→</a> <a id="1037" href="Veblen.Finitary.html#1014" class="Bound">φ-α</a> <a id="1041" href="Veblen.Finitary.html#1033" class="Bound">β</a> <a id="1043" href="Veblen.Finitary.html#653" class="Function Operator">0⋯0</a><a id="1046" class="Symbol">)</a>
+  <a id="1050" class="Symbol">(λ</a> <a id="1053" href="Veblen.Finitary.html#1053" class="Bound Operator">φ[_]</a> <a id="1058" class="Symbol">→</a> <a id="1060" href="Veblen.Finitary.html#956" class="Function">Ψ</a> <a id="1062" href="Function.Base.html#1974" class="Function Operator">$</a> <a id="1064" href="Veblen.Basic.html#11585" class="Function">jump</a> <a id="1069" class="Symbol">λ</a> <a id="1071" href="Veblen.Finitary.html#1071" class="Bound">β</a> <a id="1073" class="Symbol">→</a> <a id="1075" href="Veblen.Basic.html#3293" class="InductiveConstructor">lim</a> <a id="1079" class="Symbol">λ</a> <a id="1081" href="Veblen.Finitary.html#1081" class="Bound">n</a> <a id="1083" class="Symbol">→</a> <a id="1085" href="Veblen.Finitary.html#1053" class="Bound Operator">φ[</a> <a id="1088" href="Veblen.Finitary.html#1081" class="Bound">n</a> <a id="1090" href="Veblen.Finitary.html#1053" class="Bound Operator">]</a> <a id="1092" href="Veblen.Finitary.html#1071" class="Bound">β</a> <a id="1094" href="Veblen.Finitary.html#653" class="Function Operator">0⋯0</a><a id="1097" class="Symbol">)</a>
+</pre>
+<pre class="Agda"><a id="1112" href="Veblen.Finitary.html#956" class="Function">Ψ</a> <a id="1114" class="Symbol">{</a><a id="1115" class="Argument">n</a> <a id="1117" class="Symbol">=</a> <a id="1119" href="Agda.Builtin.Nat.html#221" class="InductiveConstructor">zero</a><a id="1123" class="Symbol">}</a> <a id="1125" class="Symbol">=</a> <a id="1127" href="Function.Base.html#704" class="Function">id</a>
+<a id="1130" href="Veblen.Finitary.html#956" class="Function">Ψ</a> <a id="1132" class="Symbol">{</a><a id="1133" class="Argument">n</a> <a id="1135" class="Symbol">=</a> <a id="1137" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="1141" href="Veblen.Finitary.html#1141" class="Bound">n</a><a id="1142" class="Symbol">}</a> <a id="1144" href="Veblen.Finitary.html#1144" class="Bound">F</a> <a id="1146" class="Symbol">=</a> <a id="1148" href="Veblen.Finitary.html#925" class="Function">Φ</a> <a id="1150" class="Symbol">(</a><a id="1151" href="Veblen.Finitary.html#956" class="Function">Ψ</a> <a id="1153" href="Veblen.Finitary.html#1144" class="Bound">F</a><a id="1154" class="Symbol">)</a>
+</pre>
+<pre class="Agda"><a id="φ"></a><a id="1169" href="Veblen.Finitary.html#1169" class="Function">φ</a> <a id="1171" class="Symbol">:</a> <a id="1173" href="Veblen.Basic.html#3243" class="Datatype">Ord</a> <a id="1177" href="Veblen.Finitary.html#579" class="Function Operator">→ⁿ</a> <a id="1180" class="InductiveConstructor">suc</a> <a id="1184" href="Veblen.Basic.html#4168" class="Generalizable">n</a>
+<a id="1186" href="Veblen.Finitary.html#1169" class="Function">φ</a> <a id="1188" class="Symbol">=</a> <a id="1190" href="Veblen.Finitary.html#956" class="Function">Ψ</a> <a id="1192" class="Symbol">(</a><a id="1193" href="Veblen.Basic.html#4617" class="Function">ω</a> <a id="1195" href="Veblen.Basic.html#10933" class="Function Operator">^_</a><a id="1197" class="Symbol">)</a>
+</pre>
+<pre class="Agda"><a id="φ₀"></a><a id="1212" href="Veblen.Finitary.html#1212" class="Function">φ₀</a> <a id="1215" class="Symbol">:</a> <a id="1217" href="Veblen.Finitary.html#1169" class="Function">φ</a> <a id="1219" class="Symbol">{</a><a id="1220" class="Number">0</a><a id="1221" class="Symbol">}</a> <a id="1223" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="1225" href="Veblen.Basic.html#4617" class="Function">ω</a> <a id="1227" href="Veblen.Basic.html#10933" class="Function Operator">^_</a>
+<a id="1230" href="Veblen.Finitary.html#1212" class="Function">φ₀</a> <a id="1233" class="Symbol">=</a> <a id="1235" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<pre class="Agda"><a id="φ₁"></a><a id="1253" href="Veblen.Finitary.html#1253" class="Function">φ₁</a> <a id="1256" class="Symbol">:</a> <a id="1258" href="Veblen.Finitary.html#1169" class="Function">φ</a> <a id="1260" class="Symbol">{</a><a id="1261" class="Number">1</a><a id="1262" class="Symbol">}</a> <a id="1264" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="1266" href="Veblen.Multinary.html#2978" class="Function">Bin.φ</a>
+<a id="1272" href="Veblen.Finitary.html#1253" class="Function">φ₁</a> <a id="1275" class="Symbol">=</a> <a id="1277" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<pre class="Agda"><a id="φ₂"></a><a id="1295" href="Veblen.Finitary.html#1295" class="Function">φ₂</a> <a id="1298" class="Symbol">:</a> <a id="1300" href="Veblen.Finitary.html#1169" class="Function">φ</a> <a id="1302" class="Symbol">{</a><a id="1303" class="Number">2</a><a id="1304" class="Symbol">}</a> <a id="1306" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="1308" href="Veblen.Multinary.html#7678" class="Function">Tri.φ</a>
+<a id="1314" href="Veblen.Finitary.html#1295" class="Function">φ₂</a> <a id="1317" class="Symbol">=</a> <a id="1319" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<pre class="Agda"><a id="φ₃"></a><a id="1337" href="Veblen.Finitary.html#1337" class="Function">φ₃</a> <a id="1340" class="Symbol">:</a> <a id="1342" href="Veblen.Finitary.html#1169" class="Function">φ</a> <a id="1344" class="Symbol">{</a><a id="1345" class="Number">3</a><a id="1346" class="Symbol">}</a> <a id="1348" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="1350" href="Veblen.Multinary.html#10869" class="Function">Qua.φ</a>
+<a id="1356" href="Veblen.Finitary.html#1337" class="Function">φ₃</a> <a id="1359" class="Symbol">=</a> <a id="1361" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p>SVO (<del>Subject–Verb–Object</del> Small Veblen Ordinal)</p>
+<pre class="Agda"><a id="SVO"></a><a id="1431" href="Veblen.Finitary.html#1431" class="Function">SVO</a> <a id="1435" class="Symbol">:</a> <a id="1437" href="Veblen.Basic.html#3243" class="Datatype">Ord</a>
+<a id="1441" href="Veblen.Finitary.html#1431" class="Function">SVO</a> <a id="1445" class="Symbol">=</a> <a id="1447" href="Veblen.Basic.html#3293" class="InductiveConstructor">lim</a> <a id="1451" class="Symbol">λ</a> <a id="1453" href="Veblen.Finitary.html#1453" class="Bound">n</a> <a id="1455" class="Symbol">→</a> <a id="1457" href="Veblen.Finitary.html#1169" class="Function">φ</a> <a id="1459" class="Symbol">{</a><a id="1460" href="Veblen.Finitary.html#1453" class="Bound">n</a><a id="1461" class="Symbol">}</a> <a id="1463" class="Number">1</a> <a id="1465" href="Veblen.Finitary.html#653" class="Function Operator">0⋯0</a>
+</pre>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>
