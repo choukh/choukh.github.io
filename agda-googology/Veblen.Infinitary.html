@@ -56,14 +56,15 @@
 本文源码: <a href="https://github.com/choukh/agda-googology/blob/main/src/Veblen/Infinitary.lagda.md">Infinitary.lagda.md</a><br />
 高亮渲染: <a href="https://choukh.github.io/agda-googology/Veblen.Infinitary.html">Infinitary.html</a></p>
 </blockquote>
-<pre class="Agda"><a id="339" class="Keyword">module</a> <a id="346" href="Veblen.Infinitary.html" class="Module">Veblen.Infinitary</a> <a id="364" class="Keyword">where</a>
-<a id="370" class="Keyword">open</a> <a id="375" class="Keyword">import</a> <a id="382" href="Veblen.Basic.html" class="Module">Veblen.Basic</a> <a id="395" class="Keyword">public</a>
+<pre class="Agda"><a id="339" class="Symbol">{-#</a> <a id="343" class="Keyword">OPTIONS</a> <a id="351" class="Pragma">--rewriting</a> <a id="363" class="Symbol">#-}</a>
+<a id="367" class="Keyword">module</a> <a id="374" href="Veblen.Infinitary.html" class="Module">Veblen.Infinitary</a> <a id="392" class="Keyword">where</a>
+<a id="398" class="Keyword">open</a> <a id="403" class="Keyword">import</a> <a id="410" href="Veblen.Basic.html" class="Module">Veblen.Basic</a> <a id="423" class="Keyword">public</a>
 </pre>
 <p>本篇要讲的无限元Veblen函数, 并不是超限元或者说序元 (以序数作为元数) Veblen函数. 我们将踏入这个层次, 但还没有完全覆盖. 从有限到超限的过程中, 有一个里程碑式的层级—— <span class="math inline">ω+n</span> 元Veblen函数, 我们称为无限元Veblen函数.</p>
 <h2 id="ω元veblen函数">ω元Veblen函数</h2>
 <p>我们先来搞清楚: 「什么叫 <span class="math inline">ω</span> 元?」. 首先这决不意味着我们有真无穷的信息, 否则可能就成黑洞了. 也就是说 <span class="math inline">ω</span> 元里的大部分信息是被「压缩」了的. 如何压缩? 就是用上一篇讲的填零操作 <span class="math inline">\overset{.}{0}:A^{→n}→A</span> 压缩的.</p>
-<pre class="Agda"><a id="692" class="Keyword">import</a> <a id="699" href="Veblen.Finitary.html" class="Module">Veblen.Finitary</a> <a id="715" class="Symbol">as</a> <a id="718" class="Module">Fin</a>
-<a id="722" class="Keyword">open</a> <a id="727" href="Veblen.Finitary.html" class="Module">Fin</a> <a id="731" class="Keyword">using</a> <a id="737" class="Symbol">(</a><a id="738" href="Veblen.Finitary.html#1357" class="Function Operator">_→ⁿ_</a><a id="742" class="Symbol">;</a> <a id="744" href="Veblen.Finitary.html#2270" class="Function Operator">_0̇</a><a id="747" class="Symbol">)</a>
+<pre class="Agda"><a id="720" class="Keyword">import</a> <a id="727" href="Veblen.Finitary.html" class="Module">Veblen.Finitary</a> <a id="743" class="Symbol">as</a> <a id="746" class="Module">Fin</a>
+<a id="750" class="Keyword">open</a> <a id="755" href="Veblen.Finitary.html" class="Module">Fin</a> <a id="759" class="Keyword">using</a> <a id="765" class="Symbol">(</a><a id="766" href="Veblen.Finitary.html#1471" class="Function Operator">_→ⁿ_</a><a id="770" class="Symbol">;</a> <a id="772" href="Veblen.Finitary.html#2384" class="Function Operator">_0̇</a><a id="775" class="Symbol">)</a>
 </pre>
 <p>也就是说, 我们只有有限个非零参数, 而有无限个零参数. 这就是无限元的真相. 确实, 也只有这样, 才能保证可计算性.</p>
 <p>回想我们在首篇定义的 <span class="math inline">ω := \lim\text{finord}</span>. 其中的极限 <span class="math inline">\lim</span> 相当于一种原语, 它没有进一步的定义. 类型论的规则只不过是保证它可以对应到一种有限的计算过程 (对角化), 而没有公理保证它里面有无穷多的元素, 也不需要此种保证. 无公理类型论中的一切函数都可以看作是某种真有限的计算过程.</p>
@@ -76,17 +77,17 @@
 \text{Ord}^{→ω^+} &amp;:= \text{Ord} → \text{Ord}^{→ω}
 \end{aligned}
 </span></p>
-<pre class="Agda"><a id="Ord→^ω"></a><a id="1636" href="Veblen.Infinitary.html#1636" class="Function">Ord→^ω</a> <a id="Ord→^ω⁺"></a><a id="1643" href="Veblen.Infinitary.html#1643" class="Function">Ord→^ω⁺</a> <a id="1651" class="Symbol">:</a> <a id="1653" href="Agda.Primitive.html#388" class="Primitive">Set</a>
-<a id="1657" href="Veblen.Infinitary.html#1636" class="Function">Ord→^ω</a> <a id="1664" class="Symbol">=</a> <a id="1666" class="Symbol">∀</a> <a id="1668" class="Symbol">{</a><a id="1669" href="Veblen.Infinitary.html#1669" class="Bound">n</a><a id="1670" class="Symbol">}</a> <a id="1672" class="Symbol">→</a> <a id="1674" href="Veblen.Basic.html#3262" class="Datatype">Ord</a> <a id="1678" href="Veblen.Finitary.html#1357" class="Function Operator">→ⁿ</a> <a id="1681" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="1685" href="Veblen.Infinitary.html#1669" class="Bound">n</a>
-<a id="1687" href="Veblen.Infinitary.html#1643" class="Function">Ord→^ω⁺</a> <a id="1695" class="Symbol">=</a> <a id="1697" href="Veblen.Basic.html#3262" class="Datatype">Ord</a> <a id="1701" class="Symbol">→</a> <a id="1703" href="Veblen.Infinitary.html#1636" class="Function">Ord→^ω</a>
+<pre class="Agda"><a id="Ord→^ω"></a><a id="1664" href="Veblen.Infinitary.html#1664" class="Function">Ord→^ω</a> <a id="Ord→^ω⁺"></a><a id="1671" href="Veblen.Infinitary.html#1671" class="Function">Ord→^ω⁺</a> <a id="1679" class="Symbol">:</a> <a id="1681" href="Agda.Primitive.html#388" class="Primitive">Set</a>
+<a id="1685" href="Veblen.Infinitary.html#1664" class="Function">Ord→^ω</a> <a id="1692" class="Symbol">=</a> <a id="1694" class="Symbol">∀</a> <a id="1696" class="Symbol">{</a><a id="1697" href="Veblen.Infinitary.html#1697" class="Bound">n</a><a id="1698" class="Symbol">}</a> <a id="1700" class="Symbol">→</a> <a id="1702" href="Veblen.Basic.html#3285" class="Datatype">Ord</a> <a id="1706" href="Veblen.Finitary.html#1471" class="Function Operator">→ⁿ</a> <a id="1709" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="1713" href="Veblen.Infinitary.html#1697" class="Bound">n</a>
+<a id="1715" href="Veblen.Infinitary.html#1671" class="Function">Ord→^ω⁺</a> <a id="1723" class="Symbol">=</a> <a id="1725" href="Veblen.Basic.html#3285" class="Datatype">Ord</a> <a id="1729" class="Symbol">→</a> <a id="1731" href="Veblen.Infinitary.html#1664" class="Function">Ord→^ω</a>
 </pre>
 <p><strong>定义</strong> <span class="math inline">ω</span> 元Veblen函数</p>
 <p><span class="math display">
 φ_{\lt ω} := φ_n : \text{Ord}^{→ω}
 </span></p>
-<pre class="Agda"><a id="1787" class="Keyword">module</a> <a id="OmegaryVeblen"></a><a id="1794" href="Veblen.Infinitary.html#1794" class="Module">OmegaryVeblen</a> <a id="1808" class="Keyword">where</a>
-  <a id="OmegaryVeblen.φ"></a><a id="1816" href="Veblen.Infinitary.html#1816" class="Function">φ</a> <a id="1818" class="Symbol">:</a> <a id="1820" href="Veblen.Infinitary.html#1636" class="Function">Ord→^ω</a>
-  <a id="1829" href="Veblen.Infinitary.html#1816" class="Function">φ</a> <a id="1831" class="Symbol">=</a> <a id="1833" href="Veblen.Finitary.html#6451" class="Function">Fin.φ</a>
+<pre class="Agda"><a id="1815" class="Keyword">module</a> <a id="OmegaryVeblen"></a><a id="1822" href="Veblen.Infinitary.html#1822" class="Module">OmegaryVeblen</a> <a id="1836" class="Keyword">where</a>
+  <a id="OmegaryVeblen.φ"></a><a id="1844" href="Veblen.Infinitary.html#1844" class="Function">φ</a> <a id="1846" class="Symbol">:</a> <a id="1848" href="Veblen.Infinitary.html#1664" class="Function">Ord→^ω</a>
+  <a id="1857" href="Veblen.Infinitary.html#1844" class="Function">φ</a> <a id="1859" class="Symbol">=</a> <a id="1861" href="Veblen.Finitary.html#6565" class="Function">Fin.φ</a>
 </pre>
 <p>注意我们的下标是一贯的:</p>
 <ul>
@@ -102,7 +103,7 @@
 <li>…</li>
 </ul>
 <h2 id="ω元veblen函数-1">ω⁺元Veblen函数</h2>
-<pre class="Agda"><a id="2071" class="Keyword">module</a> <a id="OmegaUnaryVeblen"></a><a id="2078" href="Veblen.Infinitary.html#2078" class="Module">OmegaUnaryVeblen</a> <a id="2095" class="Keyword">where</a>
+<pre class="Agda"><a id="2099" class="Keyword">module</a> <a id="OmegaUnaryVeblen"></a><a id="2106" href="Veblen.Infinitary.html#2106" class="Module">OmegaUnaryVeblen</a> <a id="2123" class="Keyword">where</a>
 </pre>
 <p><span class="math inline">ω^+</span> 元Veblen函数具有跟一元函数 <span class="math inline">λα,ω^α:\text{Ord}→\text{Ord}</span> 同等的地位, 它是新的「梦的开始」. 也因此, 它的构造是特殊的, 在它之前没有直接参考物. 但我们可以如下考虑:</p>
 <p>首先, 参考 <span class="math inline">Φ_n</span> 的类型</p>
@@ -113,7 +114,7 @@
 <p><span class="math display">
 Φ_ω : \text{Ord}^{→ω} → (\text{Ord} → \text{Ord}^{→ω})
 </span></p>
-<pre class="Agda">  <a id="OmegaUnaryVeblen.Φ"></a><a id="2376" href="Veblen.Infinitary.html#2376" class="Function">Φ</a> <a id="2378" class="Symbol">:</a> <a id="2380" href="Veblen.Infinitary.html#1636" class="Function">Ord→^ω</a> <a id="2387" class="Symbol">→</a> <a id="2389" href="Veblen.Basic.html#3262" class="Datatype">Ord</a> <a id="2393" class="Symbol">→</a> <a id="2395" href="Veblen.Infinitary.html#1636" class="Function">Ord→^ω</a>
+<pre class="Agda">  <a id="OmegaUnaryVeblen.Φ"></a><a id="2404" href="Veblen.Infinitary.html#2404" class="Function">Φ</a> <a id="2406" class="Symbol">:</a> <a id="2408" href="Veblen.Infinitary.html#1664" class="Function">Ord→^ω</a> <a id="2415" class="Symbol">→</a> <a id="2417" href="Veblen.Basic.html#3285" class="Datatype">Ord</a> <a id="2421" class="Symbol">→</a> <a id="2423" href="Veblen.Infinitary.html#1664" class="Function">Ord→^ω</a>
 </pre>
 <p>其输入将会是 <span class="math inline">φ_{\lt ω} : \text{Ord}^{→ω}</span>.</p>
 <p>其次, 如果我们希望</p>
@@ -135,38 +136,39 @@
 </span></p>
 <p>这就是后继步骤的定义. 而极限步骤将会是</p>
 <p><span class="math display">
-Φ_{\lt ω}(\text{jump}\kern{0.17em}λβ,\lim λn,φ_{ω,f\kern{0.17em}m}[m]\kern{0.17em}\beta^+)
+Φ_{\lt ω}(\text{jump}\kern{0.17em}λβ,\lim λn,φ_{ω,f\kern{0.17em}m}[m]\kern{0.17em}\beta^+\kern{0.17em}\overset{.}{0})
 </span></p>
-<p>其中 <span class="math inline">φ_{ω,f\kern{0.17em}m}[m]\kern{0.17em}\beta^+</span> 可以看作是 <span class="math inline">(φ_{ω,f\kern{0.17em}m}[m])_n\kern{0.17em}\overset{.}{0}\kern{0.17em}\beta^+</span> 简写.</p>
 <p>完整写出:</p>
 <p><strong>定义</strong> <span class="math inline">Φ_{ω}</span></p>
 <p><span class="math display">
 \begin{aligned}
-Φ_{ω}\kern{0.17em}F = \text{rec}\kern{0.17em}F
+Φ_{ω}\kern{0.17em}F &amp;= \text{rec}\kern{0.17em}F \\
+&amp;\quad(λφ_{ω,α},Φ_{\lt ω}(\text{jump}\kern{0.17em}λβ,\lim λn,φ_{ω,α,n}\kern{0.17em}\beta^+\kern{0.17em}\overset{.}{0})) \\
+&amp;\quad(λφ_{ω,f\kern{0.17em}m},Φ_{\lt ω}(\text{jump}\kern{0.17em}λβ,\lim λn,φ_{ω,f\kern{0.17em}m}[m]\kern{0.17em}\beta^+\kern{0.17em}\overset{.}{0}))
 \end{aligned}
 </span></p>
-<pre class="Agda">  <a id="3412" href="Veblen.Infinitary.html#2376" class="Function">Φ</a> <a id="3414" href="Veblen.Infinitary.html#3414" class="Bound">F</a> <a id="3416" class="Symbol">=</a> <a id="3418" href="Veblen.Basic.html#9043" class="Function">rec</a> <a id="3422" href="Veblen.Infinitary.html#3414" class="Bound">F</a>
-    <a id="3428" class="Symbol">(λ</a> <a id="3431" href="Veblen.Infinitary.html#3431" class="Bound">φ-α</a>  <a id="3436" class="Symbol">→</a> <a id="3438" href="Veblen.Finitary.html#5020" class="Function">Fin.Φⁿ</a> <a id="3445" href="Function.Base.html#1974" class="Function Operator">$</a> <a id="3447" href="Veblen.Basic.html#11996" class="Function">jump</a> <a id="3452" class="Symbol">λ</a> <a id="3454" href="Veblen.Infinitary.html#3454" class="Bound">β</a> <a id="3456" class="Symbol">→</a> <a id="3458" href="Veblen.Basic.html#3312" class="InductiveConstructor">lim</a> <a id="3462" class="Symbol">λ</a> <a id="3464" href="Veblen.Infinitary.html#3464" class="Bound">n</a> <a id="3466" class="Symbol">→</a> <a id="3468" href="Veblen.Infinitary.html#3431" class="Bound">φ-α</a> <a id="3472" class="Symbol">{</a><a id="3473" href="Veblen.Infinitary.html#3464" class="Bound">n</a><a id="3474" class="Symbol">}</a> <a id="3476" class="Symbol">(</a><a id="3477" href="Veblen.Basic.html#3293" class="InductiveConstructor">suc</a> <a id="3481" href="Veblen.Infinitary.html#3454" class="Bound">β</a><a id="3482" class="Symbol">)</a> <a id="3484" href="Veblen.Finitary.html#2270" class="Function Operator">0̇</a><a id="3486" class="Symbol">)</a>
-    <a id="3492" class="Symbol">(λ</a> <a id="3495" href="Veblen.Infinitary.html#3495" class="Bound Operator">φ[_]</a> <a id="3500" class="Symbol">→</a> <a id="3502" href="Veblen.Finitary.html#5020" class="Function">Fin.Φⁿ</a> <a id="3509" href="Function.Base.html#1974" class="Function Operator">$</a> <a id="3511" href="Veblen.Basic.html#11996" class="Function">jump</a> <a id="3516" class="Symbol">λ</a> <a id="3518" href="Veblen.Infinitary.html#3518" class="Bound">β</a> <a id="3520" class="Symbol">→</a> <a id="3522" href="Veblen.Basic.html#3312" class="InductiveConstructor">lim</a> <a id="3526" class="Symbol">λ</a> <a id="3528" href="Veblen.Infinitary.html#3528" class="Bound">n</a> <a id="3530" class="Symbol">→</a> <a id="3532" href="Veblen.Infinitary.html#3495" class="Bound Operator">φ[</a> <a id="3535" href="Veblen.Infinitary.html#3528" class="Bound">n</a> <a id="3537" href="Veblen.Infinitary.html#3495" class="Bound Operator">]</a> <a id="3539" class="Symbol">(</a><a id="3540" href="Veblen.Basic.html#3293" class="InductiveConstructor">suc</a> <a id="3544" href="Veblen.Infinitary.html#3518" class="Bound">β</a><a id="3545" class="Symbol">))</a>
+<pre class="Agda">  <a id="3604" href="Veblen.Infinitary.html#2404" class="Function">Φ</a> <a id="3606" href="Veblen.Infinitary.html#3606" class="Bound">F</a> <a id="3608" class="Symbol">=</a> <a id="3610" href="Veblen.Basic.html#9066" class="Function">rec</a> <a id="3614" href="Veblen.Infinitary.html#3606" class="Bound">F</a>
+    <a id="3620" class="Symbol">(λ</a> <a id="3623" href="Veblen.Infinitary.html#3623" class="Bound">φ-α</a>  <a id="3628" class="Symbol">→</a> <a id="3630" href="Veblen.Finitary.html#5134" class="Function">Fin.Φⁿ</a> <a id="3637" href="Function.Base.html#1974" class="Function Operator">$</a> <a id="3639" href="Veblen.Basic.html#12019" class="Function">jump</a> <a id="3644" class="Symbol">λ</a> <a id="3646" href="Veblen.Infinitary.html#3646" class="Bound">β</a> <a id="3648" class="Symbol">→</a> <a id="3650" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="3654" class="Symbol">λ</a> <a id="3656" href="Veblen.Infinitary.html#3656" class="Bound">n</a> <a id="3658" class="Symbol">→</a> <a id="3660" href="Veblen.Infinitary.html#3623" class="Bound">φ-α</a> <a id="3664" class="Symbol">{</a><a id="3665" href="Veblen.Infinitary.html#3656" class="Bound">n</a><a id="3666" class="Symbol">}</a> <a id="3668" class="Symbol">(</a><a id="3669" href="Veblen.Basic.html#3316" class="InductiveConstructor">suc</a> <a id="3673" href="Veblen.Infinitary.html#3646" class="Bound">β</a><a id="3674" class="Symbol">)</a> <a id="3676" href="Veblen.Finitary.html#2384" class="Function Operator">0̇</a><a id="3678" class="Symbol">)</a>
+    <a id="3684" class="Symbol">(λ</a> <a id="3687" href="Veblen.Infinitary.html#3687" class="Bound Operator">φ[_]</a> <a id="3692" class="Symbol">→</a> <a id="3694" href="Veblen.Finitary.html#5134" class="Function">Fin.Φⁿ</a> <a id="3701" href="Function.Base.html#1974" class="Function Operator">$</a> <a id="3703" href="Veblen.Basic.html#12019" class="Function">jump</a> <a id="3708" class="Symbol">λ</a> <a id="3710" href="Veblen.Infinitary.html#3710" class="Bound">β</a> <a id="3712" class="Symbol">→</a> <a id="3714" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="3718" class="Symbol">λ</a> <a id="3720" href="Veblen.Infinitary.html#3720" class="Bound">n</a> <a id="3722" class="Symbol">→</a> <a id="3724" href="Veblen.Infinitary.html#3687" class="Bound Operator">φ[</a> <a id="3727" href="Veblen.Infinitary.html#3720" class="Bound">n</a> <a id="3729" href="Veblen.Infinitary.html#3687" class="Bound Operator">]</a> <a id="3731" class="Symbol">{</a><a id="3732" href="Veblen.Infinitary.html#3720" class="Bound">n</a><a id="3733" class="Symbol">}</a> <a id="3735" class="Symbol">(</a><a id="3736" href="Veblen.Basic.html#3316" class="InductiveConstructor">suc</a> <a id="3740" href="Veblen.Infinitary.html#3710" class="Bound">β</a><a id="3741" class="Symbol">)</a> <a id="3743" href="Veblen.Finitary.html#2384" class="Function Operator">0̇</a><a id="3745" class="Symbol">)</a>
 </pre>
-<pre class="Agda">  <a id="OmegaUnaryVeblen.φ"></a><a id="3563" href="Veblen.Infinitary.html#3563" class="Function">φ</a> <a id="3565" class="Symbol">:</a> <a id="3567" href="Veblen.Basic.html#3262" class="Datatype">Ord</a> <a id="3571" class="Symbol">→</a> <a id="3573" href="Veblen.Infinitary.html#1636" class="Function">Ord→^ω</a>
-  <a id="3582" href="Veblen.Infinitary.html#3563" class="Function">φ</a> <a id="3584" class="Symbol">=</a> <a id="3586" href="Veblen.Infinitary.html#2376" class="Function">Φ</a> <a id="3588" href="Veblen.Finitary.html#6451" class="Function">Fin.φ</a>
+<pre class="Agda">  <a id="OmegaUnaryVeblen.φ"></a><a id="3762" href="Veblen.Infinitary.html#3762" class="Function">φ</a> <a id="3764" class="Symbol">:</a> <a id="3766" href="Veblen.Basic.html#3285" class="Datatype">Ord</a> <a id="3770" class="Symbol">→</a> <a id="3772" href="Veblen.Infinitary.html#1664" class="Function">Ord→^ω</a>
+  <a id="3781" href="Veblen.Infinitary.html#3762" class="Function">φ</a> <a id="3783" class="Symbol">=</a> <a id="3785" href="Veblen.Infinitary.html#2404" class="Function">Φ</a> <a id="3787" href="Veblen.Finitary.html#6565" class="Function">Fin.φ</a>
 </pre>
-<pre class="Agda">  <a id="OmegaUnaryVeblen.φ-0"></a><a id="3609" href="Veblen.Infinitary.html#3609" class="Function">φ-0</a> <a id="3613" class="Symbol">:</a> <a id="3615" href="Veblen.Infinitary.html#3563" class="Function">φ</a> <a id="3617" class="Number">0</a> <a id="3619" class="Symbol">{</a><a id="3620" href="Veblen.Basic.html#4258" class="Generalizable">n</a><a id="3621" class="Symbol">}</a> <a id="3623" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="3625" href="Veblen.Finitary.html#6451" class="Function">Fin.φ</a>
-  <a id="3633" href="Veblen.Infinitary.html#3609" class="Function">φ-0</a> <a id="3637" class="Symbol">=</a> <a id="3639" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+<pre class="Agda">  <a id="OmegaUnaryVeblen.φ-0"></a><a id="3808" href="Veblen.Infinitary.html#3808" class="Function">φ-0</a> <a id="3812" class="Symbol">:</a> <a id="3814" href="Veblen.Infinitary.html#3762" class="Function">φ</a> <a id="3816" class="Number">0</a> <a id="3818" class="Symbol">{</a><a id="3819" href="Veblen.Basic.html#4281" class="Generalizable">n</a><a id="3820" class="Symbol">}</a> <a id="3822" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="3824" href="Veblen.Finitary.html#6565" class="Function">Fin.φ</a>
+  <a id="3832" href="Veblen.Infinitary.html#3808" class="Function">φ-0</a> <a id="3836" class="Symbol">=</a> <a id="3838" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
 </pre>
-<pre class="Agda">  <a id="OmegaUnaryVeblen.φ-1⋯0"></a><a id="3659" href="Veblen.Infinitary.html#3659" class="Function">φ-1⋯0</a> <a id="3665" class="Symbol">:</a> <a id="3667" href="Veblen.Infinitary.html#3563" class="Function">φ</a> <a id="3669" class="Number">1</a> <a id="3671" class="Number">0</a> <a id="3673" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="3675" href="Veblen.Finitary.html#19079" class="Function">Fin.SVO</a>
-  <a id="3685" href="Veblen.Infinitary.html#3659" class="Function">φ-1⋯0</a> <a id="3691" class="Symbol">=</a> <a id="3693" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+<pre class="Agda">  <a id="OmegaUnaryVeblen.φ-1⋯0"></a><a id="3858" href="Veblen.Infinitary.html#3858" class="Function">φ-1⋯0</a> <a id="3864" class="Symbol">:</a> <a id="3866" href="Veblen.Infinitary.html#3762" class="Function">φ</a> <a id="3868" class="Number">1</a> <a id="3870" class="Number">0</a> <a id="3872" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="3874" href="Veblen.Finitary.html#14794" class="Function">Fin.SVO</a>
+  <a id="3884" href="Veblen.Infinitary.html#3858" class="Function">φ-1⋯0</a> <a id="3890" class="Symbol">=</a> <a id="3892" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
 
-  <a id="OmegaUnaryVeblen.φ-1⋯0-0"></a><a id="3701" href="Veblen.Infinitary.html#3701" class="Function">φ-1⋯0-0</a> <a id="3709" class="Symbol">:</a> <a id="3711" href="Veblen.Infinitary.html#3563" class="Function">φ</a> <a id="3713" class="Number">1</a> <a id="3715" class="Number">0</a> <a id="3717" class="Number">0</a> <a id="3719" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="3721" href="Veblen.Finitary.html#19079" class="Function">Fin.SVO</a>
-  <a id="3731" href="Veblen.Infinitary.html#3701" class="Function">φ-1⋯0-0</a> <a id="3739" class="Symbol">=</a> <a id="3741" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+  <a id="OmegaUnaryVeblen.φ-1⋯0-0"></a><a id="3900" href="Veblen.Infinitary.html#3900" class="Function">φ-1⋯0-0</a> <a id="3908" class="Symbol">:</a> <a id="3910" href="Veblen.Infinitary.html#3762" class="Function">φ</a> <a id="3912" class="Number">1</a> <a id="3914" class="Number">0</a> <a id="3916" class="Number">0</a> <a id="3918" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="3920" href="Veblen.Finitary.html#14794" class="Function">Fin.SVO</a>
+  <a id="3930" href="Veblen.Infinitary.html#3900" class="Function">φ-1⋯0-0</a> <a id="3938" class="Symbol">=</a> <a id="3940" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
 
-  <a id="OmegaUnaryVeblen.φ-1⋯0-0-0"></a><a id="3749" href="Veblen.Infinitary.html#3749" class="Function">φ-1⋯0-0-0</a> <a id="3759" class="Symbol">:</a> <a id="3761" href="Veblen.Infinitary.html#3563" class="Function">φ</a> <a id="3763" class="Number">1</a> <a id="3765" class="Number">0</a> <a id="3767" class="Number">0</a> <a id="3769" class="Number">0</a> <a id="3771" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="3773" href="Veblen.Finitary.html#19079" class="Function">Fin.SVO</a>
-  <a id="3783" href="Veblen.Infinitary.html#3749" class="Function">φ-1⋯0-0-0</a> <a id="3793" class="Symbol">=</a> <a id="3795" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+  <a id="OmegaUnaryVeblen.φ-1⋯0-0-0"></a><a id="3948" href="Veblen.Infinitary.html#3948" class="Function">φ-1⋯0-0-0</a> <a id="3958" class="Symbol">:</a> <a id="3960" href="Veblen.Infinitary.html#3762" class="Function">φ</a> <a id="3962" class="Number">1</a> <a id="3964" class="Number">0</a> <a id="3966" class="Number">0</a> <a id="3968" class="Number">0</a> <a id="3970" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="3972" href="Veblen.Finitary.html#14794" class="Function">Fin.SVO</a>
+  <a id="3982" href="Veblen.Infinitary.html#3948" class="Function">φ-1⋯0-0-0</a> <a id="3992" class="Symbol">=</a> <a id="3994" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
 </pre>
 <h2 id="ω元veblen函数-2">ω⁺⁺元Veblen函数</h2>
-<p>module OmegaBinaryVeblen where</p>
-<p>Φ : Ord→^ω⁺ → Ord → Ord→^ω⁺ Φ F = rec F {! !} {! !}</p>
+<pre class="Agda"><a id="4029" class="Keyword">module</a> <a id="OmegaBinaryVeblen"></a><a id="4036" href="Veblen.Infinitary.html#4036" class="Module">OmegaBinaryVeblen</a> <a id="4054" class="Keyword">where</a>
+</pre>
 <h2 id="ω元veblen函数-3">2ω元Veblen函数</h2>
 <h2 id="ω元veblen函数-4">(2ω)⁺元Veblen函数</h2>
 <h2 id="ω元veblen函数-5">3ω元Veblen函数</h2>
