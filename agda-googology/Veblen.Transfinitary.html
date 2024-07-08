@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>形式化大数数学 (1.5 - 超限元Veblen函数)</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+</head>
+<body>
+
+<header>
+<h1 class="title">形式化大数数学 (1.5 - 超限元Veblen函数)</h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <strong>Contents</strong><label for="contents">⊕</label>
+  <input type="checkbox" id="contents">
+  <ul>
+  <li><a href="#形式化大数数学-1.5---超限元veblen函数" id="toc-形式化大数数学-1.5---超限元veblen函数">形式化大数数学 (1.5 - 超限元Veblen函数)</a>
+  <ul>
+  <li><a href="#超限元函数类型" id="toc-超限元函数类型">超限元函数类型</a></li>
+  <li><a href="#超限元veblen函数" id="toc-超限元veblen函数">超限元Veblen函数</a></li>
+  <li><a href="#lvo" id="toc-lvo">LVO</a></li>
+  </ul></li>
+  </ul>
+</nav>
+
+<main>
+<h1 id="形式化大数数学-1.5---超限元veblen函数">形式化大数数学 (1.5 - 超限元Veblen函数)</h1>
+<blockquote>
+<p>交流Q群: 893531731<br />
+本文源码: <a href="https://github.com/choukh/agda-googology/blob/main/src/Veblen/Transfinitary.lagda.md">Transfinitary.lagda.md</a><br />
+高亮渲染: <a href="https://choukh.github.io/agda-googology/Veblen.Transfinitary.html">Transfinitary.html</a></p>
+</blockquote>
+<p>本篇我们来定义超限元Veblen函数, 也叫序元Veblen函数. 它在形式上只依赖我们的第一篇: <a href="https://zhuanlan.zhihu.com/p/705306447">形式化大数数学 (1.1 - 序数, FGH, 不动点)</a>. 在认知上是前几篇的自然推广, 而没有什么非常新的东西. 所以我们会讲得很简洁, 如有疑问请参考前几篇.</p>
+<p>Agda 编程上, 我们开启了一些高级特性 (有损合一化, 自定义重写), 它们只是为了让代码更简洁 (比非形式写法还简洁), 而不影响目标函数的性质以及证明的可靠性.</p>
+<pre class="Agda"><a id="662" class="Symbol">{-#</a> <a id="666" class="Keyword">OPTIONS</a> <a id="674" class="Pragma">--lossy-unification</a> <a id="694" class="Pragma">--rewriting</a> <a id="706" class="Pragma">--local-confluence-check</a> <a id="731" class="Symbol">#-}</a>
+<a id="735" class="Keyword">module</a> <a id="742" href="Veblen.Transfinitary.html" class="Module">Veblen.Transfinitary</a> <a id="763" class="Keyword">where</a>
+<a id="769" class="Keyword">open</a> <a id="774" class="Keyword">import</a> <a id="781" href="Veblen.Basic.html" class="Module">Veblen.Basic</a> <a id="794" class="Keyword">public</a>
+</pre>
+<h2 id="超限元函数类型">超限元函数类型</h2>
+<p><strong>定义</strong> 递归定义超限元函数类型</p>
+<p><span class="math display">
+A^{→α} := \begin{cases}
+A &amp; \text{if } α = 0 \\
+\text{Ord} → A^{→β} &amp; \text{if } α = β^+ \\
+\prod_n A^{→ (f\kern{0.17em}n)^+} &amp; \text{if } α = \lim f
+\end{cases}
+</span></p>
+<pre class="Agda"><a id="_→^_"></a><a id="1015" href="Veblen.Transfinitary.html#1015" class="Function Operator">_→^_</a> <a id="1020" class="Symbol">:</a> <a id="1022" href="Agda.Primitive.html#388" class="Primitive">Set</a> <a id="1026" class="Symbol">→</a> <a id="1028" href="Veblen.Basic.html#3285" class="Datatype">Ord</a> <a id="1032" class="Symbol">→</a> <a id="1034" href="Agda.Primitive.html#388" class="Primitive">Set</a>
+<a id="1038" href="Veblen.Transfinitary.html#1038" class="Bound">A</a> <a id="1040" href="Veblen.Transfinitary.html#1015" class="Function Operator">→^</a> <a id="1043" href="Veblen.Basic.html#3303" class="InductiveConstructor">zero</a> <a id="1048" class="Symbol">=</a> <a id="1050" href="Veblen.Transfinitary.html#1038" class="Bound">A</a>
+<a id="1052" href="Veblen.Transfinitary.html#1052" class="Bound">A</a> <a id="1054" href="Veblen.Transfinitary.html#1015" class="Function Operator">→^</a> <a id="1057" href="Veblen.Basic.html#3316" class="InductiveConstructor">suc</a> <a id="1061" href="Veblen.Transfinitary.html#1061" class="Bound">α</a> <a id="1063" class="Symbol">=</a> <a id="1065" href="Veblen.Basic.html#3285" class="Datatype">Ord</a> <a id="1069" class="Symbol">→</a> <a id="1071" href="Veblen.Transfinitary.html#1052" class="Bound">A</a> <a id="1073" href="Veblen.Transfinitary.html#1015" class="Function Operator">→^</a> <a id="1076" href="Veblen.Transfinitary.html#1061" class="Bound">α</a>
+<a id="1078" href="Veblen.Transfinitary.html#1078" class="Bound">A</a> <a id="1080" href="Veblen.Transfinitary.html#1015" class="Function Operator">→^</a> <a id="1083" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="1087" href="Veblen.Transfinitary.html#1087" class="Bound">f</a> <a id="1089" class="Symbol">=</a> <a id="1091" class="Symbol">∀</a> <a id="1093" class="Symbol">{</a><a id="1094" href="Veblen.Transfinitary.html#1094" class="Bound">n</a><a id="1095" class="Symbol">}</a> <a id="1097" class="Symbol">→</a> <a id="1099" href="Veblen.Basic.html#3285" class="Datatype">Ord</a> <a id="1103" class="Symbol">→</a> <a id="1105" href="Veblen.Transfinitary.html#1078" class="Bound">A</a> <a id="1107" href="Veblen.Transfinitary.html#1015" class="Function Operator">→^</a> <a id="1110" href="Veblen.Transfinitary.html#1087" class="Bound">f</a> <a id="1112" href="Veblen.Transfinitary.html#1094" class="Bound">n</a>
+</pre>
+<p><strong>约定</strong> 对任意 <span class="math inline">F : \text{Ord}^{→\lim f}</span> 我们用下标表示 <span class="math inline">F_n : \text{Ord}^{→(f\kern{0.17em}n)^+}</span>.</p>
+<p><strong>注意</strong> 上面的定义可以使用序数的递归原理 <span class="math inline">\text{rec}</span>. 这里不使用的原因是没有必要. 之前使用的唯一原因是方便证明推广后的函数确实具有与推广前的函数相等的部分——两个递归函数只有归约到相同的 <span class="math inline">\text{rec}</span> 形式 Agda 才认为定义相等 (definitional equality), 否则依赖函数外延性 (functional extensionality). 这里我们是从自然数元推广到序数元, 怎样都无法证明定义相等.</p>
+<p><strong>定义</strong> 给一个超限元函数的参数全部填零的高阶函数</p>
+<p><span class="math display">
+λF,F\kern{0.17em}\overset{.}{0} : A^{→α} → A
+</span></p>
+<p>定义为</p>
+<p><span class="math display">
+(F : A^{→α})\kern{0.17em}\overset{.}{0} := \begin{cases}
+F:A &amp; \text{if } α = 0 \\
+(F\kern{0.17em}0 : A^{→β})\kern{0.17em}\overset{.}{0} &amp; \text{if } α = β^+ \\
+(F_0\kern{0.17em}0 : A^{→f\kern{0.17em}0})\kern{0.17em}\overset{.}{0} &amp; \text{if } α = \lim f
+\end{cases}
+</span></p>
+<pre class="Agda"><a id="_0̇"></a><a id="1808" href="Veblen.Transfinitary.html#1808" class="Function Operator">_0̇</a> <a id="1812" class="Symbol">:</a> <a id="1814" href="Veblen.Basic.html#5279" class="Generalizable">A</a> <a id="1816" href="Veblen.Transfinitary.html#1015" class="Function Operator">→^</a> <a id="1819" href="Veblen.Basic.html#4265" class="Generalizable">α</a> <a id="1821" class="Symbol">→</a> <a id="1823" href="Veblen.Basic.html#5279" class="Generalizable">A</a>
+<a id="1825" href="Veblen.Transfinitary.html#1808" class="Function Operator">_0̇</a> <a id="1829" class="Symbol">{</a><a id="1830" class="Argument">α</a> <a id="1832" class="Symbol">=</a> <a id="1834" href="Veblen.Basic.html#3303" class="InductiveConstructor">zero</a><a id="1838" class="Symbol">}</a> <a id="1840" class="Symbol">=</a> <a id="1842" href="Function.Base.html#704" class="Function">id</a>
+<a id="1845" href="Veblen.Transfinitary.html#1808" class="Function Operator">_0̇</a> <a id="1849" class="Symbol">{</a><a id="1850" class="Argument">α</a> <a id="1852" class="Symbol">=</a> <a id="1854" href="Veblen.Basic.html#3316" class="InductiveConstructor">suc</a> <a id="1858" class="Symbol">_}</a> <a id="1861" href="Veblen.Transfinitary.html#1861" class="Bound">F</a> <a id="1863" class="Symbol">=</a> <a id="1865" href="Veblen.Transfinitary.html#1861" class="Bound">F</a> <a id="1867" class="Number">0</a> <a id="1869" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a>
+<a id="1872" href="Veblen.Transfinitary.html#1808" class="Function Operator">_0̇</a> <a id="1876" class="Symbol">{</a><a id="1877" class="Argument">α</a> <a id="1879" class="Symbol">=</a> <a id="1881" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="1885" class="Symbol">_}</a> <a id="1888" href="Veblen.Transfinitary.html#1888" class="Bound">F</a> <a id="1890" class="Symbol">=</a> <a id="1892" href="Veblen.Transfinitary.html#1888" class="Bound">F</a> <a id="1894" class="Symbol">{</a><a id="1895" class="Number">0</a><a id="1896" class="Symbol">}</a> <a id="1898" class="Number">0</a> <a id="1900" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a>
+</pre>
+<p><strong>定义</strong> 给一个超限元函数的参数除最后一位外全部填零的高阶函数</p>
+<p><span class="math display">
+λF,F\kern{0.17em}\overset{.}{0}\kern{0.17em}\underline{\kern{0.5em}} : A^{→α^+} → A^{→1}
+</span></p>
+<p>定义为</p>
+<p><span class="math display">
+(F : A^{→α^+})\kern{0.17em}\overset{.}{0}\kern{0.17em}\underline{\kern{0.5em}} := \begin{cases}
+F:A^{→1} &amp; \text{if } α = 0 \\
+(F\kern{0.17em}0 : A^{→β^+})\kern{0.17em}\overset{.}{0}\kern{0.17em}\underline{\kern{0.5em}} &amp; \text{if } α = β^+ \\
+((F\kern{0.17em}0)_0 : A^{→(f\kern{0.17em}0)^+})\kern{0.17em}\overset{.}{0}\kern{0.17em}\underline{\kern{0.5em}} &amp; \text{if } α = \lim f
+\end{cases}
+</span></p>
+<pre class="Agda"><a id="_0̇,_"></a><a id="2452" href="Veblen.Transfinitary.html#2452" class="Function Operator">_0̇,_</a> <a id="2458" class="Symbol">:</a> <a id="2460" href="Veblen.Basic.html#5279" class="Generalizable">A</a> <a id="2462" href="Veblen.Transfinitary.html#1015" class="Function Operator">→^</a> <a id="2465" class="InductiveConstructor">suc</a> <a id="2469" href="Veblen.Basic.html#4265" class="Generalizable">α</a> <a id="2471" class="Symbol">→</a> <a id="2473" href="Veblen.Basic.html#5279" class="Generalizable">A</a> <a id="2475" href="Veblen.Transfinitary.html#1015" class="Function Operator">→^</a> <a id="2478" class="Number">1</a>
+<a id="2480" href="Veblen.Transfinitary.html#2452" class="Function Operator">_0̇,_</a> <a id="2486" class="Symbol">{</a><a id="2487" class="Argument">α</a> <a id="2489" class="Symbol">=</a> <a id="2491" href="Veblen.Basic.html#3303" class="InductiveConstructor">zero</a><a id="2495" class="Symbol">}</a> <a id="2497" class="Symbol">=</a> <a id="2499" href="Function.Base.html#704" class="Function">id</a>
+<a id="2502" href="Veblen.Transfinitary.html#2452" class="Function Operator">_0̇,_</a> <a id="2508" class="Symbol">{</a><a id="2509" class="Argument">α</a> <a id="2511" class="Symbol">=</a> <a id="2513" href="Veblen.Basic.html#3316" class="InductiveConstructor">suc</a> <a id="2517" class="Symbol">_}</a> <a id="2520" href="Veblen.Transfinitary.html#2520" class="Bound">F</a> <a id="2522" class="Symbol">=</a> <a id="2524" href="Veblen.Transfinitary.html#2520" class="Bound">F</a> <a id="2526" class="Number">0</a> <a id="2528" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,_</a>
+<a id="2533" href="Veblen.Transfinitary.html#2452" class="Function Operator">_0̇,_</a> <a id="2539" class="Symbol">{</a><a id="2540" class="Argument">α</a> <a id="2542" class="Symbol">=</a> <a id="2544" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="2548" class="Symbol">_}</a> <a id="2551" href="Veblen.Transfinitary.html#2551" class="Bound">F</a> <a id="2553" class="Symbol">=</a> <a id="2555" href="Veblen.Transfinitary.html#2551" class="Bound">F</a> <a id="2557" class="Number">0</a> <a id="2559" class="Symbol">{</a><a id="2560" class="Number">0</a><a id="2561" class="Symbol">}</a> <a id="2563" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,_</a>
+</pre>
+<h2 id="超限元veblen函数">超限元Veblen函数</h2>
+<p><strong>定义</strong> 互递归定义以下3个辅助函数</p>
+<ul>
+<li>后继元辅助函数 <span class="math inline">Φ_{α^+} : \text{Ord}^{→α^+} → \text{Ord}^{→α^{++}}</span></li>
+<li>极限元辅助函数 <span class="math inline">Φ_{\lim f} : \text{Ord}^{→\lim f} → \text{Ord}^{→(f\kern{0.17em}n)^+}</span>
+<ul>
+<li>即 <span class="math inline">(\prod_n \text{Ord}^{→(f\kern{0.17em}n)^+}) → \text{Ord}^{→(f\kern{0.17em}n)^+}</span></li>
+</ul></li>
+<li><span class="math inline">α</span> 元辅助函数 <span class="math inline">Φ^{α} : \text{Ord}^{→1} → \prod_α \text{Ord}^{→α^+}</span></li>
+</ul>
+<pre class="Agda"><a id="Φₛ"></a><a id="2919" href="Veblen.Transfinitary.html#2919" class="Function">Φₛ</a> <a id="2922" class="Symbol">:</a> <a id="2924" href="Veblen.Basic.html#3285" class="Datatype">Ord</a> <a id="2928" href="Veblen.Transfinitary.html#1015" class="Function Operator">→^</a> <a id="2931" class="InductiveConstructor">suc</a> <a id="2935" href="Veblen.Basic.html#4265" class="Generalizable">α</a> <a id="2937" class="Symbol">→</a> <a id="2939" href="Veblen.Basic.html#3285" class="Datatype">Ord</a> <a id="2943" href="Veblen.Transfinitary.html#1015" class="Function Operator">→^</a> <a id="2946" class="InductiveConstructor">2+</a> <a id="2949" href="Veblen.Basic.html#4265" class="Generalizable">α</a>
+<a id="Φₗ"></a><a id="2951" href="Veblen.Transfinitary.html#2951" class="Function">Φₗ</a> <a id="2954" class="Symbol">:</a> <a id="2956" href="Veblen.Basic.html#3285" class="Datatype">Ord</a> <a id="2960" href="Veblen.Transfinitary.html#1015" class="Function Operator">→^</a> <a id="2963" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="2967" href="Veblen.Basic.html#9616" class="Generalizable">f</a> <a id="2969" class="Symbol">→</a> <a id="2971" href="Veblen.Basic.html#3285" class="Datatype">Ord</a> <a id="2975" href="Veblen.Transfinitary.html#1015" class="Function Operator">→^</a> <a id="2978" class="InductiveConstructor">suc</a> <a id="2982" class="Symbol">(</a><a id="2983" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="2987" href="Veblen.Basic.html#9616" class="Generalizable">f</a><a id="2988" class="Symbol">)</a>
+<a id="Φ"></a><a id="2990" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="2992" class="Symbol">:</a> <a id="2994" href="Veblen.Basic.html#3285" class="Datatype">Ord</a> <a id="2998" href="Veblen.Transfinitary.html#1015" class="Function Operator">→^</a> <a id="3001" class="Number">1</a> <a id="3003" class="Symbol">→</a> <a id="3005" class="Symbol">(∀</a> <a id="3008" class="Symbol">{</a><a id="3009" href="Veblen.Transfinitary.html#3009" class="Bound">α</a><a id="3010" class="Symbol">}</a> <a id="3012" class="Symbol">→</a> <a id="3014" href="Veblen.Basic.html#3285" class="Datatype">Ord</a> <a id="3018" href="Veblen.Transfinitary.html#1015" class="Function Operator">→^</a> <a id="3021" class="InductiveConstructor">suc</a> <a id="3025" href="Veblen.Transfinitary.html#3009" class="Bound">α</a><a id="3026" class="Symbol">)</a>
+</pre>
+<p><span class="math display">
+\begin{aligned}
+Φ_{α^+}\kern{0.17em}F &amp;:= \text{rec}\kern{0.17em}F \\
+&amp;\quad (λ φ_{α^+,β}, Φ^{α}\kern{0.17em}(\text{fixpt}\kern{0.17em}(λγ,φ_{α^+,β}\kern{0.17em}γ\kern{0.17em}\overset{.}{0}))) \\
+&amp;\quad (λ φ_{α^+,g\kern{0.17em}n}, Φ^{α}\kern{0.17em}(\text{jump}\kern{0.17em}(λγ,\lim λ n,φ_{α^+,g\kern{0.17em}n}\kern{0.17em}γ\kern{0.17em}\overset{.}{0}))) \\
+\end{aligned}
+</span></p>
+<pre class="Agda"><a id="3420" href="Veblen.Transfinitary.html#2919" class="Function">Φₛ</a> <a id="3423" href="Veblen.Transfinitary.html#3423" class="Bound">F</a> <a id="3425" class="Symbol">=</a> <a id="3427" href="Veblen.Basic.html#9146" class="Function">rec</a> <a id="3431" href="Veblen.Transfinitary.html#3423" class="Bound">F</a>
+  <a id="3435" class="Symbol">(λ</a> <a id="3438" href="Veblen.Transfinitary.html#3438" class="Bound">φ</a> <a id="3440" class="Symbol">→</a> <a id="3442" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="3444" href="Function.Base.html#1974" class="Function Operator">$</a> <a id="3446" href="Veblen.Basic.html#13832" class="Function">fixpt</a> <a id="3452" class="Symbol">λ</a> <a id="3454" href="Veblen.Transfinitary.html#3454" class="Bound">γ</a> <a id="3456" class="Symbol">→</a> <a id="3458" href="Veblen.Transfinitary.html#3438" class="Bound">φ</a> <a id="3460" href="Veblen.Transfinitary.html#3454" class="Bound">γ</a> <a id="3462" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a><a id="3464" class="Symbol">)</a>
+  <a id="3468" class="Symbol">(λ</a> <a id="3471" href="Veblen.Transfinitary.html#3471" class="Bound">φ</a> <a id="3473" class="Symbol">→</a> <a id="3475" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="3477" href="Function.Base.html#1974" class="Function Operator">$</a> <a id="3479" href="Veblen.Basic.html#12327" class="Function">jump</a> <a id="3484" class="Symbol">λ</a> <a id="3486" href="Veblen.Transfinitary.html#3486" class="Bound">γ</a> <a id="3488" class="Symbol">→</a> <a id="3490" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="3494" class="Symbol">λ</a> <a id="3496" href="Veblen.Transfinitary.html#3496" class="Bound">n</a> <a id="3498" class="Symbol">→</a> <a id="3500" href="Veblen.Transfinitary.html#3471" class="Bound">φ</a> <a id="3502" href="Veblen.Transfinitary.html#3496" class="Bound">n</a> <a id="3504" href="Veblen.Transfinitary.html#3486" class="Bound">γ</a> <a id="3506" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a><a id="3508" class="Symbol">)</a>
+</pre>
+<p><span class="math display">
+\begin{aligned}
+Φ_{\lim f}\kern{0.17em}F &amp;:= \text{rec}\kern{0.17em}F \\
+&amp;\quad (λ φ_{\lim f,β} λn , Φ^{f\kern{0.17em}n}\kern{0.17em}(\text{jump}_1\kern{0.17em}(λγ,\lim λ m,φ_{\lim f,β,m}\kern{0.17em}γ\kern{0.17em}\overset{.}{0}))) \\
+&amp;\quad (λ φ_{\lim f,g\kern{0.17em}n} λn , Φ^{f\kern{0.17em}n}\kern{0.17em}(\text{jump}\kern{0.17em}(λγ,\lim λ m,φ_{\lim f,g\kern{0.17em}m,m}\kern{0.17em}γ\kern{0.17em}\overset{.}{0}))) \\
+\end{aligned}
+</span></p>
+<pre class="Agda"><a id="3967" href="Veblen.Transfinitary.html#2951" class="Function">Φₗ</a> <a id="3970" href="Veblen.Transfinitary.html#3970" class="Bound">F</a> <a id="3972" class="Symbol">=</a> <a id="3974" href="Veblen.Basic.html#9146" class="Function">rec</a> <a id="3978" href="Veblen.Transfinitary.html#3970" class="Bound">F</a>
+  <a id="3982" class="Symbol">(λ</a> <a id="3985" href="Veblen.Transfinitary.html#3985" class="Bound">φ</a> <a id="3987" class="Symbol">→</a> <a id="3989" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="3991" href="Function.Base.html#1974" class="Function Operator">$</a> <a id="3993" href="Veblen.Basic.html#12121" class="Function Operator">jump⟨</a> <a id="3999" class="Number">1</a> <a id="4001" href="Veblen.Basic.html#12121" class="Function Operator">⟩</a> <a id="4003" class="Symbol">λ</a> <a id="4005" href="Veblen.Transfinitary.html#4005" class="Bound">γ</a> <a id="4007" class="Symbol">→</a> <a id="4009" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="4013" class="Symbol">λ</a> <a id="4015" href="Veblen.Transfinitary.html#4015" class="Bound">n</a> <a id="4017" class="Symbol">→</a> <a id="4019" href="Veblen.Transfinitary.html#3985" class="Bound">φ</a> <a id="4021" class="Symbol">{</a><a id="4022" href="Veblen.Transfinitary.html#4015" class="Bound">n</a><a id="4023" class="Symbol">}</a> <a id="4025" href="Veblen.Transfinitary.html#4005" class="Bound">γ</a> <a id="4027" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a><a id="4029" class="Symbol">)</a>
+  <a id="4033" class="Symbol">(λ</a> <a id="4036" href="Veblen.Transfinitary.html#4036" class="Bound">φ</a> <a id="4038" class="Symbol">→</a> <a id="4040" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="4042" href="Function.Base.html#1974" class="Function Operator">$</a> <a id="4044" href="Veblen.Basic.html#12327" class="Function">jump</a> <a id="4049" class="Symbol">(λ</a> <a id="4052" href="Veblen.Transfinitary.html#4052" class="Bound">γ</a> <a id="4054" class="Symbol">→</a> <a id="4056" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="4060" class="Symbol">λ</a> <a id="4062" href="Veblen.Transfinitary.html#4062" class="Bound">n</a> <a id="4064" class="Symbol">→</a> <a id="4066" href="Veblen.Transfinitary.html#4036" class="Bound">φ</a> <a id="4068" href="Veblen.Transfinitary.html#4062" class="Bound">n</a> <a id="4070" class="Symbol">{</a><a id="4071" href="Veblen.Transfinitary.html#4062" class="Bound">n</a><a id="4072" class="Symbol">}</a> <a id="4074" href="Veblen.Transfinitary.html#4052" class="Bound">γ</a> <a id="4076" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a><a id="4078" class="Symbol">))</a>
+</pre>
+<p><span class="math display">
+Φ^{α}\kern{0.17em}F := \begin{cases}
+F &amp; \text{if } α = 0 \\
+Φ_{β^+}\kern{0.17em}(Φ^{β}\kern{0.17em}F) &amp; \text{if } α = β^+ \\
+Φ_{\lim f}\kern{0.17em}(λn,Φ^{f\kern{0.17em}n}\kern{0.17em}F) &amp; \text{if } α = \lim f
+\end{cases}
+</span></p>
+<pre class="Agda"><a id="4326" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="4328" href="Veblen.Transfinitary.html#4328" class="Bound">F</a> <a id="4330" class="Symbol">{</a><a id="4331" class="Argument">α</a> <a id="4333" class="Symbol">=</a> <a id="4335" href="Veblen.Basic.html#3303" class="InductiveConstructor">zero</a><a id="4339" class="Symbol">}</a>  <a id="4342" class="Symbol">=</a> <a id="4344" href="Veblen.Transfinitary.html#4328" class="Bound">F</a>
+<a id="4346" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="4348" href="Veblen.Transfinitary.html#4348" class="Bound">F</a> <a id="4350" class="Symbol">{</a><a id="4351" class="Argument">α</a> <a id="4353" class="Symbol">=</a> <a id="4355" href="Veblen.Basic.html#3316" class="InductiveConstructor">suc</a> <a id="4359" href="Veblen.Transfinitary.html#4359" class="Bound">α</a><a id="4360" class="Symbol">}</a> <a id="4362" class="Symbol">=</a> <a id="4364" href="Veblen.Transfinitary.html#2919" class="Function">Φₛ</a> <a id="4367" class="Symbol">(</a><a id="4368" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="4370" href="Veblen.Transfinitary.html#4348" class="Bound">F</a><a id="4371" class="Symbol">)</a>
+<a id="4373" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="4375" href="Veblen.Transfinitary.html#4375" class="Bound">F</a> <a id="4377" class="Symbol">{</a><a id="4378" class="Argument">α</a> <a id="4380" class="Symbol">=</a> <a id="4382" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="4386" href="Veblen.Transfinitary.html#4386" class="Bound">f</a><a id="4387" class="Symbol">}</a> <a id="4389" class="Symbol">=</a> <a id="4391" href="Veblen.Transfinitary.html#2951" class="Function">Φₗ</a> <a id="4394" class="Symbol">(</a><a id="4395" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="4397" href="Veblen.Transfinitary.html#4375" class="Bound">F</a><a id="4398" class="Symbol">)</a>
+</pre>
+<p><strong>定义</strong> 超限元Veblen函数</p>
+<p><span class="math display">
+φ := Φ\kern{0.17em}(λα,ω^α)
+</span></p>
+<pre class="Agda"><a id="φ"></a><a id="4468" href="Veblen.Transfinitary.html#4468" class="Function">φ</a> <a id="4470" class="Symbol">:</a> <a id="4472" class="Symbol">∀</a> <a id="4474" class="Symbol">{</a><a id="4475" href="Veblen.Transfinitary.html#4475" class="Bound">α</a><a id="4476" class="Symbol">}</a> <a id="4478" class="Symbol">→</a> <a id="4480" href="Veblen.Basic.html#3285" class="Datatype">Ord</a> <a id="4484" href="Veblen.Transfinitary.html#1015" class="Function Operator">→^</a> <a id="4487" class="InductiveConstructor">suc</a> <a id="4491" href="Veblen.Transfinitary.html#4475" class="Bound">α</a>
+<a id="4493" href="Veblen.Transfinitary.html#4468" class="Function">φ</a> <a id="4495" class="Symbol">=</a> <a id="4497" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="4499" class="Symbol">(</a><a id="4500" href="Veblen.Basic.html#4732" class="Function">ω</a> <a id="4502" href="Veblen.Basic.html#11363" class="Function Operator">^_</a><a id="4504" class="Symbol">)</a>
+</pre>
+<p><strong>例</strong> 容易验证</p>
+<p><span class="math display">
+\begin{aligned}
+φ_{0} &amp;= \text{Fin.}φ\kern{0.17em}0 \\
+φ_{1} &amp;= \text{Fin.}φ\kern{0.17em}1 \\
+φ_{2} &amp;= \text{Fin.}φ\kern{0.17em}2 \\
+\end{aligned}
+</span></p>
+<pre class="Agda"><a id="4685" class="Keyword">import</a> <a id="4692" href="Veblen.Finitary.html" class="Module">Veblen.Finitary</a> <a id="4708" class="Symbol">as</a> <a id="4711" class="Module">Fin</a>
+
+<a id="φ₀"></a><a id="4716" href="Veblen.Transfinitary.html#4716" class="Function">φ₀</a> <a id="4719" class="Symbol">:</a> <a id="4721" href="Veblen.Transfinitary.html#4468" class="Function">φ</a> <a id="4723" class="Symbol">{</a><a id="4724" class="Number">0</a><a id="4725" class="Symbol">}</a> <a id="4727" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="4729" href="Veblen.Finitary.html#6759" class="Function">Fin.φ</a> <a id="4735" class="Number">0</a>
+<a id="4737" href="Veblen.Transfinitary.html#4716" class="Function">φ₀</a> <a id="4740" class="Symbol">=</a> <a id="4742" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+
+<a id="φ₁"></a><a id="4748" href="Veblen.Transfinitary.html#4748" class="Function">φ₁</a> <a id="4751" class="Symbol">:</a> <a id="4753" href="Veblen.Transfinitary.html#4468" class="Function">φ</a> <a id="4755" class="Symbol">{</a><a id="4756" class="Number">1</a><a id="4757" class="Symbol">}</a> <a id="4759" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="4761" href="Veblen.Finitary.html#6759" class="Function">Fin.φ</a> <a id="4767" class="Number">1</a>
+<a id="4769" href="Veblen.Transfinitary.html#4748" class="Function">φ₁</a> <a id="4772" class="Symbol">=</a> <a id="4774" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+
+<a id="φ₂"></a><a id="4780" href="Veblen.Transfinitary.html#4780" class="Function">φ₂</a> <a id="4783" class="Symbol">:</a> <a id="4785" href="Veblen.Transfinitary.html#4468" class="Function">φ</a> <a id="4787" class="Symbol">{</a><a id="4788" class="Number">2</a><a id="4789" class="Symbol">}</a> <a id="4791" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="4793" href="Veblen.Finitary.html#6759" class="Function">Fin.φ</a> <a id="4799" class="Number">2</a>
+<a id="4801" href="Veblen.Transfinitary.html#4780" class="Function">φ₂</a> <a id="4804" class="Symbol">=</a> <a id="4806" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p>后文我们补上一种容易阅读的非形式记法——双行有限列矩阵: 第一行是所有非零参数, 第二行是参数的序号. 如 <span class="math inline">φ_{2}\kern{0.17em}2\kern{0.17em}1\kern{0.17em}0</span> 写作 <span class="math inline">\begin{pmatrix}2&amp;1\\2&amp;1\end{pmatrix}</span>.</p>
+<p><strong>引理</strong> 非零参数可以省去:</p>
+<p><span class="math display">
+Φ^α\kern{0.17em}F\kern{0.17em}\overset{.}{0}\kern{0.17em}\underline{\kern{0.5em}} = F
+</span></p>
+<p>即</p>
+<p><span class="math display">
+\begin{pmatrix}
+...&amp;0\\
+...&amp;α
+\end{pmatrix}
+=
+\begin{pmatrix}
+...\\
+...
+\end{pmatrix}
+</span></p>
+<pre class="Agda"><a id="Φ-ż-α"></a><a id="5179" href="Veblen.Transfinitary.html#5179" class="Function">Φ-ż-α</a> <a id="5186" class="Symbol">:</a> <a id="5188" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="5190" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="5192" class="Symbol">{</a><a id="5193" href="Veblen.Basic.html#4265" class="Generalizable">α</a><a id="5194" class="Symbol">}</a> <a id="5196" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,_</a> <a id="5201" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="5203" href="Veblen.Basic.html#9600" class="Generalizable">F</a>
+<a id="5205" href="Veblen.Transfinitary.html#5179" class="Function">Φ-ż-α</a> <a id="5212" class="Symbol">{</a><a id="5213" class="Argument">α</a> <a id="5215" class="Symbol">=</a> <a id="5217" href="Veblen.Basic.html#3303" class="InductiveConstructor">zero</a><a id="5221" class="Symbol">}</a> <a id="5223" class="Symbol">=</a> <a id="5225" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+<a id="5230" href="Veblen.Transfinitary.html#5179" class="Function">Φ-ż-α</a> <a id="5237" class="Symbol">{</a><a id="5238" class="Argument">α</a> <a id="5240" class="Symbol">=</a> <a id="5242" href="Veblen.Basic.html#3316" class="InductiveConstructor">suc</a> <a id="5246" href="Veblen.Transfinitary.html#5246" class="Bound">α</a><a id="5247" class="Symbol">}</a> <a id="5249" class="Symbol">=</a> <a id="5251" href="Veblen.Transfinitary.html#5179" class="Function">Φ-ż-α</a> <a id="5258" class="Symbol">{</a><a id="5259" class="Argument">α</a> <a id="5261" class="Symbol">=</a> <a id="5263" href="Veblen.Transfinitary.html#5246" class="Bound">α</a><a id="5264" class="Symbol">}</a>
+<a id="5266" href="Veblen.Transfinitary.html#5179" class="Function">Φ-ż-α</a> <a id="5273" class="Symbol">{</a><a id="5274" class="Argument">α</a> <a id="5276" class="Symbol">=</a> <a id="5278" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="5282" href="Veblen.Transfinitary.html#5282" class="Bound">f</a><a id="5283" class="Symbol">}</a> <a id="5285" class="Symbol">=</a> <a id="5287" href="Veblen.Transfinitary.html#5179" class="Function">Φ-ż-α</a> <a id="5294" class="Symbol">{</a><a id="5295" class="Argument">α</a> <a id="5297" class="Symbol">=</a> <a id="5299" href="Veblen.Transfinitary.html#5282" class="Bound">f</a> <a id="5301" class="Number">0</a><a id="5302" class="Symbol">}</a>
+<a id="5304" class="Symbol">{-#</a> <a id="5308" class="Keyword">REWRITE</a> <a id="5316" href="Veblen.Transfinitary.html#5179" class="Function">Φ-ż-α</a> <a id="5323" class="Symbol">#-}</a>
+</pre>
+<p>Agda 编程上, 我们将以上引理声明为新的重写规则, 以方便证明以下定理.</p>
+<p><strong>定理</strong> 计算模式 (后继元五条加极限元五条, 共十条)</p>
+<p><span class="math display">
+Φ^{α^+}\kern{0.17em}F\kern{0.17em}β^+\kern{0.17em}\overset{.}{0}\kern{0.17em}0 = (λγ,Φ^{α^+}\kern{0.17em}F\kern{0.17em}β\kern{0.17em}γ\kern{0.17em}\overset{.}{0})^ω\kern{0.17em}0
+</span></p>
+<p><span class="math display">
+\begin{pmatrix}
+...&amp;β^+\\
+...&amp;α^+
+\end{pmatrix}
+=
+\begin{pmatrix}
+...&amp;λ\\
+...&amp;α^+
+\end{pmatrix}^ω\kern{0.17em}0
+=
+\begin{pmatrix}
+...&amp;\begin{pmatrix}
+...&amp;_⋰\begin{pmatrix}
+...&amp;0\\
+...&amp;α^+
+\end{pmatrix}\\
+...&amp;α^+
+\end{pmatrix}\\
+...&amp;α^+
+\end{pmatrix}
+</span></p>
+<pre class="Agda"><a id="Φₛ-s-ż-z"></a><a id="5855" href="Veblen.Transfinitary.html#5855" class="Function">Φₛ-s-ż-z</a> <a id="5865" class="Symbol">:</a> <a id="5867" class="Symbol">(</a><a id="5868" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="5870" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="5872" class="Symbol">{</a><a id="5873" class="InductiveConstructor">suc</a> <a id="5877" href="Veblen.Basic.html#4265" class="Generalizable">α</a><a id="5878" class="Symbol">}</a> <a id="5880" class="Symbol">(</a><a id="5881" class="InductiveConstructor">suc</a> <a id="5885" href="Veblen.Basic.html#4267" class="Generalizable">β</a><a id="5886" class="Symbol">)</a> <a id="5888" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,</a> <a id="5892" class="Number">0</a><a id="5893" class="Symbol">)</a> <a id="5895" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="5897" href="Veblen.Basic.html#11736" class="Function">iterω</a> <a id="5903" class="Symbol">(λ</a> <a id="5906" href="Veblen.Transfinitary.html#5906" class="Bound">γ</a> <a id="5908" class="Symbol">→</a> <a id="5910" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="5912" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="5914" class="Symbol">{</a><a id="5915" class="InductiveConstructor">suc</a> <a id="5919" href="Veblen.Basic.html#4265" class="Generalizable">α</a><a id="5920" class="Symbol">}</a> <a id="5922" href="Veblen.Basic.html#4267" class="Generalizable">β</a> <a id="5924" href="Veblen.Transfinitary.html#5906" class="Bound">γ</a> <a id="5926" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a><a id="5928" class="Symbol">)</a> <a id="5930" class="Number">0</a>
+<a id="5932" href="Veblen.Transfinitary.html#5855" class="Function">Φₛ-s-ż-z</a> <a id="5942" class="Symbol">=</a> <a id="5944" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><span class="math display">
+Φ^{α^+}\kern{0.17em}F\kern{0.17em}β^+\kern{0.17em}\overset{.}{0}\kern{0.17em}γ^+ = (λγ,Φ^{α^+}\kern{0.17em}F\kern{0.17em}β\kern{0.17em}γ\kern{0.17em}\overset{.}{0})^ω\kern{0.17em}(Φ^{α^+}\kern{0.17em}F\kern{0.17em}β^+\kern{0.17em}\overset{.}{0}\kern{0.17em}γ)^+
+</span></p>
+<p><span class="math display">
+\begin{pmatrix}
+...&amp;β^+&amp;γ^+\\
+...&amp;α^+&amp;0
+\end{pmatrix}
+=
+\begin{pmatrix}
+...&amp;β&amp;λ\\
+...&amp;α^+&amp;α
+\end{pmatrix}^ω\kern{0.17em}
+\begin{pmatrix}
+...&amp;β^+&amp;γ\\
+...&amp;α^+&amp;0
+\end{pmatrix}^+
+</span></p>
+<pre class="Agda"><a id="Φₛ-s-ż-s"></a><a id="6413" href="Veblen.Transfinitary.html#6413" class="Function">Φₛ-s-ż-s</a> <a id="6423" class="Symbol">:</a> <a id="6425" class="Symbol">(</a><a id="6426" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="6428" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="6430" class="Symbol">{</a><a id="6431" class="InductiveConstructor">suc</a> <a id="6435" href="Veblen.Basic.html#4265" class="Generalizable">α</a><a id="6436" class="Symbol">}</a> <a id="6438" class="Symbol">(</a><a id="6439" class="InductiveConstructor">suc</a> <a id="6443" href="Veblen.Basic.html#4267" class="Generalizable">β</a><a id="6444" class="Symbol">)</a> <a id="6446" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,</a> <a id="6450" class="InductiveConstructor">suc</a> <a id="6454" href="Veblen.Basic.html#4269" class="Generalizable">γ</a><a id="6455" class="Symbol">)</a> <a id="6457" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="6459" href="Veblen.Basic.html#11736" class="Function">iterω</a> <a id="6465" class="Symbol">(λ</a> <a id="6468" href="Veblen.Transfinitary.html#6468" class="Bound">γ</a> <a id="6470" class="Symbol">→</a> <a id="6472" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="6474" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="6476" class="Symbol">{</a><a id="6477" class="InductiveConstructor">suc</a> <a id="6481" href="Veblen.Basic.html#4265" class="Generalizable">α</a><a id="6482" class="Symbol">}</a> <a id="6484" href="Veblen.Basic.html#4267" class="Generalizable">β</a> <a id="6486" href="Veblen.Transfinitary.html#6468" class="Bound">γ</a> <a id="6488" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a><a id="6490" class="Symbol">)</a> <a id="6492" class="Symbol">(</a><a id="6493" class="InductiveConstructor">suc</a> <a id="6497" class="Symbol">(</a><a id="6498" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="6500" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="6502" class="Symbol">{</a><a id="6503" class="InductiveConstructor">suc</a> <a id="6507" href="Veblen.Basic.html#4265" class="Generalizable">α</a><a id="6508" class="Symbol">}</a> <a id="6510" class="Symbol">(</a><a id="6511" class="InductiveConstructor">suc</a> <a id="6515" href="Veblen.Basic.html#4267" class="Generalizable">β</a><a id="6516" class="Symbol">)</a> <a id="6518" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,</a> <a id="6522" href="Veblen.Basic.html#4269" class="Generalizable">γ</a><a id="6523" class="Symbol">))</a>
+<a id="6526" href="Veblen.Transfinitary.html#6413" class="Function">Φₛ-s-ż-s</a> <a id="6536" class="Symbol">=</a> <a id="6538" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><span class="math display">
+Φ^{α^+}\kern{0.17em}F\kern{0.17em}(\lim g)\kern{0.17em}\overset{.}{0}\kern{0.17em}0 = \lim λ n,Φ^{α^+}\kern{0.17em}F\kern{0.17em}(g\kern{0.17em}n)\kern{0.17em}0\kern{0.17em}\overset{.}{0}
+</span></p>
+<p><span class="math display">
+\begin{pmatrix}
+...&amp;\lim g\\
+...&amp;α^+
+\end{pmatrix}
+=
+\lim λn,\begin{pmatrix}
+...&amp;g\kern{0.17em}n\\
+...&amp;α^+
+\end{pmatrix}
+</span></p>
+<pre class="Agda"><a id="Φₛ-l-ż-z"></a><a id="6879" href="Veblen.Transfinitary.html#6879" class="Function">Φₛ-l-ż-z</a> <a id="6889" class="Symbol">:</a> <a id="6891" class="Symbol">(</a><a id="6892" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="6894" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="6896" class="Symbol">{</a><a id="6897" class="InductiveConstructor">suc</a> <a id="6901" href="Veblen.Basic.html#4265" class="Generalizable">α</a><a id="6902" class="Symbol">}</a> <a id="6904" class="Symbol">(</a><a id="6905" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="6909" href="Veblen.Basic.html#9618" class="Generalizable">g</a><a id="6910" class="Symbol">)</a> <a id="6912" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,</a> <a id="6916" class="Number">0</a><a id="6917" class="Symbol">)</a> <a id="6919" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="6921" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="6925" class="Symbol">λ</a> <a id="6927" href="Veblen.Transfinitary.html#6927" class="Bound">n</a> <a id="6929" class="Symbol">→</a> <a id="6931" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="6933" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="6935" class="Symbol">{</a><a id="6936" class="InductiveConstructor">suc</a> <a id="6940" href="Veblen.Basic.html#4265" class="Generalizable">α</a><a id="6941" class="Symbol">}</a> <a id="6943" class="Symbol">(</a><a id="6944" href="Veblen.Basic.html#9618" class="Generalizable">g</a> <a id="6946" href="Veblen.Transfinitary.html#6927" class="Bound">n</a><a id="6947" class="Symbol">)</a> <a id="6949" class="Number">0</a> <a id="6951" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a>
+<a id="6954" href="Veblen.Transfinitary.html#6879" class="Function">Φₛ-l-ż-z</a> <a id="6964" class="Symbol">=</a> <a id="6966" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><span class="math display">
+Φ^{α^+}\kern{0.17em}F\kern{0.17em}(\lim g)\kern{0.17em}\overset{.}{0}\kern{0.17em}γ^+ = \lim λ n,Φ^{α^+}\kern{0.17em}F\kern{0.17em}(g\kern{0.17em}n)\kern{0.17em}(Φ^{α^+}\kern{0.17em}F\kern{0.17em}(\lim g)\kern{0.17em}\overset{.}{0}\kern{0.17em}γ)^+\kern{0.17em}\overset{.}{0}
+</span></p>
+<p><span class="math display">
+\begin{pmatrix}
+...&amp;\lim g&amp;γ^+\\
+...&amp;α^+&amp;0
+\end{pmatrix}
+=
+\lim λn,\begin{pmatrix}
+...&amp;g\kern{0.17em}n&amp;
+  \begin{pmatrix}
+  ...&amp;\lim g&amp;γ\\
+  ...&amp;α^+&amp;0
+  \end{pmatrix}^+\\
+...&amp;α^+&amp;α
+\end{pmatrix}
+</span></p>
+<pre class="Agda"><a id="Φₛ-l-ż-s"></a><a id="7469" href="Veblen.Transfinitary.html#7469" class="Function">Φₛ-l-ż-s</a> <a id="7479" class="Symbol">:</a> <a id="7481" class="Symbol">(</a><a id="7482" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="7484" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="7486" class="Symbol">{</a><a id="7487" class="InductiveConstructor">suc</a> <a id="7491" href="Veblen.Basic.html#4265" class="Generalizable">α</a><a id="7492" class="Symbol">}</a> <a id="7494" class="Symbol">(</a><a id="7495" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="7499" href="Veblen.Basic.html#9618" class="Generalizable">g</a><a id="7500" class="Symbol">)</a> <a id="7502" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,</a> <a id="7506" class="InductiveConstructor">suc</a> <a id="7510" href="Veblen.Basic.html#4269" class="Generalizable">γ</a><a id="7511" class="Symbol">)</a> <a id="7513" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="7515" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="7519" class="Symbol">λ</a> <a id="7521" href="Veblen.Transfinitary.html#7521" class="Bound">n</a> <a id="7523" class="Symbol">→</a> <a id="7525" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="7527" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="7529" class="Symbol">{</a><a id="7530" class="InductiveConstructor">suc</a> <a id="7534" href="Veblen.Basic.html#4265" class="Generalizable">α</a><a id="7535" class="Symbol">}</a> <a id="7537" class="Symbol">(</a><a id="7538" href="Veblen.Basic.html#9618" class="Generalizable">g</a> <a id="7540" href="Veblen.Transfinitary.html#7521" class="Bound">n</a><a id="7541" class="Symbol">)</a> <a id="7543" class="Symbol">(</a><a id="7544" class="InductiveConstructor">suc</a> <a id="7548" class="Symbol">(</a><a id="7549" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="7551" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="7553" class="Symbol">{</a><a id="7554" class="InductiveConstructor">suc</a> <a id="7558" href="Veblen.Basic.html#4265" class="Generalizable">α</a><a id="7559" class="Symbol">}</a> <a id="7561" class="Symbol">(</a><a id="7562" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="7566" href="Veblen.Basic.html#9618" class="Generalizable">g</a><a id="7567" class="Symbol">)</a> <a id="7569" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,</a> <a id="7573" href="Veblen.Basic.html#4269" class="Generalizable">γ</a><a id="7574" class="Symbol">))</a> <a id="7577" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a>
+<a id="7580" href="Veblen.Transfinitary.html#7469" class="Function">Φₛ-l-ż-s</a> <a id="7590" class="Symbol">=</a> <a id="7592" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><span class="math display">
+Φ^{\lim f}\kern{0.17em}F\kern{0.17em}β^+\kern{0.17em}\overset{.}{0}\kern{0.17em}0
+=
+\lim λ n,(Φ^{\lim f}\kern{0.17em}F\kern{0.17em}β)_n\kern{0.17em}1\kern{0.17em}\overset{.}{0}
+</span></p>
+<p><span class="math display">
+\begin{pmatrix}
+...&amp;β^+\\
+...&amp;\lim f
+\end{pmatrix}
+=
+\lim λ n,\begin{pmatrix}
+...&amp;β&amp;1\\
+...&amp;\lim f&amp;f\kern{0.17em}n
+\end{pmatrix}
+</span></p>
+<pre class="Agda"><a id="Φₗ-s-ż-z"></a><a id="7930" href="Veblen.Transfinitary.html#7930" class="Function">Φₗ-s-ż-z</a> <a id="7940" class="Symbol">:</a> <a id="7942" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="7944" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="7946" class="Symbol">{</a><a id="7947" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="7951" href="Veblen.Basic.html#9616" class="Generalizable">f</a><a id="7952" class="Symbol">}</a> <a id="7954" class="Symbol">(</a><a id="7955" class="InductiveConstructor">suc</a> <a id="7959" href="Veblen.Basic.html#4267" class="Generalizable">β</a><a id="7960" class="Symbol">)</a> <a id="7962" class="Symbol">{</a><a id="7963" href="Veblen.Basic.html#4283" class="Generalizable">n</a><a id="7964" class="Symbol">}</a> <a id="7966" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,</a> <a id="7970" class="Number">0</a> <a id="7972" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="7974" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="7978" class="Symbol">λ</a> <a id="7980" href="Veblen.Transfinitary.html#7980" class="Bound">n</a> <a id="7982" class="Symbol">→</a> <a id="7984" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="7986" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="7988" class="Symbol">{</a><a id="7989" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="7993" href="Veblen.Basic.html#9616" class="Generalizable">f</a><a id="7994" class="Symbol">}</a> <a id="7996" href="Veblen.Basic.html#4267" class="Generalizable">β</a> <a id="7998" class="Symbol">{</a><a id="7999" href="Veblen.Transfinitary.html#7980" class="Bound">n</a><a id="8000" class="Symbol">}</a> <a id="8002" class="Number">1</a> <a id="8004" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a>
+<a id="8007" href="Veblen.Transfinitary.html#7930" class="Function">Φₗ-s-ż-z</a> <a id="8017" class="Symbol">=</a> <a id="8019" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><span class="math display">
+Φ^{\lim f}\kern{0.17em}F\kern{0.17em}β^+\kern{0.17em}\overset{.}{0}\kern{0.17em}γ^+
+=
+\lim λ n,(Φ^{\lim f}\kern{0.17em}F\kern{0.17em}β)_n\kern{0.17em}(Φ^{\lim f}\kern{0.17em}F\kern{0.17em}β^+\kern{0.17em}\overset{.}{0}\kern{0.17em}γ)^+\kern{0.17em}\overset{.}{0}
+</span></p>
+<p><span class="math display">
+\begin{pmatrix}
+...&amp;β^+&amp;γ^+\\
+...&amp;\lim f&amp;0
+\end{pmatrix}
+=
+\lim λ n,\begin{pmatrix}
+...&amp;β&amp;
+  \begin{pmatrix}
+  ...&amp;β^+&amp;γ\\
+  ...&amp;\lim f&amp;0
+  \end{pmatrix}^+
+\\
+...&amp;\lim f&amp;f\kern{0.17em}n
+\end{pmatrix}
+</span></p>
+<pre class="Agda"><a id="Φₗ-s-ż-s"></a><a id="8514" href="Veblen.Transfinitary.html#8514" class="Function">Φₗ-s-ż-s</a> <a id="8524" class="Symbol">:</a> <a id="8526" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="8528" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="8530" class="Symbol">{</a><a id="8531" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="8535" href="Veblen.Basic.html#9616" class="Generalizable">f</a><a id="8536" class="Symbol">}</a> <a id="8538" class="Symbol">(</a><a id="8539" class="InductiveConstructor">suc</a> <a id="8543" href="Veblen.Basic.html#4267" class="Generalizable">β</a><a id="8544" class="Symbol">)</a> <a id="8546" class="Symbol">{</a><a id="8547" href="Veblen.Basic.html#4283" class="Generalizable">n</a><a id="8548" class="Symbol">}</a> <a id="8550" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,</a> <a id="8554" class="InductiveConstructor">suc</a> <a id="8558" href="Veblen.Basic.html#4269" class="Generalizable">γ</a> <a id="8560" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="8562" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="8566" class="Symbol">λ</a> <a id="8568" href="Veblen.Transfinitary.html#8568" class="Bound">n</a> <a id="8570" class="Symbol">→</a> <a id="8572" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="8574" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="8576" class="Symbol">{</a><a id="8577" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="8581" href="Veblen.Basic.html#9616" class="Generalizable">f</a><a id="8582" class="Symbol">}</a> <a id="8584" href="Veblen.Basic.html#4267" class="Generalizable">β</a> <a id="8586" class="Symbol">{</a><a id="8587" href="Veblen.Transfinitary.html#8568" class="Bound">n</a><a id="8588" class="Symbol">}</a> <a id="8590" class="Symbol">(</a><a id="8591" class="InductiveConstructor">suc</a> <a id="8595" class="Symbol">(</a><a id="8596" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="8598" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="8600" class="Symbol">{</a><a id="8601" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="8605" href="Veblen.Basic.html#9616" class="Generalizable">f</a><a id="8606" class="Symbol">}</a> <a id="8608" class="Symbol">(</a><a id="8609" class="InductiveConstructor">suc</a> <a id="8613" href="Veblen.Basic.html#4267" class="Generalizable">β</a><a id="8614" class="Symbol">)</a> <a id="8616" class="Symbol">{</a><a id="8617" href="Veblen.Transfinitary.html#8568" class="Bound">n</a><a id="8618" class="Symbol">}</a> <a id="8620" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,</a> <a id="8624" href="Veblen.Basic.html#4269" class="Generalizable">γ</a><a id="8625" class="Symbol">))</a> <a id="8628" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a>
+<a id="8631" href="Veblen.Transfinitary.html#8514" class="Function">Φₗ-s-ż-s</a> <a id="8641" class="Symbol">=</a> <a id="8643" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><span class="math display">
+Φ^{\lim f}\kern{0.17em}F\kern{0.17em}(\lim g)\kern{0.17em}\overset{.}{0}\kern{0.17em}0
+=
+\lim λ n,Φ^{\lim f}\kern{0.17em}F\kern{0.17em}(g\kern{0.17em}n)\kern{0.17em}0\kern{0.17em}\overset{.}{0}
+</span></p>
+<p><span class="math display">
+\begin{pmatrix}
+...&amp;\lim g\\
+...&amp;\lim f
+\end{pmatrix}
+=
+\lim λ n,\begin{pmatrix}
+...&amp;g\kern{0.17em}n\\
+...&amp;\lim f
+\end{pmatrix}
+</span></p>
+<pre class="Agda"><a id="Φₗ-l-ż-z"></a><a id="8997" href="Veblen.Transfinitary.html#8997" class="Function">Φₗ-l-ż-z</a> <a id="9007" class="Symbol">:</a> <a id="9009" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="9011" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="9013" class="Symbol">{</a><a id="9014" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="9018" href="Veblen.Basic.html#9616" class="Generalizable">f</a><a id="9019" class="Symbol">}</a> <a id="9021" class="Symbol">(</a><a id="9022" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="9026" href="Veblen.Basic.html#9618" class="Generalizable">g</a><a id="9027" class="Symbol">)</a> <a id="9029" class="Symbol">{</a><a id="9030" href="Veblen.Basic.html#4283" class="Generalizable">n</a><a id="9031" class="Symbol">}</a> <a id="9033" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,</a> <a id="9037" class="Number">0</a> <a id="9039" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="9041" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="9045" class="Symbol">λ</a> <a id="9047" href="Veblen.Transfinitary.html#9047" class="Bound">n</a> <a id="9049" class="Symbol">→</a> <a id="9051" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="9053" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="9055" class="Symbol">{</a><a id="9056" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="9060" href="Veblen.Basic.html#9616" class="Generalizable">f</a><a id="9061" class="Symbol">}</a> <a id="9063" class="Symbol">(</a><a id="9064" href="Veblen.Basic.html#9618" class="Generalizable">g</a> <a id="9066" href="Veblen.Transfinitary.html#9047" class="Bound">n</a><a id="9067" class="Symbol">)</a> <a id="9069" class="Symbol">{</a><a id="9070" href="Veblen.Transfinitary.html#9047" class="Bound">n</a><a id="9071" class="Symbol">}</a> <a id="9073" class="Number">0</a> <a id="9075" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a>
+<a id="9078" href="Veblen.Transfinitary.html#8997" class="Function">Φₗ-l-ż-z</a> <a id="9088" class="Symbol">=</a> <a id="9090" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><span class="math display">
+Φ^{\lim f}\kern{0.17em}F\kern{0.17em}(\lim g)\kern{0.17em}\overset{.}{0}\kern{0.17em}γ^+
+=
+\lim λ n,Φ^{\lim f}\kern{0.17em}F\kern{0.17em}(g\kern{0.17em}n)\kern{0.17em}(Φ^{\lim f}\kern{0.17em}F\kern{0.17em}(\lim g)\kern{0.17em}\overset{.}{0}\kern{0.17em}γ)^+\kern{0.17em}\overset{.}{0}
+</span></p>
+<p><span class="math display">
+\begin{pmatrix}
+...&amp;\lim g&amp;γ^+\\
+...&amp;\lim f&amp;0
+\end{pmatrix}
+=
+\lim λ n,\begin{pmatrix}
+...&amp;g\kern{0.17em}n&amp;
+  \begin{pmatrix}
+  ...&amp;\lim g&amp;γ\\
+  ...&amp;\lim f&amp;0
+  \end{pmatrix}^+
+\\
+...&amp;\lim f&amp;f\kern{0.17em}n
+\end{pmatrix}
+</span></p>
+<pre class="Agda"><a id="Φₗ-l-ż-s"></a><a id="9627" href="Veblen.Transfinitary.html#9627" class="Function">Φₗ-l-ż-s</a> <a id="9637" class="Symbol">:</a> <a id="9639" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="9641" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="9643" class="Symbol">{</a><a id="9644" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="9648" href="Veblen.Basic.html#9616" class="Generalizable">f</a><a id="9649" class="Symbol">}</a> <a id="9651" class="Symbol">(</a><a id="9652" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="9656" href="Veblen.Basic.html#9618" class="Generalizable">g</a><a id="9657" class="Symbol">)</a> <a id="9659" class="Symbol">{</a><a id="9660" href="Veblen.Basic.html#4283" class="Generalizable">n</a><a id="9661" class="Symbol">}</a> <a id="9663" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,</a> <a id="9667" class="InductiveConstructor">suc</a> <a id="9671" href="Veblen.Basic.html#4269" class="Generalizable">γ</a> <a id="9673" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="9675" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="9679" class="Symbol">λ</a> <a id="9681" href="Veblen.Transfinitary.html#9681" class="Bound">n</a> <a id="9683" class="Symbol">→</a> <a id="9685" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="9687" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="9689" class="Symbol">{</a><a id="9690" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="9694" href="Veblen.Basic.html#9616" class="Generalizable">f</a><a id="9695" class="Symbol">}</a> <a id="9697" class="Symbol">(</a><a id="9698" href="Veblen.Basic.html#9618" class="Generalizable">g</a> <a id="9700" href="Veblen.Transfinitary.html#9681" class="Bound">n</a><a id="9701" class="Symbol">)</a> <a id="9703" class="Symbol">{</a><a id="9704" href="Veblen.Transfinitary.html#9681" class="Bound">n</a><a id="9705" class="Symbol">}</a> <a id="9707" class="Symbol">(</a><a id="9708" class="InductiveConstructor">suc</a> <a id="9712" class="Symbol">(</a><a id="9713" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="9715" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="9717" class="Symbol">{</a><a id="9718" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="9722" href="Veblen.Basic.html#9616" class="Generalizable">f</a><a id="9723" class="Symbol">}</a> <a id="9725" class="Symbol">(</a><a id="9726" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="9730" href="Veblen.Basic.html#9618" class="Generalizable">g</a><a id="9731" class="Symbol">)</a> <a id="9733" class="Symbol">{</a><a id="9734" href="Veblen.Transfinitary.html#9681" class="Bound">n</a><a id="9735" class="Symbol">}</a> <a id="9737" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,</a> <a id="9741" href="Veblen.Basic.html#4269" class="Generalizable">γ</a><a id="9742" class="Symbol">))</a> <a id="9745" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a>
+<a id="9748" href="Veblen.Transfinitary.html#9627" class="Function">Φₗ-l-ż-s</a> <a id="9758" class="Symbol">=</a> <a id="9760" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><span class="math display">
+Φ^{α^+}\kern{0.17em}F\kern{0.17em}β\kern{0.17em}\overset{.}{0}\kern{0.17em}(\lim g)
+=
+\lim λn,Φ^{α^+}\kern{0.17em}F\kern{0.17em}β\kern{0.17em}\overset{.}{0}\kern{0.17em}(g\kern{0.17em}n)
+</span></p>
+<p><span class="math display">
+\begin{pmatrix}
+...&amp;β&amp;\lim g\\
+...&amp;α^+&amp;0
+\end{pmatrix}
+=
+\lim λn,\begin{pmatrix}
+...&amp;β&amp;g\kern{0.17em}n\\
+...&amp;α^+&amp;0
+\end{pmatrix}
+</span></p>
+<p>只要</p>
+<p><span class="math display">
+F\kern{0.17em}(\lim g) = \lim λ n,F\kern{0.17em}(g\kern{0.17em}n)
+</span></p>
+<pre class="Agda"><a id="Φₛ-β-ż-l"></a><a id="10185" href="Veblen.Transfinitary.html#10185" class="Function">Φₛ-β-ż-l</a> <a id="10195" class="Symbol">:</a> <a id="10197" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="10199" class="Symbol">(</a><a id="10200" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="10204" href="Veblen.Basic.html#9618" class="Generalizable">g</a><a id="10205" class="Symbol">)</a> <a id="10207" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="10209" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="10213" class="Symbol">(λ</a> <a id="10216" href="Veblen.Transfinitary.html#10216" class="Bound">n</a> <a id="10218" class="Symbol">→</a> <a id="10220" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="10222" class="Symbol">(</a><a id="10223" href="Veblen.Basic.html#9618" class="Generalizable">g</a> <a id="10225" href="Veblen.Transfinitary.html#10216" class="Bound">n</a><a id="10226" class="Symbol">))</a>
+  <a id="10231" class="Symbol">→</a> <a id="10233" class="Symbol">(</a><a id="10234" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="10236" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="10238" class="Symbol">{</a><a id="10239" class="InductiveConstructor">suc</a> <a id="10243" href="Veblen.Basic.html#4265" class="Generalizable">α</a><a id="10244" class="Symbol">}</a> <a id="10246" href="Veblen.Basic.html#4267" class="Generalizable">β</a> <a id="10248" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,</a> <a id="10252" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="10256" href="Veblen.Basic.html#9618" class="Generalizable">g</a><a id="10257" class="Symbol">)</a> <a id="10259" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="10261" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="10265" class="Symbol">λ</a> <a id="10267" href="Veblen.Transfinitary.html#10267" class="Bound">n</a> <a id="10269" class="Symbol">→</a> <a id="10271" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="10273" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="10275" class="Symbol">{</a><a id="10276" class="InductiveConstructor">suc</a> <a id="10280" href="Veblen.Basic.html#4265" class="Generalizable">α</a><a id="10281" class="Symbol">}</a> <a id="10283" href="Veblen.Basic.html#4267" class="Generalizable">β</a> <a id="10285" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,</a> <a id="10289" href="Veblen.Basic.html#9618" class="Generalizable">g</a> <a id="10291" href="Veblen.Transfinitary.html#10267" class="Bound">n</a>
+<a id="10293" href="Veblen.Transfinitary.html#10185" class="Function">Φₛ-β-ż-l</a> <a id="10303" class="Symbol">{</a><a id="10304" class="Argument">β</a> <a id="10306" class="Symbol">=</a> <a id="10308" href="Veblen.Basic.html#3303" class="InductiveConstructor">zero</a><a id="10312" class="Symbol">}</a> <a id="10314" class="Symbol">=</a> <a id="10316" href="Function.Base.html#704" class="Function">id</a>
+<a id="10319" href="Veblen.Transfinitary.html#10185" class="Function">Φₛ-β-ż-l</a> <a id="10329" class="Symbol">{</a><a id="10330" class="Argument">β</a> <a id="10332" class="Symbol">=</a> <a id="10334" href="Veblen.Basic.html#3316" class="InductiveConstructor">suc</a> <a id="10338" class="Symbol">_}</a> <a id="10341" class="Symbol">_</a> <a id="10343" class="Symbol">=</a> <a id="10345" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+<a id="10350" href="Veblen.Transfinitary.html#10185" class="Function">Φₛ-β-ż-l</a> <a id="10360" class="Symbol">{</a><a id="10361" class="Argument">β</a> <a id="10363" class="Symbol">=</a> <a id="10365" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="10369" class="Symbol">_}</a> <a id="10372" class="Symbol">_</a> <a id="10374" class="Symbol">=</a> <a id="10376" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><span class="math display">
+Φ^{\lim f}\kern{0.17em}F\kern{0.17em}β\kern{0.17em}\overset{.}{0}\kern{0.17em}(\lim g)
+=
+\lim λn,Φ^{\lim f}\kern{0.17em}F\kern{0.17em}β\kern{0.17em}\overset{.}{0}\kern{0.17em}(g\kern{0.17em}n)
+</span></p>
+<p><span class="math display">
+\begin{pmatrix}
+...&amp;β&amp;\lim g\\
+...&amp;\lim f&amp;0
+\end{pmatrix}
+=
+\lim λn,\begin{pmatrix}
+...&amp;β&amp;g\kern{0.17em}n\\
+...&amp;\lim f&amp;0
+\end{pmatrix}
+</span></p>
+<p>只要</p>
+<p><span class="math display">
+F\kern{0.17em}(\lim g) = \lim λ n,F\kern{0.17em}(g\kern{0.17em}n)
+</span></p>
+<pre class="Agda"><a id="Φₗ-β-ż-l"></a><a id="10813" href="Veblen.Transfinitary.html#10813" class="Function">Φₗ-β-ż-l</a> <a id="10823" class="Symbol">:</a> <a id="10825" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="10827" class="Symbol">(</a><a id="10828" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="10832" href="Veblen.Basic.html#9618" class="Generalizable">g</a><a id="10833" class="Symbol">)</a> <a id="10835" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="10837" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="10841" class="Symbol">(λ</a> <a id="10844" href="Veblen.Transfinitary.html#10844" class="Bound">n</a> <a id="10846" class="Symbol">→</a> <a id="10848" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="10850" class="Symbol">(</a><a id="10851" href="Veblen.Basic.html#9618" class="Generalizable">g</a> <a id="10853" href="Veblen.Transfinitary.html#10844" class="Bound">n</a><a id="10854" class="Symbol">))</a>
+  <a id="10859" class="Symbol">→</a> <a id="10861" class="Symbol">(</a><a id="10862" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="10864" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="10866" class="Symbol">{</a><a id="10867" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="10871" href="Veblen.Basic.html#9616" class="Generalizable">f</a><a id="10872" class="Symbol">}</a> <a id="10874" href="Veblen.Basic.html#4267" class="Generalizable">β</a> <a id="10876" class="Symbol">{</a><a id="10877" href="Veblen.Basic.html#4283" class="Generalizable">n</a><a id="10878" class="Symbol">}</a> <a id="10880" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,</a> <a id="10884" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="10888" href="Veblen.Basic.html#9618" class="Generalizable">g</a><a id="10889" class="Symbol">)</a> <a id="10891" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="10893" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="10897" class="Symbol">λ</a> <a id="10899" href="Veblen.Transfinitary.html#10899" class="Bound">n</a> <a id="10901" class="Symbol">→</a> <a id="10903" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="10905" href="Veblen.Basic.html#9600" class="Generalizable">F</a> <a id="10907" class="Symbol">{</a><a id="10908" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="10912" href="Veblen.Basic.html#9616" class="Generalizable">f</a><a id="10913" class="Symbol">}</a> <a id="10915" href="Veblen.Basic.html#4267" class="Generalizable">β</a> <a id="10917" class="Symbol">{</a><a id="10918" href="Veblen.Transfinitary.html#10899" class="Bound">n</a><a id="10919" class="Symbol">}</a> <a id="10921" href="Veblen.Transfinitary.html#2452" class="Function Operator">0̇,</a> <a id="10925" href="Veblen.Basic.html#9618" class="Generalizable">g</a> <a id="10927" href="Veblen.Transfinitary.html#10899" class="Bound">n</a>
+<a id="10929" href="Veblen.Transfinitary.html#10813" class="Function">Φₗ-β-ż-l</a> <a id="10939" class="Symbol">{</a><a id="10940" class="Argument">β</a> <a id="10942" class="Symbol">=</a> <a id="10944" href="Veblen.Basic.html#3303" class="InductiveConstructor">zero</a><a id="10948" class="Symbol">}</a> <a id="10950" class="Symbol">=</a> <a id="10952" href="Function.Base.html#704" class="Function">id</a>
+<a id="10955" href="Veblen.Transfinitary.html#10813" class="Function">Φₗ-β-ż-l</a> <a id="10965" class="Symbol">{</a><a id="10966" class="Argument">β</a> <a id="10968" class="Symbol">=</a> <a id="10970" href="Veblen.Basic.html#3316" class="InductiveConstructor">suc</a> <a id="10974" class="Symbol">_}</a> <a id="10977" class="Symbol">_</a> <a id="10979" class="Symbol">=</a> <a id="10981" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+<a id="10986" href="Veblen.Transfinitary.html#10813" class="Function">Φₗ-β-ż-l</a> <a id="10996" class="Symbol">{</a><a id="10997" class="Argument">β</a> <a id="10999" class="Symbol">=</a> <a id="11001" href="Veblen.Basic.html#3335" class="InductiveConstructor">lim</a> <a id="11005" class="Symbol">_}</a> <a id="11008" class="Symbol">_</a> <a id="11010" class="Symbol">=</a> <a id="11012" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<h2 id="lvo">LVO</h2>
+<p><strong>定义</strong> Small Veblen Ordinal</p>
+<p><span class="math display">
+\text{SVO} := (φ_ω\kern{0.17em}1)_0\kern{0.17em}0 =
+\begin{pmatrix}
+1 \\
+ω \\
+\end{pmatrix}
+</span></p>
+<pre class="Agda"><a id="SVO"></a><a id="11166" href="Veblen.Transfinitary.html#11166" class="Function">SVO</a> <a id="11170" class="Symbol">:</a> <a id="11172" href="Veblen.Basic.html#3285" class="Datatype">Ord</a>
+<a id="11176" href="Veblen.Transfinitary.html#11166" class="Function">SVO</a> <a id="11180" class="Symbol">=</a> <a id="11182" href="Veblen.Transfinitary.html#4468" class="Function">φ</a> <a id="11184" class="Symbol">{</a><a id="11185" href="Veblen.Basic.html#4732" class="Function">ω</a><a id="11186" class="Symbol">}</a> <a id="11188" class="Number">1</a> <a id="11190" class="Symbol">{</a><a id="11191" class="Number">0</a><a id="11192" class="Symbol">}</a> <a id="11194" class="Number">0</a>
+</pre>
+<p><strong>定义</strong> Large Veblen Ordinal</p>
+<p><span class="math display">
+\text{LVO} := (λα,φ_α\kern{0.17em}1\kern{0.17em}\overset{.}{0})^ω\kern{0.17em}0 =
+\begin{pmatrix}
+1 \\
+\begin{pmatrix}
+1 \\
+\begin{pmatrix}
+1 \\
+... \\
+\end{pmatrix} \\
+\end{pmatrix} \\
+\end{pmatrix}
+</span></p>
+<pre class="Agda"><a id="LVO"></a><a id="11445" href="Veblen.Transfinitary.html#11445" class="Function">LVO</a> <a id="11449" class="Symbol">:</a> <a id="11451" href="Veblen.Basic.html#3285" class="Datatype">Ord</a>
+<a id="11455" href="Veblen.Transfinitary.html#11445" class="Function">LVO</a> <a id="11459" class="Symbol">=</a> <a id="11461" href="Veblen.Basic.html#13832" class="Function">fixpt</a> <a id="11467" class="Symbol">(λ</a> <a id="11470" href="Veblen.Transfinitary.html#11470" class="Bound">α</a> <a id="11472" class="Symbol">→</a> <a id="11474" href="Veblen.Transfinitary.html#4468" class="Function">φ</a> <a id="11476" class="Symbol">{</a><a id="11477" href="Veblen.Transfinitary.html#11470" class="Bound">α</a><a id="11478" class="Symbol">}</a> <a id="11480" class="Number">1</a> <a id="11482" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a><a id="11484" class="Symbol">)</a> <a id="11486" class="Number">0</a>
+</pre>
+<p>这是超限元Veblen函数的能力极限.</p>
+<p><strong>例</strong> 一个很大的大数</p>
+<p><span class="math display">
+\text{lvo}_{99} := f_{\text{LVO}}(99)
+</span></p>
+<pre class="Agda"><a id="lvo₉₉"></a><a id="11582" href="Veblen.Transfinitary.html#11582" class="Function">lvo₉₉</a> <a id="11588" class="Symbol">:</a> <a id="11590" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+<a id="11592" href="Veblen.Transfinitary.html#11582" class="Function">lvo₉₉</a> <a id="11598" class="Symbol">=</a> <a id="11600" href="Veblen.Basic.html#5858" class="Function">FGH.f</a> <a id="11606" href="Veblen.Transfinitary.html#11445" class="Function">LVO</a> <a id="11610" class="Number">99</a>
+</pre>
+<p>如果仅仅是为了写出该数的定义, 省去一切讨论, 不超过100行代码就可以实现. 读者可以试着摘抄出一段最简代码.</p>
+<p>没有什么阻止我们继续向上, 例如轻易地就可以有</p>
+<p><strong>定义</strong> 第二代超限元Veblen函数以及第二代LVO</p>
+<p><span class="math display">
+\begin{aligned}
+\overset{.}{φ} &amp;:= Φ\kern{0.17em}(\text{fixpt}λα,φ_α\kern{0.17em}1\kern{0.17em}\overset{.}{0}) \\
+\text{LVO}_2 &amp;:= (λα,\overset{.}{φ}_α\kern{0.17em}1\kern{0.17em}\overset{.}{0})^ω\kern{0.17em}0
+\end{aligned}
+</span></p>
+<pre class="Agda"><a id="φ̇"></a><a id="11971" href="Veblen.Transfinitary.html#11971" class="Function">φ̇</a> <a id="11974" class="Symbol">:</a> <a id="11976" class="Symbol">∀</a> <a id="11978" class="Symbol">{</a><a id="11979" href="Veblen.Transfinitary.html#11979" class="Bound">α</a><a id="11980" class="Symbol">}</a> <a id="11982" class="Symbol">→</a> <a id="11984" href="Veblen.Basic.html#3285" class="Datatype">Ord</a> <a id="11988" href="Veblen.Transfinitary.html#1015" class="Function Operator">→^</a> <a id="11991" class="InductiveConstructor">suc</a> <a id="11995" href="Veblen.Transfinitary.html#11979" class="Bound">α</a>
+<a id="11997" href="Veblen.Transfinitary.html#11971" class="Function">φ̇</a> <a id="12000" class="Symbol">=</a> <a id="12002" href="Veblen.Transfinitary.html#2990" class="Function">Φ</a> <a id="12004" class="Symbol">(</a><a id="12005" href="Veblen.Basic.html#13832" class="Function">fixpt</a> <a id="12011" class="Symbol">(λ</a> <a id="12014" href="Veblen.Transfinitary.html#12014" class="Bound">α</a> <a id="12016" class="Symbol">→</a> <a id="12018" href="Veblen.Transfinitary.html#4468" class="Function">φ</a> <a id="12020" class="Symbol">{</a><a id="12021" href="Veblen.Transfinitary.html#12014" class="Bound">α</a><a id="12022" class="Symbol">}</a> <a id="12024" class="Number">1</a> <a id="12026" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a><a id="12028" class="Symbol">))</a>
+
+<a id="LVO₂"></a><a id="12032" href="Veblen.Transfinitary.html#12032" class="Function">LVO₂</a> <a id="12037" class="Symbol">:</a> <a id="12039" href="Veblen.Basic.html#3285" class="Datatype">Ord</a>
+<a id="12043" href="Veblen.Transfinitary.html#12032" class="Function">LVO₂</a> <a id="12048" class="Symbol">=</a> <a id="12050" href="Veblen.Basic.html#13832" class="Function">fixpt</a> <a id="12056" class="Symbol">(λ</a> <a id="12059" href="Veblen.Transfinitary.html#12059" class="Bound">α</a> <a id="12061" class="Symbol">→</a> <a id="12063" href="Veblen.Transfinitary.html#11971" class="Function">φ̇</a> <a id="12066" class="Symbol">{</a><a id="12067" href="Veblen.Transfinitary.html#12059" class="Bound">α</a><a id="12068" class="Symbol">}</a> <a id="12070" class="Number">1</a> <a id="12072" href="Veblen.Transfinitary.html#1808" class="Function Operator">0̇</a><a id="12074" class="Symbol">)</a> <a id="12076" class="Number">0</a>
+</pre>
+<p>但这个模式是重复的, 一般我们就此打住, 转而使用全新的更高级方法, 如序数崩塌函数 (Ordinal Collapsing Function, OCF). 这将开启我们的形式化大数数学 (2.x) 篇.</p>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>
