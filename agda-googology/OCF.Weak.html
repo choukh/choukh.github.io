@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>OCF.Weak</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+</head>
+<body>
+
+<header>
+<h1 class="title"></h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+
+<main>
+<pre class="Agda"><a id="10" class="Keyword">module</a> <a id="17" href="OCF.Weak.html" class="Module">OCF.Weak</a> <a id="26" class="Keyword">where</a>
+<a id="32" class="Keyword">open</a> <a id="37" class="Keyword">import</a> <a id="44" href="Base.html" class="Module">Base</a> <a id="49" class="Keyword">public</a>
+</pre>
+<pre class="Agda"><a id="69" class="Keyword">data</a> <a id="Ord₁"></a><a id="74" href="OCF.Weak.html#74" class="Datatype">Ord₁</a> <a id="79" class="Symbol">:</a> <a id="81" href="Agda.Primitive.html#388" class="Primitive">Set</a> <a id="85" class="Keyword">where</a>
+  <a id="Ord₁.zero₁"></a><a id="93" href="OCF.Weak.html#93" class="InductiveConstructor">zero₁</a> <a id="99" class="Symbol">:</a> <a id="101" href="OCF.Weak.html#74" class="Datatype">Ord₁</a>
+  <a id="Ord₁.suc₁"></a><a id="108" href="OCF.Weak.html#108" class="InductiveConstructor">suc₁</a>  <a id="114" class="Symbol">:</a> <a id="116" href="OCF.Weak.html#74" class="Datatype">Ord₁</a> <a id="121" class="Symbol">→</a> <a id="123" href="OCF.Weak.html#74" class="Datatype">Ord₁</a>
+  <a id="Ord₁.lim₁"></a><a id="130" href="OCF.Weak.html#130" class="InductiveConstructor">lim₁</a>  <a id="136" class="Symbol">:</a> <a id="138" class="Symbol">(</a><a id="139" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="141" class="Symbol">→</a> <a id="143" href="OCF.Weak.html#74" class="Datatype">Ord₁</a><a id="147" class="Symbol">)</a> <a id="149" class="Symbol">→</a> <a id="151" href="OCF.Weak.html#74" class="Datatype">Ord₁</a>
+  <a id="Ord₁.Lim₁"></a><a id="158" href="OCF.Weak.html#158" class="InductiveConstructor">Lim₁</a> <a id="163" class="Symbol">:</a> <a id="165" class="Symbol">(</a><a id="166" href="Base.html#3408" class="Datatype">Ord</a> <a id="170" class="Symbol">→</a> <a id="172" href="OCF.Weak.html#74" class="Datatype">Ord₁</a><a id="176" class="Symbol">)</a> <a id="178" class="Symbol">→</a> <a id="180" href="OCF.Weak.html#74" class="Datatype">Ord₁</a>
+</pre>
+<pre class="Agda"><a id="finord₁"></a><a id="198" href="OCF.Weak.html#198" class="Function">finord₁</a> <a id="206" class="Symbol">:</a> <a id="208" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="210" class="Symbol">→</a> <a id="212" href="OCF.Weak.html#74" class="Datatype">Ord₁</a>
+<a id="217" href="OCF.Weak.html#198" class="Function">finord₁</a> <a id="225" href="OCF.Weak.html#225" class="Bound">n</a> <a id="227" class="Symbol">=</a> <a id="229" class="Symbol">(</a><a id="230" href="OCF.Weak.html#108" class="InductiveConstructor">suc₁</a> <a id="235" href="Lower.html#1118" class="Function Operator">∘ⁿ</a> <a id="238" href="OCF.Weak.html#225" class="Bound">n</a><a id="239" class="Symbol">)</a> <a id="241" href="OCF.Weak.html#93" class="InductiveConstructor">zero₁</a>
+
+<a id="ω₁"></a><a id="248" href="OCF.Weak.html#248" class="Function">ω₁</a> <a id="251" class="Symbol">:</a> <a id="253" href="OCF.Weak.html#74" class="Datatype">Ord₁</a>
+<a id="258" href="OCF.Weak.html#248" class="Function">ω₁</a> <a id="261" class="Symbol">=</a> <a id="263" href="OCF.Weak.html#130" class="InductiveConstructor">lim₁</a> <a id="268" href="OCF.Weak.html#198" class="Function">finord₁</a>
+</pre>
+<pre class="Agda"><a id="289" class="Keyword">instance</a>
+  <a id="nOrd₁"></a><a id="300" href="OCF.Weak.html#300" class="Function">nOrd₁</a> <a id="306" class="Symbol">=</a> <a id="308" href="Agda.Builtin.FromNat.html#196" class="Record">Number</a> <a id="315" href="OCF.Weak.html#74" class="Datatype">Ord₁</a> <a id="320" href="Function.Base.html#4486" class="Function Operator">∋</a> <a id="322" class="Keyword">record</a> <a id="329" class="Symbol">{</a> <a id="331" href="Agda.Builtin.FromNat.html#252" class="Field">Constraint</a> <a id="342" class="Symbol">=</a> <a id="344" class="Symbol">λ</a> <a id="346" href="OCF.Weak.html#346" class="Bound">_</a> <a id="348" class="Symbol">→</a> <a id="350" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a> <a id="352" class="Symbol">;</a> <a id="354" href="Agda.Builtin.FromNat.html#281" class="Field">fromNat</a> <a id="362" class="Symbol">=</a> <a id="364" class="Symbol">λ</a> <a id="366" href="OCF.Weak.html#366" class="Bound">n</a> <a id="368" class="Symbol">→</a> <a id="370" href="OCF.Weak.html#198" class="Function">finord₁</a> <a id="378" href="OCF.Weak.html#366" class="Bound">n</a> <a id="380" class="Symbol">}</a>
+</pre>
+<pre class="Agda"><a id="_↑₁"></a><a id="395" href="OCF.Weak.html#395" class="Function Operator">_↑₁</a> <a id="399" class="Symbol">:</a> <a id="401" href="Base.html#3408" class="Datatype">Ord</a> <a id="405" class="Symbol">→</a> <a id="407" href="OCF.Weak.html#74" class="Datatype">Ord₁</a>
+<a id="412" href="Base.html#3426" class="InductiveConstructor">zero</a> <a id="417" href="OCF.Weak.html#395" class="Function Operator">↑₁</a> <a id="420" class="Symbol">=</a> <a id="422" href="OCF.Weak.html#93" class="InductiveConstructor">zero₁</a>
+<a id="428" href="Base.html#3439" class="InductiveConstructor">suc</a> <a id="432" href="OCF.Weak.html#432" class="Bound">α</a> <a id="434" href="OCF.Weak.html#395" class="Function Operator">↑₁</a> <a id="437" class="Symbol">=</a> <a id="439" href="OCF.Weak.html#108" class="InductiveConstructor">suc₁</a> <a id="444" class="Symbol">(</a><a id="445" href="OCF.Weak.html#432" class="Bound">α</a> <a id="447" href="OCF.Weak.html#395" class="Function Operator">↑₁</a><a id="449" class="Symbol">)</a>
+<a id="451" href="Base.html#3458" class="InductiveConstructor">lim</a> <a id="455" href="OCF.Weak.html#455" class="Bound">f</a> <a id="457" href="OCF.Weak.html#395" class="Function Operator">↑₁</a> <a id="460" class="Symbol">=</a> <a id="462" href="OCF.Weak.html#130" class="InductiveConstructor">lim₁</a> <a id="467" class="Symbol">λ</a> <a id="469" href="OCF.Weak.html#469" class="Bound">n</a> <a id="471" class="Symbol">→</a> <a id="473" href="OCF.Weak.html#455" class="Bound">f</a> <a id="475" href="OCF.Weak.html#469" class="Bound">n</a> <a id="477" href="OCF.Weak.html#395" class="Function Operator">↑₁</a>
+</pre>
+<pre class="Agda"><a id="Ω₁"></a><a id="493" href="OCF.Weak.html#493" class="Function">Ω₁</a> <a id="496" class="Symbol">:</a> <a id="498" href="OCF.Weak.html#74" class="Datatype">Ord₁</a>
+<a id="503" href="OCF.Weak.html#493" class="Function">Ω₁</a> <a id="506" class="Symbol">=</a> <a id="508" href="OCF.Weak.html#158" class="InductiveConstructor">Lim₁</a> <a id="513" href="OCF.Weak.html#395" class="Function Operator">_↑₁</a>
+</pre>
+<pre class="Agda"><a id="ψ"></a><a id="530" href="OCF.Weak.html#530" class="Function">ψ</a> <a id="532" class="Symbol">:</a> <a id="534" href="OCF.Weak.html#74" class="Datatype">Ord₁</a> <a id="539" class="Symbol">→</a> <a id="541" href="Base.html#3408" class="Datatype">Ord</a>
+<a id="545" href="OCF.Weak.html#530" class="Function">ψ</a> <a id="547" href="OCF.Weak.html#93" class="InductiveConstructor">zero₁</a> <a id="553" class="Symbol">=</a> <a id="555" class="Number">1</a>
+<a id="557" href="OCF.Weak.html#530" class="Function">ψ</a> <a id="559" class="Symbol">(</a><a id="560" href="OCF.Weak.html#108" class="InductiveConstructor">suc₁</a> <a id="565" href="OCF.Weak.html#565" class="Bound">α₁</a><a id="567" class="Symbol">)</a> <a id="569" class="Symbol">=</a> <a id="571" href="Base.html#3439" class="InductiveConstructor">suc</a> <a id="575" class="Symbol">(</a><a id="576" href="OCF.Weak.html#530" class="Function">ψ</a> <a id="578" href="OCF.Weak.html#565" class="Bound">α₁</a><a id="580" class="Symbol">)</a>
+<a id="582" href="OCF.Weak.html#530" class="Function">ψ</a> <a id="584" class="Symbol">(</a><a id="585" href="OCF.Weak.html#130" class="InductiveConstructor">lim₁</a> <a id="590" href="OCF.Weak.html#590" class="Bound">f₁</a><a id="592" class="Symbol">)</a> <a id="594" class="Symbol">=</a> <a id="596" href="Base.html#3458" class="InductiveConstructor">lim</a> <a id="600" class="Symbol">λ</a> <a id="602" href="OCF.Weak.html#602" class="Bound">n</a> <a id="604" class="Symbol">→</a> <a id="606" href="OCF.Weak.html#530" class="Function">ψ</a> <a id="608" class="Symbol">(</a><a id="609" href="OCF.Weak.html#590" class="Bound">f₁</a> <a id="612" href="OCF.Weak.html#602" class="Bound">n</a><a id="613" class="Symbol">)</a>
+<a id="615" href="OCF.Weak.html#530" class="Function">ψ</a> <a id="617" class="Symbol">(</a><a id="618" href="OCF.Weak.html#158" class="InductiveConstructor">Lim₁</a> <a id="623" href="OCF.Weak.html#623" class="Bound">F₁</a><a id="625" class="Symbol">)</a> <a id="627" class="Symbol">=</a> <a id="629" href="Base.html#3458" class="InductiveConstructor">lim</a> <a id="633" class="Symbol">λ</a> <a id="635" href="OCF.Weak.html#635" class="Bound">n</a> <a id="637" class="Symbol">→</a> <a id="639" class="Symbol">((λ</a> <a id="643" href="OCF.Weak.html#643" class="Bound">α</a> <a id="645" class="Symbol">→</a> <a id="647" href="OCF.Weak.html#530" class="Function">ψ</a> <a id="649" class="Symbol">(</a><a id="650" href="OCF.Weak.html#623" class="Bound">F₁</a> <a id="653" href="OCF.Weak.html#643" class="Bound">α</a><a id="654" class="Symbol">))</a> <a id="657" href="Lower.html#1118" class="Function Operator">∘ⁿ</a> <a id="660" href="OCF.Weak.html#635" class="Bound">n</a><a id="661" class="Symbol">)</a> <a id="663" class="Number">0</a>
+</pre>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>
