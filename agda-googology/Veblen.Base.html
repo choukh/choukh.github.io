@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>形式化大数数学 (1.0 - 序数, 增长层级, 不动点)</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+</head>
+<body>
+
+<header>
+<h1 class="title">形式化大数数学 (1.0 - 序数, 增长层级, 不动点)</h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <strong>Contents</strong><label for="contents">⊕</label>
+  <input type="checkbox" id="contents">
+  <ul>
+  <li><a href="#形式化大数数学-1.0---序数-增长层级-不动点" id="toc-形式化大数数学-1.0---序数-增长层级-不动点">形式化大数数学 (1.0 - 序数, 增长层级, 不动点)</a>
+  <ul>
+  <li><a href="#前言" id="toc-前言">前言</a>
+  <ul>
+  <li><a href="#目标人群" id="toc-目标人群">目标人群</a></li>
+  <li><a href="#补充材料" id="toc-补充材料">补充材料</a></li>
+  <li><a href="#标准库依赖" id="toc-标准库依赖">标准库依赖</a></li>
+  </ul></li>
+  <li><a href="#序数的定义" id="toc-序数的定义">序数的定义</a></li>
+  <li><a href="#增长层级" id="toc-增长层级">增长层级</a>
+  <ul>
+  <li><a href="#快速" id="toc-快速">快速</a></li>
+  <li><a href="#快速以下" id="toc-快速以下">※快速以下</a></li>
+  </ul></li>
+  <li><a href="#序数的递归原理" id="toc-序数的递归原理">序数的递归原理</a></li>
+  <li><a href="#超限复合" id="toc-超限复合">超限复合</a></li>
+  <li><a href="#序数算术" id="toc-序数算术">序数算术</a></li>
+  <li><a href="#三大高阶函数" id="toc-三大高阶函数">三大高阶函数</a>
+  <ul>
+  <li><a href="#无穷迭代" id="toc-无穷迭代">无穷迭代</a></li>
+  <li><a href="#跳出运算" id="toc-跳出运算">跳出运算</a></li>
+  <li><a href="#不动点的枚举" id="toc-不动点的枚举">不动点的枚举</a></li>
+  </ul></li>
+  <li><a href="#ε-ζ-η-层级" id="toc-ε-ζ-η-层级">ε， ζ， η 层级</a></li>
+  </ul></li>
+  </ul>
+</nav>
+
+<main>
+<h1 id="形式化大数数学-1.0---序数-增长层级-不动点">形式化大数数学 (1.0 - 序数, 增长层级, 不动点)</h1>
+<blockquote>
+<p>交流Q群: 893531731<br />
+本文源码: <a href="https://github.com/choukh/agda-googology/blob/main/src/Veblen/Base.lagda.md">Base.lagda.md</a><br />
+高亮渲染: <a href="https://choukh.github.io/agda-googology/Veblen.Base.html">Base.html</a></p>
+</blockquote>
+<h2 id="前言">前言</h2>
+<p>本系列文章是可运行且保证停机的<a href="https://zh.wikipedia.org/wiki/%E5%A4%A7%E6%95%B0_(%E6%95%B0%E5%AD%A6)">大数</a>计算程序的<a href="https://zh.wikipedia.org/wiki/%E6%96%87%E5%AD%A6%E7%BC%96%E7%A8%8B">文学编程 (literate programming)</a> 实现.</p>
+<ul>
+<li><strong>可运行</strong>是相对于自然语言的数学描述而言, 本文贴出的代码可以在电脑上运行.</li>
+<li><strong>保证停机</strong>是相对于<a href="https://zh.wikipedia.org/wiki/%E5%9C%96%E9%9D%88%E5%AE%8C%E5%82%99%E6%80%A7">图灵完备 (Turing-complete)</a> 语言 (如C语言) 而言, 本文使用的 <a href="https://en.wikipedia.org/wiki/Agda_(programming_language)">Agda</a> 语言并非图灵完备, 其自带<a href="https://agda.readthedocs.io/en/v2.6.4.3-r1/language/termination-checking.html">停机检查 (termination checking)</a>, 写出的程序保证停机.</li>
+<li><strong>文学编程</strong>是指本文既是程序代码, 也是程序文档, 代码和文档交织在一起, 以增强可读性.
+<ul>
+<li>Agda 程序会自动抽取本文所有代码块中的代码, 并执行类型检查, 而忽略代码块以外的内容.</li>
+<li>※ 冷知识: 文学编程的发明者<a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E5%BE%B7%E7%BA%B3">高德纳 (Donald Knuth)</a>, 也是大数数学入门级内容<a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E5%BE%B7%E7%B4%8D%E7%AE%AD%E8%99%9F%E8%A1%A8%E7%A4%BA%E6%B3%95">高德纳箭号</a>的发明者, 也是排版软件 <a href="https://zh.wikipedia.org/wiki/TeX">TeX</a> 的发明者.</li>
+<li>Agda代码将放在如下代码块中</li>
+</ul></li>
+</ul>
+<pre class="Agda"><a id="1357" class="Symbol">{-#</a> <a id="1361" class="Keyword">OPTIONS</a> <a id="1369" class="Pragma">--safe</a> <a id="1376" class="Symbol">#-}</a>
+<a id="1380" class="Keyword">module</a> <a id="1387" href="Veblen.Base.html" class="Module">Veblen.Base</a> <a id="1399" class="Keyword">where</a>
+</pre>
+<p>也就是说, 提供足够的时间, 能量和内存, 本文介绍的大数计算程序可以真正算出一个大数. 如果真的想运行: 1. 参考 <a href="https://agda.readthedocs.io/en/latest/getting-started/installation.html">Installation</a> 安装 Agda. 2. 进本文所在Github仓库 (<a href="https://github.com/choukh/agda-googology">agda-googology</a>) 下载本文 markdown 源码. 3. 用编辑器打开源码, 确认进入了 <a href="https://agda.readthedocs.io/en/latest/tools/emacs-mode.html">agda-mode</a>, 键入 <code>C-c C-n</code> 对本文定义的任意大数 (如文末的 <code>oom</code>) 执行正规化 (normalization).</p>
+<h3 id="目标人群">目标人群</h3>
+<ul>
+<li>大数数学已入门 (如, 看完<a href="https://www.zhihu.com/column/c_1307845959598960640">大数数学入门</a>), 对严格性和精确定义有进一步要求的读者.</li>
+<li>Agda 已入门 (如, 看完 <a href="https://agda-zh.github.io/PLFA-zh/">PLFA</a>), 对大数计算程序的编程实现感兴趣的读者.</li>
+</ul>
+<p>只对前者感兴趣的读者, 可以忽略代码部分, 而只阅读文学部分, 它们可以看作是基于朴素类型论的数学描述, 并使用了 <span class="math inline">\LaTeX</span> 公式, 以对齐通常的数学习惯.</p>
+<h3 id="补充材料">补充材料</h3>
+<ul>
+<li><a href="https://www.zhihu.com/column/c_1307845959598960640">core.exe - 大数数学入门</a></li>
+<li><a href="https://www.zhihu.com/column/c_1697290814588301312">core.exe - 大数数学入门 - 重置版</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/572691308">oCaU - Agda大序数</a>
+<ul>
+<li>详细讨论了上至二元Veblen层级的序性质, 而本文不会讨论这些性质</li>
+</ul></li>
+<li><a href="https://github.com/choukh/Googology">oCaU - Googology</a>
+<ul>
+<li>包含上一条的 Coq 版本以及 LVO 的 Coq 实现</li>
+<li>纯代码, 无文学</li>
+</ul></li>
+<li><a href="https://github.com/ccz181078/googology">ccz181078 - googology</a>
+<ul>
+<li>各种大数函数的 Coq 形式化</li>
+<li>有少量注释, 适合上级者速通形式化定义</li>
+</ul></li>
+</ul>
+<h3 id="标准库依赖">标准库依赖</h3>
+<pre class="Agda"><a id="2590" class="Keyword">open</a> <a id="2595" class="Keyword">import</a> <a id="2602" href="Data.Nat.html" class="Module">Data.Nat</a> <a id="2611" class="Keyword">public</a> <a id="2618" class="Keyword">using</a> <a id="2624" class="Symbol">(</a><a id="2625" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a><a id="2626" class="Symbol">;</a> <a id="2628" href="Agda.Builtin.Nat.html#221" class="InductiveConstructor">zero</a><a id="2632" class="Symbol">;</a> <a id="2634" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a><a id="2637" class="Symbol">)</a>
+<a id="2639" class="Keyword">open</a> <a id="2644" class="Keyword">import</a> <a id="2651" href="Data.Unit.html" class="Module">Data.Unit</a> <a id="2661" class="Keyword">public</a> <a id="2668" class="Keyword">using</a> <a id="2674" class="Symbol">(</a><a id="2675" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a><a id="2676" class="Symbol">;</a> <a id="2678" href="Agda.Builtin.Unit.html#212" class="InductiveConstructor">tt</a><a id="2680" class="Symbol">)</a>
+<a id="2682" class="Keyword">open</a> <a id="2687" class="Keyword">import</a> <a id="2694" href="Function.html" class="Module">Function</a> <a id="2703" class="Keyword">public</a> <a id="2710" class="Keyword">using</a> <a id="2716" class="Symbol">(</a><a id="2717" href="Function.Base.html#704" class="Function">id</a><a id="2719" class="Symbol">;</a> <a id="2721" href="Function.Base.html#1115" class="Function Operator">_∘_</a><a id="2724" class="Symbol">;</a> <a id="2726" href="Function.Base.html#1974" class="Function Operator">_$_</a><a id="2729" class="Symbol">;</a> <a id="2731" href="Function.Base.html#4486" class="Function Operator">_∋_</a><a id="2734" class="Symbol">)</a>
+<a id="2736" class="Keyword">open</a> <a id="2741" class="Keyword">import</a> <a id="2748" href="Relation.Binary.PropositionalEquality.html" class="Module">Relation.Binary.PropositionalEquality</a> <a id="2786" class="Symbol">as</a> <a id="2789" class="Module">Eq</a> <a id="2792" class="Keyword">public</a> <a id="2799" class="Keyword">using</a> <a id="2805" class="Symbol">(</a><a id="2806" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">_≡_</a><a id="2809" class="Symbol">;</a> <a id="2811" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a><a id="2815" class="Symbol">)</a>
+<a id="2817" class="Keyword">open</a> <a id="2822" href="Relation.Binary.PropositionalEquality.Properties.html#6744" class="Module">Eq.≡-Reasoning</a> <a id="2837" class="Keyword">public</a>
+</pre>
+<h2 id="序数的定义">序数的定义</h2>
+<p>我们知道自然数类型 <span class="math inline">ℕ</span> 由如下两条规则定义.</p>
+<p><span class="math display">
+\frac{}{\kern{0.17em}\text{zero} : ℕ\kern{0.17em}}
+\qquad
+\frac{\alpha:ℕ}{\kern{0.17em}\text{suc}\kern{0.17em}\alpha:ℕ\kern{0.17em}}
+</span></p>
+<p><strong>定义</strong> 我们的序数类型 <span class="math inline">\text{Ord}</span> 在 <span class="math inline">ℕ</span> 的基础上增加了第三条规则 <span class="math inline">\text{lim}</span>, 即如果 <span class="math inline">f</span> 是 <span class="math inline">ℕ</span> 到序数的函数, 那么 <span class="math inline">\text{lim}\kern{0.17em}f</span> 也是序数.</p>
+<p><span class="math display">
+\frac{}{\kern{0.17em}\text{zero} : \text{Ord}\kern{0.17em}}
+\qquad
+\frac{\alpha:\text{Ord}}{\kern{0.17em}\text{suc}\kern{0.17em}\alpha:\text{Ord}\kern{0.17em}}
+\qquad
+\frac{\kern{0.17em}f : ℕ\rightarrow\text{Ord}\kern{0.17em}}{\text{lim}\kern{0.17em}f:\text{Ord}}
+</span></p>
+<pre class="Agda"><a id="3424" class="Keyword">data</a> <a id="Ord"></a><a id="3429" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="3433" class="Symbol">:</a> <a id="3435" href="Agda.Primitive.html#388" class="Primitive">Set</a> <a id="3439" class="Keyword">where</a>
+  <a id="Ord.zero"></a><a id="3447" href="Veblen.Base.html#3447" class="InductiveConstructor">zero</a> <a id="3452" class="Symbol">:</a> <a id="3454" href="Veblen.Base.html#3429" class="Datatype">Ord</a>
+  <a id="Ord.suc"></a><a id="3460" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a>  <a id="3465" class="Symbol">:</a> <a id="3467" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="3471" class="Symbol">→</a> <a id="3473" href="Veblen.Base.html#3429" class="Datatype">Ord</a>
+  <a id="Ord.lim"></a><a id="3479" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a>  <a id="3484" class="Symbol">:</a> <a id="3486" class="Symbol">(</a><a id="3487" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="3489" class="Symbol">→</a> <a id="3491" href="Veblen.Base.html#3429" class="Datatype">Ord</a><a id="3494" class="Symbol">)</a> <a id="3496" class="Symbol">→</a> <a id="3498" href="Veblen.Base.html#3429" class="Datatype">Ord</a>
+</pre>
+<p>这样的 <span class="math inline">f : ℕ\rightarrow\text{Ord}</span> 又叫做 <span class="math inline">\text{lim}\kern{0.17em}f</span> 的基本列 (fundamental sequence), 而 <span class="math inline">\text{lim}\kern{0.17em}f</span> 则叫做基本列 <span class="math inline">f</span> 的极限. 仅就我们将要做的事情而言, <span class="math inline">\lim</span> 可视为等同于集合论的 <span class="math inline">\sup</span>. 这样的定义允许我们很方便地讨论零, 后继序数和极限序数三种情况. 为了方便阅读, 我们会把 <span class="math inline">\text{zero}</span> 写作 <span class="math inline">0</span>, 把 <span class="math inline">\text{suc}\kern{0.17em}x</span> 写作 <span class="math inline">x^+</span>.</p>
+<p><strong>注意</strong> 我们的序数类型, 学名叫布劳威尔树序数 (Brouwer tree ordinals), 比真正的递归序数宽泛很多, 体现在以下两点:</p>
+<ul>
+<li>树序数不要求基本列是严格递增的.
+<ul>
+<li>严格递增的约束对于计算本身而言无关紧要.</li>
+<li>当然, 如果要保证算出的大数足够大, 那么基本列的递增性是必要的.</li>
+<li>我们构造的序数的基本列都是严格递增的, 如果想要, 可以额外补上证明.</li>
+<li><a href="https://zhuanlan.zhihu.com/p/572691308">Agda大序数</a>一文中证明了其中构造的上至 <span class="math inline">\Gamma_0</span> 的所有树序数的基本列都是严格递增的.</li>
+</ul></li>
+<li>树序数是高度外延的 (extensional), 即一个真正的递归序数可能对应树上大量的节点.
+<ul>
+<li>也就是说我们可以用大量不同的基本列构造出相同的序数.
+<ul>
+<li>但同一性证明依赖于函数外延性 (functional extensionality), 或某种商 (quotient) 机制, 如 setoid 或 cubical.</li>
+</ul></li>
+<li>但这并不影响大数的计算, 因为只要给出基本列就能算, 况且 FGH 大数的具体数值确实可能是依赖于特定基本列的——同一序数的不同定义方式会使基本列在起始处稍有不同.</li>
+</ul></li>
+</ul>
+<p><strong>约定</strong> 我们用 <span class="math inline">α,β,γ</span> 表示序数, 用 <span class="math inline">n</span> 表示自然数, 用 <span class="math inline">A</span> 表示任意给定的类型.</p>
+<pre class="Agda"><a id="4411" class="Keyword">variable</a>
+  <a id="4422" href="Veblen.Base.html#4422" class="Generalizable">α</a> <a id="4424" href="Veblen.Base.html#4424" class="Generalizable">β</a> <a id="4426" href="Veblen.Base.html#4426" class="Generalizable">γ</a> <a id="4428" class="Symbol">:</a> <a id="4430" href="Veblen.Base.html#3429" class="Datatype">Ord</a>
+  <a id="4436" href="Veblen.Base.html#4436" class="Generalizable">n</a> <a id="4438" class="Symbol">:</a> <a id="4440" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+  <a id="4444" href="Veblen.Base.html#4444" class="Generalizable">A</a> <a id="4446" class="Symbol">:</a> <a id="4448" href="Agda.Primitive.html#388" class="Primitive">Set</a>
+</pre>
+<p><strong>约定</strong> 我们遵循类型论的习惯, 今后都会在无歧义的情况下省略函数应用的括号.</p>
+<p>回忆任意类型 <span class="math inline">A</span> 上的函数的有限次迭代.</p>
+<p><strong>定义</strong> 函数 <span class="math inline">F : A → A</span> 的 <span class="math inline">n</span> 次复合叫做 <span class="math inline">F</span> 的 <span class="math inline">n</span> 次迭代, 记作 <span class="math inline">F^n</span></p>
+<p><span class="math display">
+\begin{aligned}
+F^0 &amp;= \text{id} \\
+F^{n^+} &amp;= F \circ F^n
+\end{aligned}
+</span></p>
+<p>其中 <span class="math inline">\text{id}</span> 是恒等函数.</p>
+<pre class="Agda"><a id="4694" class="Keyword">open</a> <a id="4699" class="Keyword">import</a> <a id="4706" href="Lower.html" class="Module">Lower</a> <a id="4712" class="Keyword">public</a> <a id="4719" class="Keyword">using</a> <a id="4725" class="Symbol">(</a><a id="4726" href="Lower.html#1118" class="Function Operator">_∘ⁿ_</a><a id="4730" class="Symbol">)</a>
+</pre>
+<p><strong>定义</strong> 自然数到序数的嵌入函数 <span class="math inline">\text{finord} : ℕ → \text{Ord}</span> 定义为对输入的自然数 <span class="math inline">n</span>, 输出从序数零开始迭代序数后继 <span class="math inline">n</span> 次所得到的序数.</p>
+<p><span class="math display">
+\text{finord}\kern{0.17em}n := \text{suc}^n\kern{0.17em}0
+</span></p>
+<pre class="Agda"><a id="finord"></a><a id="4907" href="Veblen.Base.html#4907" class="Function">finord</a> <a id="4914" class="Symbol">:</a> <a id="4916" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="4918" class="Symbol">→</a> <a id="4920" href="Veblen.Base.html#3429" class="Datatype">Ord</a>
+<a id="4924" href="Veblen.Base.html#4907" class="Function">finord</a> <a id="4931" href="Veblen.Base.html#4931" class="Bound">n</a> <a id="4933" class="Symbol">=</a> <a id="4935" class="Symbol">(</a><a id="4936" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a> <a id="4940" href="Lower.html#1118" class="Function Operator">∘ⁿ</a> <a id="4943" href="Veblen.Base.html#4931" class="Bound">n</a><a id="4944" class="Symbol">)</a> <a id="4946" href="Veblen.Base.html#3447" class="InductiveConstructor">zero</a>
+</pre>
+<p><strong>定义</strong> <span class="math inline">\text{finord}</span> 构成了基本列 <span class="math inline">(0, 1, 2, \ldots)</span>, 其极限定义为 <span class="math inline">ω</span></p>
+<p><span class="math display">
+ω := \text{lim}\kern{0.17em}\text{finord}
+</span></p>
+<pre class="Agda"><a id="ω"></a><a id="5076" href="Veblen.Base.html#5076" class="Function">ω</a> <a id="5078" class="Symbol">=</a> <a id="5080" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a> <a id="5084" href="Veblen.Base.html#4907" class="Function">finord</a>
+</pre>
+<p><strong>非文学</strong> 以下代码调用了<a href="https://agda.readthedocs.io/en/v2.6.4.3-r1/language/literal-overloading.html">字面量重载</a>功能, 允许数字字面量依据上下文自动具有自然数或序数类型.</p>
+<pre class="Agda"><a id="5235" class="Keyword">open</a> <a id="5240" class="Keyword">import</a> <a id="5247" href="Agda.Builtin.FromNat.html" class="Module">Agda.Builtin.FromNat</a> <a id="5268" class="Keyword">public</a>
+<a id="5275" class="Keyword">instance</a>
+  <a id="nOrd"></a><a id="5286" href="Veblen.Base.html#5286" class="Function">nOrd</a> <a id="5291" class="Symbol">=</a> <a id="5293" href="Agda.Builtin.FromNat.html#196" class="Record">Number</a> <a id="5300" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="5304" href="Function.Base.html#4486" class="Function Operator">∋</a> <a id="5306" class="Keyword">record</a> <a id="5313" class="Symbol">{</a> <a id="5315" href="Agda.Builtin.FromNat.html#252" class="Field">Constraint</a> <a id="5326" class="Symbol">=</a> <a id="5328" class="Symbol">λ</a> <a id="5330" href="Veblen.Base.html#5330" class="Bound">_</a> <a id="5332" class="Symbol">→</a> <a id="5334" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a> <a id="5336" class="Symbol">;</a> <a id="5338" href="Agda.Builtin.FromNat.html#281" class="Field">fromNat</a> <a id="5346" class="Symbol">=</a> <a id="5348" class="Symbol">λ</a> <a id="5350" href="Veblen.Base.html#5350" class="Bound">n</a> <a id="5352" class="Symbol">→</a> <a id="5354" href="Veblen.Base.html#4907" class="Function">finord</a> <a id="5361" href="Veblen.Base.html#5350" class="Bound">n</a> <a id="5363" class="Symbol">}</a>
+  <a id="nNat"></a><a id="5367" href="Veblen.Base.html#5367" class="Function">nNat</a> <a id="5372" class="Symbol">=</a> <a id="5374" href="Agda.Builtin.FromNat.html#196" class="Record">Number</a> <a id="5381" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>   <a id="5385" href="Function.Base.html#4486" class="Function Operator">∋</a> <a id="5387" class="Keyword">record</a> <a id="5394" class="Symbol">{</a> <a id="5396" href="Agda.Builtin.FromNat.html#252" class="Field">Constraint</a> <a id="5407" class="Symbol">=</a> <a id="5409" class="Symbol">λ</a> <a id="5411" href="Veblen.Base.html#5411" class="Bound">_</a> <a id="5413" class="Symbol">→</a> <a id="5415" href="Agda.Builtin.Unit.html#175" class="Record">⊤</a> <a id="5417" class="Symbol">;</a> <a id="5419" href="Agda.Builtin.FromNat.html#281" class="Field">fromNat</a> <a id="5427" class="Symbol">=</a> <a id="5429" class="Symbol">λ</a> <a id="5431" href="Veblen.Base.html#5431" class="Bound">n</a> <a id="5433" class="Symbol">→</a> <a id="5435" href="Veblen.Base.html#5431" class="Bound">n</a> <a id="5437" class="Symbol">}</a>
+</pre>
+<p>以下为测试用例.</p>
+<pre class="Agda"><a id="5462" href="Veblen.Base.html#5462" class="Function">_</a> <a id="5464" class="Symbol">=</a> <a id="5466" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="5470" href="Function.Base.html#4486" class="Function Operator">∋</a> <a id="5472" class="Number">233</a>
+<a id="5476" href="Veblen.Base.html#5476" class="Function">_</a> <a id="5478" class="Symbol">=</a> <a id="5480" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>   <a id="5484" href="Function.Base.html#4486" class="Function Operator">∋</a> <a id="5486" class="Number">233</a>
+</pre>
+<p><strong>非文学</strong> 我们将 <code>suc (suc α)</code> 写作 <code>2+ α</code>.</p>
+<pre class="Agda"><a id="5541" class="Keyword">pattern</a> <a id="2+"></a><a id="5549" href="Veblen.Base.html#5549" class="InductiveConstructor">2+</a> <a id="5552" href="Veblen.Base.html#5565" class="Bound">α</a> <a id="5554" class="Symbol">=</a> <a id="5556" class="InductiveConstructor">suc</a> <a id="5560" class="Symbol">(</a><a id="5561" class="InductiveConstructor">suc</a> <a id="5565" href="Veblen.Base.html#5565" class="Bound">α</a><a id="5566" class="Symbol">)</a>
+</pre>
+<h2 id="增长层级">增长层级</h2>
+<p>增长层级是一种函数族 <span class="math inline">f : \text{Ord} → ℕ → ℕ</span>, 对于每个序数 <span class="math inline">α</span>, <span class="math inline">f_α</span> 是一个从自然数到自然数的函数. 最常用的是快速增长层级.</p>
+<h3 id="快速">快速</h3>
+<p><strong>定义</strong> 快速增长层级 (Fast Growing Hierarchy, FGH)</p>
+<p><span class="math display">
+\begin{aligned}
+f_0 &amp;= \text{suc} \\
+f_{α^+}\kern{0.17em}n &amp;= f_α^n\kern{0.17em}n \\
+f_{\text{lim}\kern{0.17em}α}\kern{0.17em}n &amp;= f_{α[n]}\kern{0.17em}n
+\end{aligned}
+</span></p>
+<p>其中在极限序数情况下的这种处理方式叫做对角化 (diagonalization).</p>
+<pre class="Agda"><a id="5946" class="Keyword">module</a> <a id="FGH"></a><a id="5953" href="Veblen.Base.html#5953" class="Module">FGH</a> <a id="5957" class="Keyword">where</a>
+  <a id="FGH.f"></a><a id="5965" href="Veblen.Base.html#5965" class="Function">f</a> <a id="5967" class="Symbol">:</a> <a id="5969" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="5973" class="Symbol">→</a> <a id="5975" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="5977" class="Symbol">→</a> <a id="5979" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+  <a id="5983" href="Veblen.Base.html#5965" class="Function">f</a> <a id="5985" href="Veblen.Base.html#3447" class="InductiveConstructor">zero</a> <a id="5990" class="Symbol">=</a> <a id="5992" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a>
+  <a id="5998" href="Veblen.Base.html#5965" class="Function">f</a> <a id="6000" class="Symbol">(</a><a id="6001" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a> <a id="6005" href="Veblen.Base.html#6005" class="Bound">α</a><a id="6006" class="Symbol">)</a> <a id="6008" href="Veblen.Base.html#6008" class="Bound">n</a> <a id="6010" class="Symbol">=</a> <a id="6012" class="Symbol">(</a><a id="6013" href="Veblen.Base.html#5965" class="Function">f</a> <a id="6015" href="Veblen.Base.html#6005" class="Bound">α</a> <a id="6017" href="Lower.html#1118" class="Function Operator">∘ⁿ</a> <a id="6020" href="Veblen.Base.html#6008" class="Bound">n</a><a id="6021" class="Symbol">)</a> <a id="6023" href="Veblen.Base.html#6008" class="Bound">n</a>
+  <a id="6027" href="Veblen.Base.html#5965" class="Function">f</a> <a id="6029" class="Symbol">(</a><a id="6030" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a> <a id="6034" href="Veblen.Base.html#6034" class="Bound">α</a><a id="6035" class="Symbol">)</a> <a id="6037" href="Veblen.Base.html#6037" class="Bound">n</a> <a id="6039" class="Symbol">=</a> <a id="6041" href="Veblen.Base.html#5965" class="Function">f</a> <a id="6043" class="Symbol">(</a><a id="6044" href="Veblen.Base.html#6034" class="Bound">α</a> <a id="6046" href="Veblen.Base.html#6037" class="Bound">n</a><a id="6047" class="Symbol">)</a> <a id="6049" href="Veblen.Base.html#6037" class="Bound">n</a>
+</pre>
+<p><strong>例</strong> 我们有</p>
+<p><span class="math display">
+\begin{aligned}
+f_0\kern{0.17em}n &amp;= n^+ \\
+f_1\kern{0.17em}n &amp;= 2n \\
+f_2\kern{0.17em}n &amp;= 2^n\kern{0.17em}n
+\end{aligned}
+</span></p>
+<p>这些等式的证明只需对 <span class="math inline">n</span> 进行归纳, 是显然的. 代码方面我们只写一些实例作为测试.</p>
+<pre class="Agda">  <a id="FGH.f-0-2"></a><a id="6254" href="Veblen.Base.html#6254" class="Function">f-0-2</a> <a id="6260" class="Symbol">:</a> <a id="6262" href="Veblen.Base.html#5965" class="Function">f</a> <a id="6264" class="Number">0</a> <a id="6266" class="Number">2</a> <a id="6268" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="6270" class="Number">3</a>
+  <a id="6274" href="Veblen.Base.html#6254" class="Function">f-0-2</a> <a id="6280" class="Symbol">=</a> <a id="6282" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+
+  <a id="FGH.f-1-2"></a><a id="6290" href="Veblen.Base.html#6290" class="Function">f-1-2</a> <a id="6296" class="Symbol">:</a> <a id="6298" href="Veblen.Base.html#5965" class="Function">f</a> <a id="6300" class="Number">1</a> <a id="6302" class="Number">2</a> <a id="6304" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="6306" class="Number">4</a>
+  <a id="6310" href="Veblen.Base.html#6290" class="Function">f-1-2</a> <a id="6316" class="Symbol">=</a> <a id="6318" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+
+  <a id="FGH.f-2-2"></a><a id="6326" href="Veblen.Base.html#6326" class="Function">f-2-2</a> <a id="6332" class="Symbol">:</a> <a id="6334" href="Veblen.Base.html#5965" class="Function">f</a> <a id="6336" class="Number">2</a> <a id="6338" class="Number">2</a> <a id="6340" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="6342" class="Number">8</a>
+  <a id="6346" href="Veblen.Base.html#6326" class="Function">f-2-2</a> <a id="6352" class="Symbol">=</a> <a id="6354" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><span class="math inline">f_3</span> 以上的表达式越来越复杂, 但不难计算实例如 <span class="math inline">f_{3}\kern{0.17em}2=2048</span>.</p>
+<pre class="Agda">  <a id="FGH.f-3-2"></a><a id="6431" href="Veblen.Base.html#6431" class="Function">f-3-2</a> <a id="6437" class="Symbol">:</a> <a id="6439" href="Veblen.Base.html#5965" class="Function">f</a> <a id="6441" class="Number">3</a> <a id="6443" class="Number">2</a> <a id="6445" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="6447" class="Number">2048</a>
+  <a id="6454" href="Veblen.Base.html#6431" class="Function">f-3-2</a> <a id="6460" class="Symbol">=</a> <a id="6462" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><strong>引理</strong> 我们有</p>
+<p><span class="math display">
+\begin{aligned}
+f_{\alpha^+}\kern{0.17em}n &amp;= f_\alpha^n\kern{0.17em}n \\
+f_{ω}\kern{0.17em}n &amp;= f_{n}\kern{0.17em}n
+\end{aligned}
+</span></p>
+<pre class="Agda">  <a id="FGH.f-suc"></a><a id="6632" href="Veblen.Base.html#6632" class="Function">f-suc</a> <a id="6638" class="Symbol">:</a> <a id="6640" href="Veblen.Base.html#5965" class="Function">f</a> <a id="6642" class="Symbol">(</a><a id="6643" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a> <a id="6647" href="Veblen.Base.html#4422" class="Generalizable">α</a><a id="6648" class="Symbol">)</a> <a id="6650" href="Veblen.Base.html#4436" class="Generalizable">n</a> <a id="6652" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="6654" class="Symbol">(</a><a id="6655" href="Veblen.Base.html#5965" class="Function">f</a> <a id="6657" href="Veblen.Base.html#4422" class="Generalizable">α</a> <a id="6659" href="Lower.html#1118" class="Function Operator">∘ⁿ</a> <a id="6662" href="Veblen.Base.html#4436" class="Generalizable">n</a><a id="6663" class="Symbol">)</a> <a id="6665" href="Veblen.Base.html#4436" class="Generalizable">n</a>
+  <a id="6669" href="Veblen.Base.html#6632" class="Function">f-suc</a> <a id="6675" class="Symbol">=</a> <a id="6677" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+
+  <a id="FGH.f-ω"></a><a id="6685" href="Veblen.Base.html#6685" class="Function">f-ω</a> <a id="6689" class="Symbol">:</a> <a id="6691" href="Veblen.Base.html#5965" class="Function">f</a> <a id="6693" href="Veblen.Base.html#5076" class="Function">ω</a> <a id="6695" href="Veblen.Base.html#4436" class="Generalizable">n</a> <a id="6697" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="6699" href="Veblen.Base.html#5965" class="Function">f</a> <a id="6701" class="Symbol">(</a><a id="6702" href="Veblen.Base.html#4907" class="Function">finord</a> <a id="6709" href="Veblen.Base.html#4436" class="Generalizable">n</a><a id="6710" class="Symbol">)</a> <a id="6712" href="Veblen.Base.html#4436" class="Generalizable">n</a>
+  <a id="6716" href="Veblen.Base.html#6685" class="Function">f-ω</a> <a id="6720" class="Symbol">=</a> <a id="6722" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><strong>注意</strong> 本文出现的大部分命题的证明都是「依定义即得」的, 体现为代码中的 <code>refl</code>. 也就是说, 证明都是直接展开定义, 不需要额外的推理. 但这并不意味着所有证明是显然的, 有时候递归定义的展开会非常复杂, 这时候我们会分步展开, 逐步化简, 但每一步都 <code>refl</code> 可证.</p>
+<p><strong>定理</strong> 由以上两式不难看出</p>
+<p><span class="math display">
+f_{ω^+}\kern{0.17em}n = f_ω^n\kern{0.17em}n
+</span></p>
+<pre class="Agda">  <a id="FGH.f-ω⁺"></a><a id="6957" href="Veblen.Base.html#6957" class="Function">f-ω⁺</a> <a id="6962" class="Symbol">:</a> <a id="6964" href="Veblen.Base.html#5965" class="Function">f</a> <a id="6966" class="Symbol">(</a><a id="6967" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a> <a id="6971" href="Veblen.Base.html#5076" class="Function">ω</a><a id="6972" class="Symbol">)</a> <a id="6974" href="Veblen.Base.html#4436" class="Generalizable">n</a> <a id="6976" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="6978" class="Symbol">(</a><a id="6979" href="Veblen.Base.html#5965" class="Function">f</a> <a id="6981" href="Veblen.Base.html#5076" class="Function">ω</a> <a id="6983" href="Lower.html#1118" class="Function Operator">∘ⁿ</a> <a id="6986" href="Veblen.Base.html#4436" class="Generalizable">n</a><a id="6987" class="Symbol">)</a> <a id="6989" href="Veblen.Base.html#4436" class="Generalizable">n</a>
+  <a id="6993" href="Veblen.Base.html#6957" class="Function">f-ω⁺</a> <a id="6998" class="Symbol">=</a> <a id="7000" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><strong>推论</strong> 特别地, 有</p>
+<p><span class="math display">
+f_{ω^+}\kern{0.17em}2 = f_ω\kern{0.17em}(f_ω\kern{0.17em}2)
+</span></p>
+<p>但此式无法在 Agda 中直接证明, 因为 Agda 想先把两边都算出再比较相等, 而这是不现实的. 如果有读者知道如何证明, 请打在评论区. 作为替代, 我们可以证明如下式子.</p>
+<p><span class="math display">
+f_{\alpha^+}\kern{0.17em}2 = f_\alpha\kern{0.17em}(f_\alpha\kern{0.17em}2)
+</span></p>
+<pre class="Agda">  <a id="FGH.f-suc-2"></a><a id="7275" href="Veblen.Base.html#7275" class="Function">f-suc-2</a> <a id="7283" class="Symbol">:</a> <a id="7285" href="Veblen.Base.html#5965" class="Function">f</a> <a id="7287" class="Symbol">(</a><a id="7288" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a> <a id="7292" href="Veblen.Base.html#4422" class="Generalizable">α</a><a id="7293" class="Symbol">)</a> <a id="7295" class="Number">2</a> <a id="7297" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="7299" href="Veblen.Base.html#5965" class="Function">f</a> <a id="7301" href="Veblen.Base.html#4422" class="Generalizable">α</a> <a id="7303" class="Symbol">(</a><a id="7304" href="Veblen.Base.html#5965" class="Function">f</a> <a id="7306" href="Veblen.Base.html#4422" class="Generalizable">α</a> <a id="7308" class="Number">2</a><a id="7309" class="Symbol">)</a>
+  <a id="7313" href="Veblen.Base.html#7275" class="Function">f-suc-2</a> <a id="7321" class="Symbol">=</a> <a id="7323" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><strong>事实</strong> <span class="math inline">f_{ω^+} 64</span> 已经大于葛立恒数.</p>
+<blockquote>
+<p>从这里开始, 研究大数的数学就转变成了研究快速增长函数的数学, 进而转变成研究大的序数的数学.</p>
+</blockquote>
+<h3 id="快速以下">※快速以下</h3>
+<p>FGH 是最常用的增长层级, 除此之外, 其他常见的还有 SGH, MGH, HH. 它们的共同特征是遇到极限序数都要做对角化.</p>
+<p><strong>定义</strong> 慢速增长层级 SGH</p>
+<p><span class="math display">
+\begin{aligned}
+g_0\kern{0.17em}n &amp;= 0 \\
+g_{α^+}\kern{0.17em}n &amp;= (g_α\kern{0.17em}n)^+ \\
+g_{\text{lim}\kern{0.17em}α}\kern{0.17em}n &amp;= g_{α[n]}\kern{0.17em}n
+\end{aligned}
+</span></p>
+<pre class="Agda"><a id="7701" class="Keyword">module</a> <a id="SGH"></a><a id="7708" href="Veblen.Base.html#7708" class="Module">SGH</a> <a id="7712" class="Keyword">where</a>
+  <a id="SGH.g"></a><a id="7720" href="Veblen.Base.html#7720" class="Function">g</a> <a id="7722" class="Symbol">:</a> <a id="7724" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="7728" class="Symbol">→</a> <a id="7730" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="7732" class="Symbol">→</a> <a id="7734" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+  <a id="7738" href="Veblen.Base.html#7720" class="Function">g</a> <a id="7740" href="Veblen.Base.html#3447" class="InductiveConstructor">zero</a> <a id="7745" class="Symbol">_</a> <a id="7747" class="Symbol">=</a> <a id="7749" class="Number">0</a>
+  <a id="7753" href="Veblen.Base.html#7720" class="Function">g</a> <a id="7755" class="Symbol">(</a><a id="7756" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a> <a id="7760" href="Veblen.Base.html#7760" class="Bound">α</a><a id="7761" class="Symbol">)</a> <a id="7763" href="Veblen.Base.html#7763" class="Bound">n</a> <a id="7765" class="Symbol">=</a> <a id="7767" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="7771" class="Symbol">(</a><a id="7772" href="Veblen.Base.html#7720" class="Function">g</a> <a id="7774" href="Veblen.Base.html#7760" class="Bound">α</a> <a id="7776" href="Veblen.Base.html#7763" class="Bound">n</a><a id="7777" class="Symbol">)</a>
+  <a id="7781" href="Veblen.Base.html#7720" class="Function">g</a> <a id="7783" class="Symbol">(</a><a id="7784" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a> <a id="7788" href="Veblen.Base.html#7788" class="Bound">α</a><a id="7789" class="Symbol">)</a> <a id="7791" href="Veblen.Base.html#7791" class="Bound">n</a> <a id="7793" class="Symbol">=</a> <a id="7795" href="Veblen.Base.html#7720" class="Function">g</a> <a id="7797" class="Symbol">(</a><a id="7798" href="Veblen.Base.html#7788" class="Bound">α</a> <a id="7800" href="Veblen.Base.html#7791" class="Bound">n</a><a id="7801" class="Symbol">)</a> <a id="7803" href="Veblen.Base.html#7791" class="Bound">n</a>
+</pre>
+<p><strong>定义</strong> 中速增长层级 MGH</p>
+<p><span class="math display">
+\begin{aligned}
+m_0 &amp;= \text{suc} \\
+m_{α^+} &amp;= m_α^2 \\
+m_{\text{lim}\kern{0.17em}α}\kern{0.17em}n &amp;= m_{α[n]}\kern{0.17em}n
+\end{aligned}
+</span></p>
+<pre class="Agda"><a id="7984" class="Keyword">module</a> <a id="MGH"></a><a id="7991" href="Veblen.Base.html#7991" class="Module">MGH</a> <a id="7995" class="Keyword">where</a>
+  <a id="MGH.m"></a><a id="8003" href="Veblen.Base.html#8003" class="Function">m</a> <a id="8005" class="Symbol">:</a> <a id="8007" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="8011" class="Symbol">→</a> <a id="8013" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="8015" class="Symbol">→</a> <a id="8017" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+  <a id="8021" href="Veblen.Base.html#8003" class="Function">m</a> <a id="8023" href="Veblen.Base.html#3447" class="InductiveConstructor">zero</a> <a id="8028" class="Symbol">=</a> <a id="8030" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a>
+  <a id="8036" href="Veblen.Base.html#8003" class="Function">m</a> <a id="8038" class="Symbol">(</a><a id="8039" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a> <a id="8043" href="Veblen.Base.html#8043" class="Bound">α</a><a id="8044" class="Symbol">)</a> <a id="8046" class="Symbol">=</a> <a id="8048" href="Veblen.Base.html#8003" class="Function">m</a> <a id="8050" href="Veblen.Base.html#8043" class="Bound">α</a> <a id="8052" href="Lower.html#1118" class="Function Operator">∘ⁿ</a> <a id="8055" class="Number">2</a>
+  <a id="8059" href="Veblen.Base.html#8003" class="Function">m</a> <a id="8061" class="Symbol">(</a><a id="8062" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a> <a id="8066" href="Veblen.Base.html#8066" class="Bound">α</a><a id="8067" class="Symbol">)</a> <a id="8069" href="Veblen.Base.html#8069" class="Bound">n</a> <a id="8071" class="Symbol">=</a> <a id="8073" href="Veblen.Base.html#8003" class="Function">m</a> <a id="8075" class="Symbol">(</a><a id="8076" href="Veblen.Base.html#8066" class="Bound">α</a> <a id="8078" href="Veblen.Base.html#8069" class="Bound">n</a><a id="8079" class="Symbol">)</a> <a id="8081" href="Veblen.Base.html#8069" class="Bound">n</a>
+</pre>
+<p><strong>定义</strong> Hardy层级 HH, 介于中速和慢速之间</p>
+<p><span class="math display">
+\begin{aligned}
+h_0 &amp;= \text{id} \\
+h_{α^+}\kern{0.17em}n &amp;= h_α\kern{0.17em}(n^+) \\
+h_{\text{lim}\kern{0.17em}α}\kern{0.17em}n &amp;= h_{α[n]}\kern{0.17em}n
+\end{aligned}
+</span></p>
+<pre class="Agda"><a id="8302" class="Keyword">module</a> <a id="HH"></a><a id="8309" href="Veblen.Base.html#8309" class="Module">HH</a> <a id="8312" class="Keyword">where</a>
+  <a id="HH.h"></a><a id="8320" href="Veblen.Base.html#8320" class="Function">h</a> <a id="8322" class="Symbol">:</a> <a id="8324" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="8328" class="Symbol">→</a> <a id="8330" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="8332" class="Symbol">→</a> <a id="8334" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>
+  <a id="8338" href="Veblen.Base.html#8320" class="Function">h</a> <a id="8340" href="Veblen.Base.html#3447" class="InductiveConstructor">zero</a> <a id="8345" class="Symbol">=</a> <a id="8347" href="Function.Base.html#704" class="Function">id</a>
+  <a id="8352" href="Veblen.Base.html#8320" class="Function">h</a> <a id="8354" class="Symbol">(</a><a id="8355" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a> <a id="8359" href="Veblen.Base.html#8359" class="Bound">α</a><a id="8360" class="Symbol">)</a> <a id="8362" href="Veblen.Base.html#8362" class="Bound">n</a> <a id="8364" class="Symbol">=</a> <a id="8366" href="Veblen.Base.html#8320" class="Function">h</a> <a id="8368" href="Veblen.Base.html#8359" class="Bound">α</a> <a id="8370" class="Symbol">(</a><a id="8371" href="Agda.Builtin.Nat.html#234" class="InductiveConstructor">suc</a> <a id="8375" href="Veblen.Base.html#8362" class="Bound">n</a><a id="8376" class="Symbol">)</a>
+  <a id="8380" href="Veblen.Base.html#8320" class="Function">h</a> <a id="8382" class="Symbol">(</a><a id="8383" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a> <a id="8387" href="Veblen.Base.html#8387" class="Bound">α</a><a id="8388" class="Symbol">)</a> <a id="8390" href="Veblen.Base.html#8390" class="Bound">n</a> <a id="8392" class="Symbol">=</a> <a id="8394" href="Veblen.Base.html#8320" class="Function">h</a> <a id="8396" class="Symbol">(</a><a id="8397" href="Veblen.Base.html#8387" class="Bound">α</a> <a id="8399" href="Veblen.Base.html#8390" class="Bound">n</a><a id="8400" class="Symbol">)</a> <a id="8402" href="Veblen.Base.html#8390" class="Bound">n</a>
+</pre>
+<h2 id="序数的递归原理">序数的递归原理</h2>
+<p>为了系统性的构造大序数, 我们先证明序数归纳法, 并由此得到序数的递归原理.</p>
+<p><strong>定理 序数归纳法 (transfinite induction)</strong> 对于任意性质 <span class="math inline">P : \text{Ord} → \text{Set}</span>, 如果</p>
+<ol type="1">
+<li><span class="math inline">P\kern{0.17em}0</span> 成立,</li>
+<li>对于任意序数 <span class="math inline">α</span>, 如果 <span class="math inline">P\kern{0.17em}α</span> 成立, 则 <span class="math inline">P\kern{0.17em}α^+</span> 成立,</li>
+<li>对于任意基本列 <span class="math inline">f</span>, 如果对于任意自然数 <span class="math inline">n</span>, <span class="math inline">P\kern{0.17em}(f\kern{0.17em}n)</span> 成立, 则 <span class="math inline">P\kern{0.17em}(\text{lim}\kern{0.17em}f)</span> 成立,</li>
+</ol>
+<p>则对于任意序数 <span class="math inline">α</span>, <span class="math inline">P\kern{0.17em}α</span> 成立.</p>
+<pre class="Agda"><a id="ind"></a><a id="8794" href="Veblen.Base.html#8794" class="Function">ind</a> <a id="8798" class="Symbol">:</a> <a id="8800" class="Symbol">{</a><a id="8801" href="Veblen.Base.html#8801" class="Bound">P</a> <a id="8803" class="Symbol">:</a> <a id="8805" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="8809" class="Symbol">→</a> <a id="8811" href="Agda.Primitive.html#388" class="Primitive">Set</a><a id="8814" class="Symbol">}</a>
+  <a id="8818" class="Symbol">→</a> <a id="8820" href="Veblen.Base.html#8801" class="Bound">P</a> <a id="8822" class="InductiveConstructor">zero</a>
+  <a id="8829" class="Symbol">→</a> <a id="8831" class="Symbol">(∀</a> <a id="8834" href="Veblen.Base.html#8834" class="Bound">α</a> <a id="8836" class="Symbol">→</a> <a id="8838" href="Veblen.Base.html#8801" class="Bound">P</a> <a id="8840" href="Veblen.Base.html#8834" class="Bound">α</a> <a id="8842" class="Symbol">→</a> <a id="8844" href="Veblen.Base.html#8801" class="Bound">P</a> <a id="8846" class="Symbol">(</a><a id="8847" class="InductiveConstructor">suc</a> <a id="8851" href="Veblen.Base.html#8834" class="Bound">α</a><a id="8852" class="Symbol">))</a>
+  <a id="8857" class="Symbol">→</a> <a id="8859" class="Symbol">(∀</a> <a id="8862" href="Veblen.Base.html#8862" class="Bound">f</a> <a id="8864" class="Symbol">→</a> <a id="8866" class="Symbol">(∀</a> <a id="8869" href="Veblen.Base.html#8869" class="Bound">n</a> <a id="8871" class="Symbol">→</a> <a id="8873" href="Veblen.Base.html#8801" class="Bound">P</a> <a id="8875" class="Symbol">(</a><a id="8876" href="Veblen.Base.html#8862" class="Bound">f</a> <a id="8878" href="Veblen.Base.html#8869" class="Bound">n</a><a id="8879" class="Symbol">))</a> <a id="8882" class="Symbol">→</a> <a id="8884" href="Veblen.Base.html#8801" class="Bound">P</a> <a id="8886" class="Symbol">(</a><a id="8887" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a> <a id="8891" href="Veblen.Base.html#8862" class="Bound">f</a><a id="8892" class="Symbol">))</a>
+  <a id="8897" class="Symbol">→</a> <a id="8899" class="Symbol">∀</a> <a id="8901" href="Veblen.Base.html#8901" class="Bound">α</a> <a id="8903" class="Symbol">→</a> <a id="8905" href="Veblen.Base.html#8801" class="Bound">P</a> <a id="8907" href="Veblen.Base.html#8901" class="Bound">α</a>
+</pre>
+<p><strong>(证明)</strong> 要证对于任意序数 <span class="math inline">α</span>, <span class="math inline">P\kern{0.17em}α</span> 成立. 归纳 <span class="math inline">α</span> 的三种情况.</p>
+<ul>
+<li>当 <span class="math inline">α=0</span> 时, 由条件1, <span class="math inline">P\kern{0.17em}0</span> 成立.</li>
+<li>当 <span class="math inline">α=α^+</span> 时, 要证 <span class="math inline">P\,α^+</span> 成立. 由归纳假设, <span class="math inline">P\kern{0.17em}α</span> 成立. 由条件2, <span class="math inline">P\kern{0.17em}α^+</span> 成立.</li>
+<li>当 <span class="math inline">α=\text{lim}\kern{0.17em}f</span> 时, 要证 <span class="math inline">P\kern{0.17em}(\text{lim}\kern{0.17em}f)</span> 成立. 由归纳假设, 对于任意自然数 <span class="math inline">n</span>, <span class="math inline">P\kern{0.17em}(f\kern{0.17em}n)</span> 成立. 由条件3, <span class="math inline">P\kern{0.17em}(\text{lim}\kern{0.17em}f)</span> 成立. ∎</li>
+</ul>
+<pre class="Agda"><a id="9313" href="Veblen.Base.html#8794" class="Function">ind</a> <a id="9317" href="Veblen.Base.html#9317" class="Bound">z</a> <a id="9319" href="Veblen.Base.html#9319" class="Bound">s</a> <a id="9321" href="Veblen.Base.html#9321" class="Bound">l</a> <a id="9323" href="Veblen.Base.html#3447" class="InductiveConstructor">zero</a> <a id="9328" class="Symbol">=</a> <a id="9330" href="Veblen.Base.html#9317" class="Bound">z</a>
+<a id="9332" href="Veblen.Base.html#8794" class="Function">ind</a> <a id="9336" href="Veblen.Base.html#9336" class="Bound">z</a> <a id="9338" href="Veblen.Base.html#9338" class="Bound">s</a> <a id="9340" href="Veblen.Base.html#9340" class="Bound">l</a> <a id="9342" class="Symbol">(</a><a id="9343" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a> <a id="9347" href="Veblen.Base.html#9347" class="Bound">α</a><a id="9348" class="Symbol">)</a> <a id="9350" class="Symbol">=</a> <a id="9352" href="Veblen.Base.html#9338" class="Bound">s</a> <a id="9354" href="Veblen.Base.html#9347" class="Bound">α</a> <a id="9356" class="Symbol">(</a><a id="9357" href="Veblen.Base.html#8794" class="Function">ind</a> <a id="9361" href="Veblen.Base.html#9336" class="Bound">z</a> <a id="9363" href="Veblen.Base.html#9338" class="Bound">s</a> <a id="9365" href="Veblen.Base.html#9340" class="Bound">l</a> <a id="9367" href="Veblen.Base.html#9347" class="Bound">α</a><a id="9368" class="Symbol">)</a>
+<a id="9370" href="Veblen.Base.html#8794" class="Function">ind</a> <a id="9374" href="Veblen.Base.html#9374" class="Bound">z</a> <a id="9376" href="Veblen.Base.html#9376" class="Bound">s</a> <a id="9378" href="Veblen.Base.html#9378" class="Bound">l</a> <a id="9380" class="Symbol">(</a><a id="9381" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a> <a id="9385" href="Veblen.Base.html#9385" class="Bound">f</a><a id="9386" class="Symbol">)</a> <a id="9388" class="Symbol">=</a> <a id="9390" href="Veblen.Base.html#9378" class="Bound">l</a> <a id="9392" href="Veblen.Base.html#9385" class="Bound">f</a> <a id="9394" class="Symbol">λ</a> <a id="9396" href="Veblen.Base.html#9396" class="Bound">n</a> <a id="9398" class="Symbol">→</a> <a id="9400" href="Veblen.Base.html#8794" class="Function">ind</a> <a id="9404" href="Veblen.Base.html#9374" class="Bound">z</a> <a id="9406" href="Veblen.Base.html#9376" class="Bound">s</a> <a id="9408" href="Veblen.Base.html#9378" class="Bound">l</a> <a id="9410" class="Symbol">(</a><a id="9411" href="Veblen.Base.html#9385" class="Bound">f</a> <a id="9413" href="Veblen.Base.html#9396" class="Bound">n</a><a id="9414" class="Symbol">)</a>
+</pre>
+<p><strong>注意</strong> 这里看起来像是循环论证, 我们实际做的事情是从类型论承诺的规则中抽取出对 <span class="math inline">\text{Ord}</span> 单独适用的部分, 并固化为了一个高阶函数 <span class="math inline">\text{ind}</span>.</p>
+<p><strong>定理 序数的递归原理 (transfinite recursion)</strong> 对于任意类型 <span class="math inline">A</span>, 函数 <span class="math inline">z : A</span>, <span class="math inline">s : A → A</span>, <span class="math inline">l : (ℕ → A) → A</span>, 和任意序数 <span class="math inline">α</span>, 存在唯一的 <span class="math inline">\text{rec}\kern{0.17em}z\kern{0.17em}s\kern{0.17em}l\kern{0.17em}α : A</span>, 满足</p>
+<p><span class="math display">
+\begin{aligned}
+\text{rec}\kern{0.17em}z\kern{0.17em}s\kern{0.17em}l\kern{0.17em}0 &amp;= z \\
+\text{rec}\kern{0.17em}z\kern{0.17em}s\kern{0.17em}l\kern{0.17em}α^+ &amp;= s\kern{0.17em}(\text{rec}\kern{0.17em}z\kern{0.17em}s\kern{0.17em}l\kern{0.17em}α) \\
+\text{rec}\kern{0.17em}z\kern{0.17em}s\kern{0.17em}l\kern{0.17em}(\text{lim}\kern{0.17em}f) &amp;= l\kern{0.17em}(λ\kern{0.17em}n,\text{rec}\kern{0.17em}z\kern{0.17em}s\kern{0.17em}l\kern{0.17em}(f\kern{0.17em}n))
+\end{aligned}
+</span></p>
+<p><strong>(证明)</strong> 令 <span class="math inline">P = λ\kern{0.17em}\_,A</span> 并应用序数归纳法即可. ∎</p>
+<pre class="Agda"><a id="rec"></a><a id="10243" href="Veblen.Base.html#10243" class="Function">rec</a> <a id="10247" class="Symbol">:</a> <a id="10249" href="Veblen.Base.html#4444" class="Generalizable">A</a> <a id="10251" class="Symbol">→</a> <a id="10253" class="Symbol">(</a><a id="10254" href="Veblen.Base.html#4444" class="Generalizable">A</a> <a id="10256" class="Symbol">→</a> <a id="10258" href="Veblen.Base.html#4444" class="Generalizable">A</a><a id="10259" class="Symbol">)</a> <a id="10261" class="Symbol">→</a> <a id="10263" class="Symbol">((</a><a id="10265" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="10267" class="Symbol">→</a> <a id="10269" href="Veblen.Base.html#4444" class="Generalizable">A</a><a id="10270" class="Symbol">)</a> <a id="10272" class="Symbol">→</a> <a id="10274" href="Veblen.Base.html#4444" class="Generalizable">A</a><a id="10275" class="Symbol">)</a> <a id="10277" class="Symbol">→</a> <a id="10279" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="10283" class="Symbol">→</a> <a id="10285" href="Veblen.Base.html#4444" class="Generalizable">A</a>
+<a id="10287" href="Veblen.Base.html#10243" class="Function">rec</a> <a id="10291" href="Veblen.Base.html#10291" class="Bound">z</a> <a id="10293" href="Veblen.Base.html#10293" class="Bound">s</a> <a id="10295" href="Veblen.Base.html#10295" class="Bound">l</a> <a id="10297" class="Symbol">=</a> <a id="10299" href="Veblen.Base.html#8794" class="Function">ind</a> <a id="10303" href="Veblen.Base.html#10291" class="Bound">z</a> <a id="10305" class="Symbol">(λ</a> <a id="10308" href="Veblen.Base.html#10308" class="Bound">_</a> <a id="10310" class="Symbol">→</a> <a id="10312" href="Veblen.Base.html#10293" class="Bound">s</a><a id="10313" class="Symbol">)</a> <a id="10315" class="Symbol">(λ</a> <a id="10318" href="Veblen.Base.html#10318" class="Bound">_</a> <a id="10320" class="Symbol">→</a> <a id="10322" href="Veblen.Base.html#10295" class="Bound">l</a><a id="10323" class="Symbol">)</a>
+</pre>
+<p><strong>注意</strong> 序数的递归原理和序数归纳法都可视作高阶函数, 递归原理是归纳法的特例.</p>
+<p><strong>注意</strong> 序数的递归原理相当强大, 因为 <span class="math inline">A</span> 可以是任意类型, 包括函数类型 <span class="math inline">\text{Ord}\rightarrow\text{Ord}</span> 与 <span class="math inline">(\text{Ord}\rightarrow\text{Ord})\rightarrow(\text{Ord}\rightarrow\text{Ord})</span> 等, 也就是说它允许定义高阶函数的递归. 本文出现的所有大序数都由 <span class="math inline">\text{rec}</span> 定义.</p>
+<h2 id="超限复合">超限复合</h2>
+<p><strong>约定</strong> 我们用 <span class="math inline">F</span> 表示序数函数 <span class="math inline">\text{Ord} → \text{Ord}</span>, 用 <span class="math inline">f,g,h</span> 表示基本列 <span class="math inline">ℕ → \text{Ord}</span>.</p>
+<pre class="Agda"><a id="10686" class="Keyword">variable</a>
+  <a id="10697" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="10699" class="Symbol">:</a> <a id="10701" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="10705" class="Symbol">→</a> <a id="10707" href="Veblen.Base.html#3429" class="Datatype">Ord</a>
+  <a id="10713" href="Veblen.Base.html#10713" class="Generalizable">f</a> <a id="10715" href="Veblen.Base.html#10715" class="Generalizable">g</a> <a id="10717" href="Veblen.Base.html#10717" class="Generalizable">h</a> <a id="10719" class="Symbol">:</a> <a id="10721" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="10723" class="Symbol">→</a> <a id="10725" href="Veblen.Base.html#3429" class="Datatype">Ord</a>
+</pre>
+<p><strong>定义</strong> 仿照函数 <span class="math inline">F : A → A</span> 的 <span class="math inline">n</span> 次复合 <span class="math inline">F^n</span>, 我们定义序数函数 <span class="math inline">F : \text{Ord} → \text{Ord}</span> 的 <span class="math inline">α</span> 次复合 <span class="math inline">F^α</span>, 但使用序数的递归原理 <span class="math inline">\text{rec}</span> 来定义.</p>
+<p><span class="math display">
+F^\alpha\kern{0.17em}\beta=\text{rec}\kern{0.17em}\beta\kern{0.17em}F\kern{0.17em}\text{lim}\kern{0.17em}\alpha
+</span></p>
+<pre class="Agda"><a id="_∘^_"></a><a id="10988" href="Veblen.Base.html#10988" class="Function Operator">_∘^_</a> <a id="10993" class="Symbol">:</a> <a id="10995" class="Symbol">(</a><a id="10996" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="11000" class="Symbol">→</a> <a id="11002" href="Veblen.Base.html#3429" class="Datatype">Ord</a><a id="11005" class="Symbol">)</a> <a id="11007" class="Symbol">→</a> <a id="11009" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="11013" class="Symbol">→</a> <a id="11015" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="11019" class="Symbol">→</a> <a id="11021" href="Veblen.Base.html#3429" class="Datatype">Ord</a>
+<a id="11025" class="Symbol">(</a><a id="11026" href="Veblen.Base.html#11026" class="Bound">F</a> <a id="11028" href="Veblen.Base.html#10988" class="Function Operator">∘^</a> <a id="11031" href="Veblen.Base.html#11031" class="Bound">α</a><a id="11032" class="Symbol">)</a> <a id="11034" href="Veblen.Base.html#11034" class="Bound">β</a> <a id="11036" class="Symbol">=</a> <a id="11038" href="Veblen.Base.html#10243" class="Function">rec</a> <a id="11042" href="Veblen.Base.html#11034" class="Bound">β</a> <a id="11044" href="Veblen.Base.html#11026" class="Bound">F</a> <a id="11046" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a> <a id="11050" href="Veblen.Base.html#11031" class="Bound">α</a>
+</pre>
+<p><strong>注意</strong> 该定义不是 <span class="math inline">F^\alpha\kern{0.17em}\beta=\text{rec}\kern{0.17em}\beta\kern{0.17em}F\kern{0.17em}(\text{lim}\kern{0.17em}\alpha)</span>, 此式有类型错误.</p>
+<p>对于 <span class="math inline">\text{rec}</span> 的四个参数, 直观上</p>
+<ul>
+<li>第一个参数是初始值, 这里是 <span class="math inline">F^\alpha</span> 的输入 <span class="math inline">\beta</span>,</li>
+<li>第二个参数是后继步骤, 需要指定递归迭代的函数, 这里递归迭代的就是 <span class="math inline">F</span>,</li>
+<li>第三个参数是极限步骤, 需要指定将极限步对应的步骤基本列 <span class="math inline">λ\kern{0.17em}n\kern{0.17em},\kern{0.17em}F^{f\kern{0.17em}n}\kern{0.17em}\beta</span> 映射到序数的函数, 这里就是单纯地取其极限, 所以指定为 <span class="math inline">\text{lim}</span>,</li>
+<li>第四个参数是递归的次数, 这里是 <span class="math inline">\alpha</span>.</li>
+</ul>
+<p><strong>定理</strong> 依定义有</p>
+<p><span class="math display">
+\begin{aligned}
+F^0 &amp;= \text{id} \\
+F^{α^+} &amp;= F \circ F^α \\
+F^{\text{lim}\kern{0.17em}f} &amp;= λ\kern{0.17em}\beta,\text{lim}\kern{0.17em}λ\kern{0.17em}n\kern{0.17em},\kern{0.17em}F^{f\kern{0.17em}n}\kern{0.17em}\beta
+\end{aligned}
+</span></p>
+<pre class="Agda"><a id="∘^-zero"></a><a id="11753" href="Veblen.Base.html#11753" class="Function">∘^-zero</a> <a id="11761" class="Symbol">:</a> <a id="11763" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="11765" href="Veblen.Base.html#10988" class="Function Operator">∘^</a> <a id="11768" class="InductiveConstructor">zero</a> <a id="11773" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="11775" href="Function.Base.html#704" class="Function">id</a>
+<a id="11778" href="Veblen.Base.html#11753" class="Function">∘^-zero</a> <a id="11786" class="Symbol">=</a> <a id="11788" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+
+<a id="∘^-suc"></a><a id="11794" href="Veblen.Base.html#11794" class="Function">∘^-suc</a> <a id="11801" class="Symbol">:</a> <a id="11803" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="11805" href="Veblen.Base.html#10988" class="Function Operator">∘^</a> <a id="11808" class="InductiveConstructor">suc</a> <a id="11812" href="Veblen.Base.html#4422" class="Generalizable">α</a> <a id="11814" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="11816" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="11818" href="Function.Base.html#1115" class="Function Operator">∘</a> <a id="11820" class="Symbol">(</a><a id="11821" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="11823" href="Veblen.Base.html#10988" class="Function Operator">∘^</a> <a id="11826" href="Veblen.Base.html#4422" class="Generalizable">α</a><a id="11827" class="Symbol">)</a>
+<a id="11829" href="Veblen.Base.html#11794" class="Function">∘^-suc</a> <a id="11836" class="Symbol">=</a> <a id="11838" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+
+<a id="∘^-lim"></a><a id="11844" href="Veblen.Base.html#11844" class="Function">∘^-lim</a> <a id="11851" class="Symbol">:</a> <a id="11853" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="11855" href="Veblen.Base.html#10988" class="Function Operator">∘^</a> <a id="11858" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a> <a id="11862" href="Veblen.Base.html#10713" class="Generalizable">f</a> <a id="11864" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="11866" class="Symbol">λ</a> <a id="11868" href="Veblen.Base.html#11868" class="Bound">β</a> <a id="11870" class="Symbol">→</a> <a id="11872" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a> <a id="11876" class="Symbol">λ</a> <a id="11878" href="Veblen.Base.html#11878" class="Bound">n</a> <a id="11880" class="Symbol">→</a> <a id="11882" class="Symbol">(</a><a id="11883" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="11885" href="Veblen.Base.html#10988" class="Function Operator">∘^</a> <a id="11888" class="Symbol">(</a><a id="11889" href="Veblen.Base.html#10713" class="Generalizable">f</a> <a id="11891" href="Veblen.Base.html#11878" class="Bound">n</a><a id="11892" class="Symbol">))</a> <a id="11895" href="Veblen.Base.html#11868" class="Bound">β</a>
+<a id="11897" href="Veblen.Base.html#11844" class="Function">∘^-lim</a> <a id="11904" class="Symbol">=</a> <a id="11906" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><strong>注意</strong> <span class="math inline">λ\kern{0.17em}\beta,\text{lim}\kern{0.17em}λ\kern{0.17em}n\kern{0.17em},\kern{0.17em}F^{f\kern{0.17em}n}\kern{0.17em}\beta</span> 不能简化成 <span class="math inline">\text{lim}\kern{0.17em}λ\kern{0.17em}n\kern{0.17em},\kern{0.17em}F^{f\kern{0.17em}n}</span>, 此式有类型错误.</p>
+<h2 id="序数算术">序数算术</h2>
+<p><strong>定义</strong> 从 <span class="math inline">α</span> 开始做 <span class="math inline">β</span> 次后继叫做序数加法, 记作 <span class="math inline">α+β</span></p>
+<p><span class="math display">
+α + β := \text{suc}^β\kern{0.17em}α
+</span></p>
+<pre class="Agda"><a id="_+_"></a><a id="12254" href="Veblen.Base.html#12254" class="Function Operator">_+_</a> <a id="12258" class="Symbol">:</a> <a id="12260" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="12264" class="Symbol">→</a> <a id="12266" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="12270" class="Symbol">→</a> <a id="12272" href="Veblen.Base.html#3429" class="Datatype">Ord</a><a id="12275" class="Symbol">;</a> <a id="12277" class="Keyword">infixl</a> <a id="12284" class="Number">6</a> <a id="12286" href="Veblen.Base.html#12254" class="Function Operator">_+_</a>
+<a id="12290" href="Veblen.Base.html#12290" class="Bound">α</a> <a id="12292" href="Veblen.Base.html#12254" class="Function Operator">+</a> <a id="12294" href="Veblen.Base.html#12294" class="Bound">β</a> <a id="12296" class="Symbol">=</a> <a id="12298" class="Symbol">(</a><a id="12299" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a> <a id="12303" href="Veblen.Base.html#10988" class="Function Operator">∘^</a> <a id="12306" href="Veblen.Base.html#12294" class="Bound">β</a><a id="12307" class="Symbol">)</a> <a id="12309" href="Veblen.Base.html#12290" class="Bound">α</a>
+</pre>
+<p><strong>定义</strong> 从 <span class="math inline">0</span> 开始做 <span class="math inline">β</span> 次 <span class="math inline">+ α</span> 叫做序数乘法, 记作 <span class="math inline">α×β</span></p>
+<p><span class="math display">
+α × β := (λξ,ξ+α)^β\kern{0.17em}0
+</span></p>
+<pre class="Agda"><a id="_*_"></a><a id="12412" href="Veblen.Base.html#12412" class="Function Operator">_*_</a> <a id="12416" class="Symbol">:</a> <a id="12418" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="12422" class="Symbol">→</a> <a id="12424" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="12428" class="Symbol">→</a> <a id="12430" href="Veblen.Base.html#3429" class="Datatype">Ord</a><a id="12433" class="Symbol">;</a> <a id="12435" class="Keyword">infixl</a> <a id="12442" class="Number">7</a> <a id="12444" href="Veblen.Base.html#12412" class="Function Operator">_*_</a>
+<a id="12448" href="Veblen.Base.html#12448" class="Bound">α</a> <a id="12450" href="Veblen.Base.html#12412" class="Function Operator">*</a> <a id="12452" href="Veblen.Base.html#12452" class="Bound">β</a> <a id="12454" class="Symbol">=</a> <a id="12456" class="Symbol">((</a><a id="12458" href="Veblen.Base.html#12254" class="Function Operator">_+</a> <a id="12461" href="Veblen.Base.html#12448" class="Bound">α</a><a id="12462" class="Symbol">)</a> <a id="12464" href="Veblen.Base.html#10988" class="Function Operator">∘^</a> <a id="12467" href="Veblen.Base.html#12452" class="Bound">β</a><a id="12468" class="Symbol">)</a> <a id="12470" class="Number">0</a>
+</pre>
+<p><strong>定义</strong> 从 <span class="math inline">1</span> 开始做 <span class="math inline">β</span> 次 <span class="math inline">× α</span> 叫做序数幂运算, 记作 <span class="math inline">α^β</span></p>
+<p><span class="math display">
+α^β := (λξ,ξ×α)^β\kern{0.17em}1
+</span></p>
+<pre class="Agda"><a id="_^_"></a><a id="12572" href="Veblen.Base.html#12572" class="Function Operator">_^_</a> <a id="12576" class="Symbol">:</a> <a id="12578" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="12582" class="Symbol">→</a> <a id="12584" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="12588" class="Symbol">→</a> <a id="12590" href="Veblen.Base.html#3429" class="Datatype">Ord</a><a id="12593" class="Symbol">;</a> <a id="12595" class="Keyword">infix</a> <a id="12601" class="Number">8</a> <a id="12603" href="Veblen.Base.html#12572" class="Function Operator">_^_</a>
+<a id="12607" href="Veblen.Base.html#12607" class="Bound">α</a> <a id="12609" href="Veblen.Base.html#12572" class="Function Operator">^</a> <a id="12611" href="Veblen.Base.html#12611" class="Bound">β</a> <a id="12613" class="Symbol">=</a> <a id="12615" class="Symbol">((</a><a id="12617" href="Veblen.Base.html#12412" class="Function Operator">_*</a> <a id="12620" href="Veblen.Base.html#12607" class="Bound">α</a><a id="12621" class="Symbol">)</a> <a id="12623" href="Veblen.Base.html#10988" class="Function Operator">∘^</a> <a id="12626" href="Veblen.Base.html#12611" class="Bound">β</a><a id="12627" class="Symbol">)</a> <a id="12629" class="Number">1</a>
+</pre>
+<p>关于为什么不能定义序数的第四级运算的原因可以参看<a href="https://zhuanlan.zhihu.com/p/580526275">Agda大序数(6) 迭代幂次</a>.</p>
+<h2 id="三大高阶函数">三大高阶函数</h2>
+<p>Veblen层级的构造需要三个重要的高阶函数</p>
+<ol type="1">
+<li>无穷迭代 <span class="math inline">λF,F^\omega</span></li>
+<li>跳出运算 <span class="math inline">\text{jump}</span></li>
+<li>不动点的枚举 <span class="math inline">\text{fixpt}</span></li>
+</ol>
+<p>它们都具有类型 <span class="math inline">(\text{Ord}→\text{Ord})→(\text{Ord}→\text{Ord})</span>.</p>
+<h3 id="无穷迭代">无穷迭代</h3>
+<p><strong>定义</strong> 我们称 <span class="math inline">F</span> 的 <span class="math inline">\omega</span> 次复合 <span class="math inline">F^\omega</span> 为 <span class="math inline">F</span> 的无穷迭代.</p>
+<pre class="Agda"><a id="iterω"></a><a id="12958" href="Veblen.Base.html#12958" class="Function">iterω</a> <a id="12964" class="Symbol">:</a> <a id="12966" class="Symbol">(</a><a id="12967" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="12971" class="Symbol">→</a> <a id="12973" href="Veblen.Base.html#3429" class="Datatype">Ord</a><a id="12976" class="Symbol">)</a> <a id="12978" class="Symbol">→</a> <a id="12980" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="12984" class="Symbol">→</a> <a id="12986" href="Veblen.Base.html#3429" class="Datatype">Ord</a>
+<a id="12990" href="Veblen.Base.html#12958" class="Function">iterω</a> <a id="12996" href="Veblen.Base.html#12996" class="Bound">F</a> <a id="12998" class="Symbol">=</a> <a id="13000" href="Veblen.Base.html#12996" class="Bound">F</a> <a id="13002" href="Veblen.Base.html#10988" class="Function Operator">∘^</a> <a id="13005" href="Veblen.Base.html#5076" class="Function">ω</a>
+</pre>
+<h3 id="跳出运算">跳出运算</h3>
+<p><strong>定义</strong> 给定序数函数 <span class="math inline">F</span>, 起始值 <span class="math inline">ι</span> 和迭代次数 <span class="math inline">α</span>, 从 <span class="math inline">F\kern{0.17em}ι</span> 开始, 每次迭代时先做一次后继再迭代 <span class="math inline">F</span>, 总共迭代 <span class="math inline">α</span> 次的运算叫做 <span class="math inline">F</span> 的从 <span class="math inline">ι</span> 开始的 <span class="math inline">α</span> 次跳出, 记作 <span class="math inline">\text{jump}_ι\kern{0.17em}F\kern{0.17em}α</span>.</p>
+<p><span class="math display">
+\text{jump}_ι\kern{0.17em}F\kern{0.17em}α := (F\kern{0.17em}\circ\kern{0.17em}\text{suc})\kern{0.17em}^α\kern{0.17em}(F\kern{0.17em}ι)
+</span></p>
+<pre class="Agda"><a id="jump⟨_⟩"></a><a id="13343" href="Veblen.Base.html#13343" class="Function Operator">jump⟨_⟩</a> <a id="13351" class="Symbol">:</a> <a id="13353" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="13357" class="Symbol">→</a> <a id="13359" class="Symbol">(</a><a id="13360" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="13364" class="Symbol">→</a> <a id="13366" href="Veblen.Base.html#3429" class="Datatype">Ord</a><a id="13369" class="Symbol">)</a> <a id="13371" class="Symbol">→</a> <a id="13373" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="13377" class="Symbol">→</a> <a id="13379" href="Veblen.Base.html#3429" class="Datatype">Ord</a>
+<a id="13383" href="Veblen.Base.html#13343" class="Function Operator">jump⟨</a> <a id="13389" href="Veblen.Base.html#13389" class="Bound">ι</a> <a id="13391" href="Veblen.Base.html#13343" class="Function Operator">⟩</a> <a id="13393" href="Veblen.Base.html#13393" class="Bound">F</a> <a id="13395" href="Veblen.Base.html#13395" class="Bound">α</a> <a id="13397" class="Symbol">=</a> <a id="13399" class="Symbol">((</a><a id="13401" href="Veblen.Base.html#13393" class="Bound">F</a> <a id="13403" href="Function.Base.html#1115" class="Function Operator">∘</a> <a id="13405" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a><a id="13408" class="Symbol">)</a> <a id="13410" href="Veblen.Base.html#10988" class="Function Operator">∘^</a> <a id="13413" href="Veblen.Base.html#13395" class="Bound">α</a><a id="13414" class="Symbol">)</a> <a id="13416" class="Symbol">(</a><a id="13417" href="Veblen.Base.html#13393" class="Bound">F</a> <a id="13419" href="Veblen.Base.html#13389" class="Bound">ι</a><a id="13420" class="Symbol">)</a>
+</pre>
+<p>我们通常只会使用 <span class="math inline">ι = 0</span> 的版本 <span class="math inline">\text{jump}_0\kern{0.17em}F\kern{0.17em}α</span>, 简记作 <span class="math inline">\text{jump}\kern{0.17em}F\kern{0.17em}α</span>.</p>
+<pre class="Agda"><a id="jump"></a><a id="13549" href="Veblen.Base.html#13549" class="Function">jump</a> <a id="13554" class="Symbol">:</a> <a id="13556" class="Symbol">(</a><a id="13557" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="13561" class="Symbol">→</a> <a id="13563" href="Veblen.Base.html#3429" class="Datatype">Ord</a><a id="13566" class="Symbol">)</a> <a id="13568" class="Symbol">→</a> <a id="13570" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="13574" class="Symbol">→</a> <a id="13576" href="Veblen.Base.html#3429" class="Datatype">Ord</a>
+<a id="13580" href="Veblen.Base.html#13549" class="Function">jump</a> <a id="13585" href="Veblen.Base.html#13585" class="Bound">F</a> <a id="13587" class="Symbol">=</a> <a id="13589" href="Veblen.Base.html#13343" class="Function Operator">jump⟨</a> <a id="13595" class="Number">0</a> <a id="13597" href="Veblen.Base.html#13343" class="Function Operator">⟩</a> <a id="13599" href="Veblen.Base.html#13585" class="Bound">F</a>
+</pre>
+<p><strong>定理</strong> 依定义有</p>
+<p><span class="math display">
+\begin{aligned}
+\text{jump}\kern{0.17em}F\kern{0.17em}0 &amp;= F\kern{0.17em}0 \\
+\text{jump}\kern{0.17em}F\kern{0.17em}(α^+) &amp;= F\kern{0.17em}(\text{jump}\kern{0.17em}F\kern{0.17em}α)^+ \\
+\text{jump}\kern{0.17em}F\kern{0.17em}(\text{lim}\kern{0.17em}f) &amp;= \text{lim}\kern{0.17em}λ\kern{0.17em}n\kern{0.17em},\kern{0.17em}\text{jump}\kern{0.17em}F\kern{0.17em}(f\kern{0.17em}n)
+\end{aligned}
+</span></p>
+<p><strong>(证明)</strong> 零和极限的情况是显然的. 对于后继的情况, 有</p>
+<p><span class="math display">
+\begin{aligned}
+\text{jump}\kern{0.17em}F\kern{0.17em}(α^+) &amp;= (F\kern{0.17em}\circ\kern{0.17em}\text{suc})\kern{0.17em}^{α^+}\kern{0.17em}(F\kern{0.17em}0) \\
+&amp;= (F\kern{0.17em}\circ\kern{0.17em}\text{suc})((F\kern{0.17em}\circ\kern{0.17em}\text{suc})\kern{0.17em}^α\kern{0.17em}(F\kern{0.17em}0)) \\
+&amp;= F\kern{0.17em}(\text{jump}\kern{0.17em}F\kern{0.17em}α)^+
+\end{aligned}
+</span></p>
+<p>∎</p>
+<pre class="Agda"><a id="jump-0"></a><a id="14444" href="Veblen.Base.html#14444" class="Function">jump-0</a> <a id="14451" class="Symbol">:</a> <a id="14453" href="Veblen.Base.html#13549" class="Function">jump</a> <a id="14458" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="14460" class="Number">0</a> <a id="14462" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="14464" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="14466" class="Number">0</a>
+<a id="14468" href="Veblen.Base.html#14444" class="Function">jump-0</a> <a id="14475" class="Symbol">=</a> <a id="14477" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+
+<a id="jump-suc"></a><a id="14483" href="Veblen.Base.html#14483" class="Function">jump-suc</a> <a id="14492" class="Symbol">:</a> <a id="14494" href="Veblen.Base.html#13549" class="Function">jump</a> <a id="14499" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="14501" class="Symbol">(</a><a id="14502" class="InductiveConstructor">suc</a> <a id="14506" href="Veblen.Base.html#4422" class="Generalizable">α</a><a id="14507" class="Symbol">)</a> <a id="14509" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="14511" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="14513" class="Symbol">(</a><a id="14514" class="InductiveConstructor">suc</a> <a id="14518" class="Symbol">(</a><a id="14519" href="Veblen.Base.html#13549" class="Function">jump</a> <a id="14524" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="14526" href="Veblen.Base.html#4422" class="Generalizable">α</a><a id="14527" class="Symbol">))</a>
+<a id="14530" href="Veblen.Base.html#14483" class="Function">jump-suc</a> <a id="14539" class="Symbol">{</a><a id="14540" href="Veblen.Base.html#14540" class="Bound">F</a><a id="14541" class="Symbol">}</a> <a id="14543" class="Symbol">{</a><a id="14544" href="Veblen.Base.html#14544" class="Bound">α</a><a id="14545" class="Symbol">}</a> <a id="14547" class="Symbol">=</a> <a id="14549" href="Relation.Binary.Reasoning.Syntax.html#1510" class="Function Operator">begin</a>
+  <a id="14557" href="Veblen.Base.html#13549" class="Function">jump</a> <a id="14562" href="Veblen.Base.html#14540" class="Bound">F</a> <a id="14564" class="Symbol">(</a><a id="14565" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a> <a id="14569" href="Veblen.Base.html#14544" class="Bound">α</a><a id="14570" class="Symbol">)</a>                        <a id="14595" href="Relation.Binary.Reasoning.Syntax.html#11017" class="Function">≡⟨⟩</a>
+  <a id="14601" class="Symbol">((</a><a id="14603" href="Veblen.Base.html#14540" class="Bound">F</a> <a id="14605" href="Function.Base.html#1115" class="Function Operator">∘</a> <a id="14607" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a><a id="14610" class="Symbol">)</a> <a id="14612" href="Veblen.Base.html#10988" class="Function Operator">∘^</a> <a id="14615" class="Symbol">(</a><a id="14616" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a> <a id="14620" href="Veblen.Base.html#14544" class="Bound">α</a><a id="14621" class="Symbol">))</a> <a id="14624" class="Symbol">(</a><a id="14625" href="Veblen.Base.html#14540" class="Bound">F</a> <a id="14627" href="Veblen.Base.html#3447" class="InductiveConstructor">zero</a><a id="14631" class="Symbol">)</a>       <a id="14639" href="Relation.Binary.Reasoning.Syntax.html#11017" class="Function">≡⟨⟩</a>
+  <a id="14645" class="Symbol">(</a><a id="14646" href="Veblen.Base.html#14540" class="Bound">F</a> <a id="14648" href="Function.Base.html#1115" class="Function Operator">∘</a> <a id="14650" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a><a id="14653" class="Symbol">)</a> <a id="14655" class="Symbol">(((</a><a id="14658" href="Veblen.Base.html#14540" class="Bound">F</a> <a id="14660" href="Function.Base.html#1115" class="Function Operator">∘</a> <a id="14662" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a><a id="14665" class="Symbol">)</a> <a id="14667" href="Veblen.Base.html#10988" class="Function Operator">∘^</a> <a id="14670" href="Veblen.Base.html#14544" class="Bound">α</a><a id="14671" class="Symbol">)</a> <a id="14673" class="Symbol">(</a><a id="14674" href="Veblen.Base.html#14540" class="Bound">F</a> <a id="14676" href="Veblen.Base.html#3447" class="InductiveConstructor">zero</a><a id="14680" class="Symbol">))</a> <a id="14683" href="Relation.Binary.Reasoning.Syntax.html#11017" class="Function">≡⟨⟩</a>
+  <a id="14689" href="Veblen.Base.html#14540" class="Bound">F</a> <a id="14691" class="Symbol">(</a><a id="14692" href="Veblen.Base.html#3460" class="InductiveConstructor">suc</a> <a id="14696" class="Symbol">(</a><a id="14697" href="Veblen.Base.html#13549" class="Function">jump</a> <a id="14702" href="Veblen.Base.html#14540" class="Bound">F</a> <a id="14704" href="Veblen.Base.html#14544" class="Bound">α</a><a id="14705" class="Symbol">))</a>                    <a id="14727" href="Relation.Binary.Reasoning.Syntax.html#12283" class="Function Operator">∎</a>
+
+<a id="jump-lim"></a><a id="14730" href="Veblen.Base.html#14730" class="Function">jump-lim</a> <a id="14739" class="Symbol">:</a> <a id="14741" href="Veblen.Base.html#13549" class="Function">jump</a> <a id="14746" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="14748" class="Symbol">(</a><a id="14749" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a> <a id="14753" href="Veblen.Base.html#10713" class="Generalizable">f</a><a id="14754" class="Symbol">)</a> <a id="14756" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="14758" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a> <a id="14762" class="Symbol">λ</a> <a id="14764" href="Veblen.Base.html#14764" class="Bound">n</a> <a id="14766" class="Symbol">→</a> <a id="14768" href="Veblen.Base.html#13549" class="Function">jump</a> <a id="14773" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="14775" class="Symbol">(</a><a id="14776" href="Veblen.Base.html#10713" class="Generalizable">f</a> <a id="14778" href="Veblen.Base.html#14764" class="Bound">n</a><a id="14779" class="Symbol">)</a>
+<a id="14781" href="Veblen.Base.html#14730" class="Function">jump-lim</a> <a id="14790" class="Symbol">=</a> <a id="14792" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<h3 id="不动点的枚举">不动点的枚举</h3>
+<p><strong>定义</strong> 给定序数函数 <span class="math inline">F</span>, 我们定义 <span class="math inline">F</span> 的第 <span class="math inline">α</span> 个不动点 <span class="math inline">\text{fixpt}\kern{0.17em}F\kern{0.17em}α</span> 为 <span class="math inline">F^\omega</span> 的第 <span class="math inline">α</span> 个跳出 <span class="math inline">\text{jump}\kern{0.17em}(F^\omega)\kern{0.17em}α</span>.</p>
+<p><span class="math display">
+\text{fixpt}\kern{0.17em}F := \text{jump}\kern{0.17em}(F^\omega)
+</span></p>
+<pre class="Agda"><a id="fixpt"></a><a id="15054" href="Veblen.Base.html#15054" class="Function">fixpt</a> <a id="15060" class="Symbol">:</a> <a id="15062" class="Symbol">(</a><a id="15063" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="15067" class="Symbol">→</a> <a id="15069" href="Veblen.Base.html#3429" class="Datatype">Ord</a><a id="15072" class="Symbol">)</a> <a id="15074" class="Symbol">→</a> <a id="15076" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="15080" class="Symbol">→</a> <a id="15082" href="Veblen.Base.html#3429" class="Datatype">Ord</a>
+<a id="15086" href="Veblen.Base.html#15054" class="Function">fixpt</a> <a id="15092" href="Veblen.Base.html#15092" class="Bound">F</a> <a id="15094" class="Symbol">=</a> <a id="15096" href="Veblen.Base.html#13549" class="Function">jump</a> <a id="15101" class="Symbol">(</a><a id="15102" href="Veblen.Base.html#12958" class="Function">iterω</a> <a id="15108" href="Veblen.Base.html#15092" class="Bound">F</a><a id="15109" class="Symbol">)</a>
+</pre>
+<p>特别地, <span class="math inline">F</span> 的最小的不动点记作 <span class="math inline">\text{lfp}\kern{0.17em}F</span></p>
+<p><span class="math display">
+\text{lfp}\kern{0.17em}F := \text{fixpt}\kern{0.17em}F\kern{0.17em}0
+</span></p>
+<pre class="Agda"><a id="lfp"></a><a id="15247" href="Veblen.Base.html#15247" class="Function">lfp</a> <a id="15251" class="Symbol">:</a> <a id="15253" class="Symbol">(</a><a id="15254" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="15258" class="Symbol">→</a> <a id="15260" href="Veblen.Base.html#3429" class="Datatype">Ord</a><a id="15263" class="Symbol">)</a> <a id="15265" class="Symbol">→</a> <a id="15267" href="Veblen.Base.html#3429" class="Datatype">Ord</a>
+<a id="15271" href="Veblen.Base.html#15247" class="Function">lfp</a> <a id="15275" href="Veblen.Base.html#15275" class="Bound">F</a> <a id="15277" class="Symbol">=</a> <a id="15279" href="Veblen.Base.html#15054" class="Function">fixpt</a> <a id="15285" href="Veblen.Base.html#15275" class="Bound">F</a> <a id="15287" class="Number">0</a>
+</pre>
+<p><strong>定理</strong> 依定义有</p>
+<p><span class="math display">
+\begin{aligned}
+\text{fixpt}\kern{0.17em}F\kern{0.17em}0 &amp;= F^\omega\kern{0.17em}0 \\
+\text{fixpt}\kern{0.17em}F\kern{0.17em}(α^+) &amp;= F^\omega\kern{0.17em}(\text{fixpt}\kern{0.17em}F\kern{0.17em}α)^+ \\
+\text{fixpt}\kern{0.17em}F\kern{0.17em}(\text{lim}\kern{0.17em}f) &amp;= \text{lim}\kern{0.17em}λ\kern{0.17em}n\kern{0.17em},\kern{0.17em}\text{fixpt}\kern{0.17em}F\kern{0.17em}(f\kern{0.17em}n)
+\end{aligned}
+</span></p>
+<pre class="Agda"><a id="fixpt-0"></a><a id="15730" href="Veblen.Base.html#15730" class="Function">fixpt-0</a> <a id="15738" class="Symbol">:</a> <a id="15740" href="Veblen.Base.html#15054" class="Function">fixpt</a> <a id="15746" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="15748" class="Number">0</a> <a id="15750" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="15752" href="Veblen.Base.html#12958" class="Function">iterω</a> <a id="15758" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="15760" class="Number">0</a>
+<a id="15762" href="Veblen.Base.html#15730" class="Function">fixpt-0</a> <a id="15770" class="Symbol">=</a> <a id="15772" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+
+<a id="fixpt-suc"></a><a id="15778" href="Veblen.Base.html#15778" class="Function">fixpt-suc</a> <a id="15788" class="Symbol">:</a> <a id="15790" href="Veblen.Base.html#15054" class="Function">fixpt</a> <a id="15796" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="15798" class="Symbol">(</a><a id="15799" class="InductiveConstructor">suc</a> <a id="15803" href="Veblen.Base.html#4422" class="Generalizable">α</a><a id="15804" class="Symbol">)</a> <a id="15806" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="15808" href="Veblen.Base.html#12958" class="Function">iterω</a> <a id="15814" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="15816" class="Symbol">(</a><a id="15817" class="InductiveConstructor">suc</a> <a id="15821" class="Symbol">(</a><a id="15822" href="Veblen.Base.html#15054" class="Function">fixpt</a> <a id="15828" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="15830" href="Veblen.Base.html#4422" class="Generalizable">α</a><a id="15831" class="Symbol">))</a>
+<a id="15834" href="Veblen.Base.html#15778" class="Function">fixpt-suc</a> <a id="15844" class="Symbol">{</a><a id="15845" href="Veblen.Base.html#15845" class="Bound">F</a><a id="15846" class="Symbol">}</a> <a id="15848" class="Symbol">{</a><a id="15849" href="Veblen.Base.html#15849" class="Bound">α</a><a id="15850" class="Symbol">}</a> <a id="15852" class="Symbol">=</a> <a id="15854" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+
+<a id="fixpt-lim"></a><a id="15860" href="Veblen.Base.html#15860" class="Function">fixpt-lim</a> <a id="15870" class="Symbol">:</a> <a id="15872" href="Veblen.Base.html#15054" class="Function">fixpt</a> <a id="15878" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="15880" class="Symbol">(</a><a id="15881" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a> <a id="15885" href="Veblen.Base.html#10713" class="Generalizable">f</a><a id="15886" class="Symbol">)</a> <a id="15888" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="15890" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a> <a id="15894" class="Symbol">λ</a> <a id="15896" href="Veblen.Base.html#15896" class="Bound">n</a> <a id="15898" class="Symbol">→</a> <a id="15900" href="Veblen.Base.html#15054" class="Function">fixpt</a> <a id="15906" href="Veblen.Base.html#10697" class="Generalizable">F</a> <a id="15908" class="Symbol">(</a><a id="15909" href="Veblen.Base.html#10713" class="Generalizable">f</a> <a id="15911" href="Veblen.Base.html#15896" class="Bound">n</a><a id="15912" class="Symbol">)</a>
+<a id="15914" href="Veblen.Base.html#15860" class="Function">fixpt-lim</a> <a id="15924" class="Symbol">=</a> <a id="15926" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><strong>注意</strong> 跳出运算并非一定搭配无穷迭代使用, 但一定会搭配极限使用. 后面我们会看到多种 <span class="math inline">\text{lim}</span> 的情况需要跳出, 以提高增长率.</p>
+<h2 id="ε-ζ-η-层级">ε， ζ， η 层级</h2>
+<p>我们定义三个序数函数 <span class="math inline">\varepsilon, \zeta, \eta</span> 如下.</p>
+<p><strong>定义</strong> <span class="math inline">\varepsilon</span> 是函数 <span class="math inline">λα,ω^α</span> 的不动点枚举</p>
+<p><span class="math display">
+ε := \text{fixpt}\kern{0.17em}λα,ω\kern{0.17em}^α
+</span></p>
+<pre class="Agda"><a id="ε"></a><a id="16179" href="Veblen.Base.html#16179" class="Function">ε</a> <a id="16181" class="Symbol">:</a> <a id="16183" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="16187" class="Symbol">→</a> <a id="16189" href="Veblen.Base.html#3429" class="Datatype">Ord</a>
+<a id="16193" href="Veblen.Base.html#16179" class="Function">ε</a> <a id="16195" class="Symbol">=</a> <a id="16197" href="Veblen.Base.html#15054" class="Function">fixpt</a> <a id="16203" class="Symbol">(</a><a id="16204" href="Veblen.Base.html#5076" class="Function">ω</a> <a id="16206" href="Veblen.Base.html#12572" class="Function Operator">^_</a><a id="16208" class="Symbol">)</a>
+</pre>
+<p><strong>定理</strong> 依定义有</p>
+<p><span class="math display">
+\begin{aligned}
+\varepsilon_0 &amp;= (λα,ω^α)^ω\kern{0.17em}0 =
+ω^{ω^{⋰^{ω^0}}}
+\\
+\varepsilon_{α^+} &amp;= (λα,ω^α)^ω\kern{0.17em}({ε_α}^+) =
+ω^{ω^{⋰^{ω^{({ε_α}^+)}}}}
+\\
+\varepsilon_{\text{lim}\kern{0.17em}f} &amp;= \text{lim}\kern{0.17em}λ\kern{0.17em}n\kern{0.17em},\kern{0.17em}\varepsilon_{f\kern{0.17em}n} = \text{lim}(ε_{f\kern{0.17em}0},ε_{f\kern{0.17em}1},...)
+\end{aligned}
+</span></p>
+<pre class="Agda"><a id="ε-0"></a><a id="16618" href="Veblen.Base.html#16618" class="Function">ε-0</a> <a id="16622" class="Symbol">:</a> <a id="16624" href="Veblen.Base.html#16179" class="Function">ε</a> <a id="16626" class="Number">0</a> <a id="16628" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="16630" href="Veblen.Base.html#12958" class="Function">iterω</a> <a id="16636" class="Symbol">(</a><a id="16637" href="Veblen.Base.html#5076" class="Function">ω</a> <a id="16639" href="Veblen.Base.html#12572" class="Function Operator">^_</a><a id="16641" class="Symbol">)</a> <a id="16643" class="Number">0</a>
+<a id="16645" href="Veblen.Base.html#16618" class="Function">ε-0</a> <a id="16649" class="Symbol">=</a> <a id="16651" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+
+<a id="ε-suc"></a><a id="16657" href="Veblen.Base.html#16657" class="Function">ε-suc</a> <a id="16663" class="Symbol">:</a> <a id="16665" href="Veblen.Base.html#16179" class="Function">ε</a> <a id="16667" class="Symbol">(</a><a id="16668" class="InductiveConstructor">suc</a> <a id="16672" href="Veblen.Base.html#4422" class="Generalizable">α</a><a id="16673" class="Symbol">)</a> <a id="16675" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="16677" href="Veblen.Base.html#12958" class="Function">iterω</a> <a id="16683" class="Symbol">(</a><a id="16684" href="Veblen.Base.html#5076" class="Function">ω</a> <a id="16686" href="Veblen.Base.html#12572" class="Function Operator">^_</a><a id="16688" class="Symbol">)</a> <a id="16690" class="Symbol">(</a><a id="16691" class="InductiveConstructor">suc</a> <a id="16695" class="Symbol">(</a><a id="16696" href="Veblen.Base.html#16179" class="Function">ε</a> <a id="16698" href="Veblen.Base.html#4422" class="Generalizable">α</a><a id="16699" class="Symbol">))</a>
+<a id="16702" href="Veblen.Base.html#16657" class="Function">ε-suc</a> <a id="16708" class="Symbol">=</a> <a id="16710" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+
+<a id="ε-lim"></a><a id="16716" href="Veblen.Base.html#16716" class="Function">ε-lim</a> <a id="16722" class="Symbol">:</a> <a id="16724" href="Veblen.Base.html#16179" class="Function">ε</a> <a id="16726" class="Symbol">(</a><a id="16727" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a> <a id="16731" href="Veblen.Base.html#10713" class="Generalizable">f</a><a id="16732" class="Symbol">)</a> <a id="16734" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="16736" href="Veblen.Base.html#3479" class="InductiveConstructor">lim</a> <a id="16740" class="Symbol">λ</a> <a id="16742" href="Veblen.Base.html#16742" class="Bound">n</a> <a id="16744" class="Symbol">→</a> <a id="16746" href="Veblen.Base.html#16179" class="Function">ε</a> <a id="16748" class="Symbol">(</a><a id="16749" href="Veblen.Base.html#10713" class="Generalizable">f</a> <a id="16751" href="Veblen.Base.html#16742" class="Bound">n</a><a id="16752" class="Symbol">)</a>
+<a id="16754" href="Veblen.Base.html#16716" class="Function">ε-lim</a> <a id="16760" class="Symbol">=</a> <a id="16762" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><strong>定义</strong> <span class="math inline">\zeta</span> 是 <span class="math inline">ε</span> 的不动点枚举</p>
+<p><span class="math display">
+ζ := \text{fixpt}\kern{0.17em}ε
+</span></p>
+<pre class="Agda"><a id="ζ"></a><a id="16848" href="Veblen.Base.html#16848" class="Function">ζ</a> <a id="16850" class="Symbol">:</a> <a id="16852" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="16856" class="Symbol">→</a> <a id="16858" href="Veblen.Base.html#3429" class="Datatype">Ord</a>
+<a id="16862" href="Veblen.Base.html#16848" class="Function">ζ</a> <a id="16864" class="Symbol">=</a> <a id="16866" href="Veblen.Base.html#15054" class="Function">fixpt</a> <a id="16872" href="Veblen.Base.html#16179" class="Function">ε</a>
+</pre>
+<p><strong>定理</strong> 依定义有</p>
+<p><span class="math display">
+\begin{aligned}
+\zeta_0 &amp;= ε^ω\kern{0.17em}0 =
+ε_{ε_{⋱_{ε_0}}}
+\\
+\zeta_{α^+} &amp;= ε^ω\kern{0.17em}({\zeta_α}^+) =
+ε_{ε_{⋱_{({\zeta_α}^+)}}}
+\\
+\zeta_{\text{lim}\kern{0.17em}f} &amp;= \text{lim}\kern{0.17em}λ\kern{0.17em}n\kern{0.17em},\kern{0.17em}\zeta_{f\kern{0.17em}n} = \text{lim}(ζ_{f\kern{0.17em}0},ζ_{f\kern{0.17em}1},...)
+\end{aligned}
+</span></p>
+<p><strong>定义</strong> <span class="math inline">\eta</span> 是 <span class="math inline">\zeta</span> 的不动点枚举</p>
+<p><span class="math display">
+η := \text{fixpt}\kern{0.17em}ζ
+</span></p>
+<pre class="Agda"><a id="η"></a><a id="17317" href="Veblen.Base.html#17317" class="Function">η</a> <a id="17319" class="Symbol">:</a> <a id="17321" href="Veblen.Base.html#3429" class="Datatype">Ord</a> <a id="17325" class="Symbol">→</a> <a id="17327" href="Veblen.Base.html#3429" class="Datatype">Ord</a>
+<a id="17331" href="Veblen.Base.html#17317" class="Function">η</a> <a id="17333" class="Symbol">=</a> <a id="17335" href="Veblen.Base.html#15054" class="Function">fixpt</a> <a id="17341" href="Veblen.Base.html#16848" class="Function">ζ</a>
+</pre>
+<p><strong>例</strong> 一个很大的大数:</p>
+<p><span class="math display">
+\text{oom} := f_{η_0} 99 = f_{
+  ζ_{ζ_{⋱_{ζ_0}}}
+}99
+</span></p>
+<p>其中 <span class="math inline">ζ_{ζ_{⋱_{ζ_0}}}</span> 是从 <span class="math inline">ζ_0</span> 开始迭代了 99 次 <span class="math inline">ζ</span>.</p>
+<pre class="Agda"><a id="oom"></a><a id="17479" href="Veblen.Base.html#17479" class="Function">oom</a> <a id="17483" class="Symbol">=</a> <a id="17485" href="Veblen.Base.html#5965" class="Function">FGH.f</a> <a id="17491" class="Symbol">(</a><a id="17492" href="Veblen.Base.html#17317" class="Function">η</a> <a id="17494" class="Number">0</a><a id="17495" class="Symbol">)</a> <a id="17497" class="Number">99</a>
+</pre>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>
