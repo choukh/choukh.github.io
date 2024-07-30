@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc-markdown-css-theme" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>形式化大数数学 (2.1 - 良构树序数的性质)</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/skylighting-solarized-theme.css" />
+  <script type="text/javascript" src="highlight-hover.js"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+</head>
+<body>
+
+<header>
+<h1 class="title">形式化大数数学 (2.1 - 良构树序数的性质)</h1>
+<blockquote class="metadata">
+</blockquote>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <strong>Contents</strong><label for="contents">⊕</label>
+  <input type="checkbox" id="contents">
+  <ul>
+  <li><a href="#形式化大数数学-2.1---良构树序数的性质" id="toc-形式化大数数学-2.1---良构树序数的性质">形式化大数数学 (2.1 - 良构树序数的性质)</a>
+  <ul>
+  <li><a href="#序数函数" id="toc-序数函数">序数函数</a></li>
+  <li><a href="#一些约定" id="toc-一些约定">一些约定</a></li>
+  </ul></li>
+  </ul>
+</nav>
+
+<main>
+<h1 id="形式化大数数学-2.1---良构树序数的性质">形式化大数数学 (2.1 - 良构树序数的性质)</h1>
+<blockquote>
+<p>交流Q群: 893531731<br />
+本文源码: <a href="https://github.com/choukh/agda-googology/blob/main/src/WellFormed/Properties.lagda.md">Properties.lagda.md</a><br />
+高亮渲染: <a href="https://choukh.github.io/agda-googology/WellFormed.Properties.html">Properties.html</a></p>
+</blockquote>
+<pre class="Agda"><a id="341" class="Symbol">{-#</a> <a id="345" class="Keyword">OPTIONS</a> <a id="353" class="Pragma">--safe</a> <a id="360" class="Pragma">--cubical</a> <a id="370" class="Symbol">#-}</a>
+<a id="374" class="Keyword">module</a> <a id="381" href="WellFormed.Properties.html" class="Module">WellFormed.Properties</a> <a id="403" class="Keyword">where</a>
+<a id="409" class="Keyword">open</a> <a id="414" class="Keyword">import</a> <a id="421" href="WellFormed.Base.html" class="Module">WellFormed.Base</a>
+</pre>
+<p><a href="https://zhuanlan.zhihu.com/p/711649863">上一篇</a>我们定义了良构树序数并证明了一些基本性质, 本文将继续讨论它的更多性质.</p>
+<h2 id="序数函数">序数函数</h2>
+<p>我们先定义序数函数的一些性质.</p>
+<p><strong>定义 2-1-0</strong> 我们把序数函数的类型简记作 <span class="math inline">\text{Func}</span>, 序数的二元关系的类型简记作 <span class="math inline">\text{Rel}</span>, 并约定今后都用大写的 <span class="math inline">F</span> 表示序数函数.</p>
+<pre class="Agda"><a id="Func"></a><a id="653" href="WellFormed.Properties.html#653" class="Function">Func</a> <a id="658" class="Symbol">:</a> <a id="660" href="Agda.Primitive.html#388" class="Primitive">Type</a>
+<a id="665" href="WellFormed.Properties.html#653" class="Function">Func</a> <a id="670" class="Symbol">=</a> <a id="672" href="WellFormed.Base.html#2896" class="Datatype">Ord</a> <a id="676" class="Symbol">→</a> <a id="678" href="WellFormed.Base.html#2896" class="Datatype">Ord</a>
+<a id="682" class="Keyword">variable</a> <a id="691" href="WellFormed.Properties.html#691" class="Generalizable">F</a> <a id="693" class="Symbol">:</a> <a id="695" href="WellFormed.Properties.html#653" class="Function">Func</a>
+
+<a id="Rel"></a><a id="701" href="WellFormed.Properties.html#701" class="Function">Rel</a> <a id="705" class="Symbol">:</a> <a id="707" href="Agda.Primitive.html#388" class="Primitive">Type₁</a>
+<a id="713" href="WellFormed.Properties.html#701" class="Function">Rel</a> <a id="717" class="Symbol">=</a> <a id="719" href="WellFormed.Base.html#2896" class="Datatype">Ord</a> <a id="723" class="Symbol">→</a> <a id="725" href="WellFormed.Base.html#2896" class="Datatype">Ord</a> <a id="729" class="Symbol">→</a> <a id="731" href="Agda.Primitive.html#388" class="Primitive">Type</a>
+</pre>
+<p><strong>定义 2-1-1</strong> 我们说一个序数函数 <span class="math inline">F</span> <strong>膨胀</strong>一个序数关系 <span class="math inline">\sim</span>, 当且仅当对任意序数 <span class="math inline">x</span> 都有 <span class="math inline">x \sim F(x)</span>.</p>
+<pre class="Agda"><a id="_inflates_"></a><a id="830" href="WellFormed.Properties.html#830" class="Function Operator">_inflates_</a> <a id="841" class="Symbol">:</a> <a id="843" href="WellFormed.Properties.html#653" class="Function">Func</a> <a id="848" class="Symbol">→</a> <a id="850" href="WellFormed.Properties.html#701" class="Function">Rel</a> <a id="854" class="Symbol">→</a> <a id="856" href="Agda.Primitive.html#388" class="Primitive">Type</a>
+<a id="861" href="WellFormed.Properties.html#861" class="Bound">F</a> <a id="863" href="WellFormed.Properties.html#830" class="Function Operator">inflates</a> <a id="872" href="WellFormed.Properties.html#872" class="Bound Operator">_~_</a> <a id="876" class="Symbol">=</a> <a id="878" class="Symbol">∀</a> <a id="880" class="Symbol">{</a><a id="881" href="WellFormed.Properties.html#881" class="Bound">x</a><a id="882" class="Symbol">}</a> <a id="884" class="Symbol">→</a> <a id="886" href="WellFormed.Properties.html#881" class="Bound">x</a> <a id="888" href="WellFormed.Properties.html#872" class="Bound Operator">~</a> <a id="890" href="WellFormed.Properties.html#861" class="Bound">F</a> <a id="892" href="WellFormed.Properties.html#881" class="Bound">x</a>
+</pre>
+<p><strong>事实 2-1-2</strong> 如果 <span class="math inline">F</span> 膨胀 <span class="math inline">\lt</span>, 那么 <span class="math inline">F</span> 膨胀 <span class="math inline">\leq</span>.</p>
+<pre class="Agda"><a id="infl&lt;→infl≤"></a><a id="956" href="WellFormed.Properties.html#956" class="Function">infl&lt;→infl≤</a> <a id="968" class="Symbol">:</a> <a id="970" href="WellFormed.Properties.html#691" class="Generalizable">F</a> <a id="972" href="WellFormed.Properties.html#830" class="Function Operator">inflates</a> <a id="981" href="WellFormed.Base.html#3093" class="Function Operator">_&lt;_</a> <a id="985" class="Symbol">→</a> <a id="987" href="WellFormed.Properties.html#691" class="Generalizable">F</a> <a id="989" href="WellFormed.Properties.html#830" class="Function Operator">inflates</a> <a id="998" href="WellFormed.Base.html#11754" class="Function Operator">_≤_</a>
+<a id="1002" href="WellFormed.Properties.html#956" class="Function">infl&lt;→infl≤</a> <a id="1014" href="WellFormed.Properties.html#1014" class="Bound">p</a> <a id="1016" class="Symbol">=</a> <a id="1018" href="WellFormed.Base.html#11766" class="Function">&lt;→≤</a> <a id="1022" href="WellFormed.Properties.html#1014" class="Bound">p</a>
+</pre>
+<p><strong>定义 2-1-3</strong> 我们说一个序数函数 <span class="math inline">F</span> <strong>保持</strong>一个序数关系 <span class="math inline">\sim</span>, 当且仅当对任意序数 <span class="math inline">x, y</span> 都有 <span class="math inline">x \sim y \to F(x) \sim F(y)</span>.</p>
+<pre class="Agda"><a id="_preserves_"></a><a id="1137" href="WellFormed.Properties.html#1137" class="Function Operator">_preserves_</a> <a id="1149" class="Symbol">:</a> <a id="1151" href="WellFormed.Properties.html#653" class="Function">Func</a> <a id="1156" class="Symbol">→</a> <a id="1158" href="WellFormed.Properties.html#701" class="Function">Rel</a> <a id="1162" class="Symbol">→</a> <a id="1164" href="Agda.Primitive.html#388" class="Primitive">Type</a>
+<a id="1169" href="WellFormed.Properties.html#1169" class="Bound">F</a> <a id="1171" href="WellFormed.Properties.html#1137" class="Function Operator">preserves</a> <a id="1181" href="WellFormed.Properties.html#1181" class="Bound Operator">_~_</a> <a id="1185" class="Symbol">=</a> <a id="1187" class="Symbol">∀</a> <a id="1189" class="Symbol">{</a><a id="1190" href="WellFormed.Properties.html#1190" class="Bound">x</a> <a id="1192" href="WellFormed.Properties.html#1192" class="Bound">y</a><a id="1193" class="Symbol">}</a> <a id="1195" class="Symbol">→</a> <a id="1197" href="WellFormed.Properties.html#1190" class="Bound">x</a> <a id="1199" href="WellFormed.Properties.html#1181" class="Bound Operator">~</a> <a id="1201" href="WellFormed.Properties.html#1192" class="Bound">y</a> <a id="1203" class="Symbol">→</a> <a id="1205" href="WellFormed.Properties.html#1169" class="Bound">F</a> <a id="1207" href="WellFormed.Properties.html#1190" class="Bound">x</a> <a id="1209" href="WellFormed.Properties.html#1181" class="Bound Operator">~</a> <a id="1211" href="WellFormed.Properties.html#1169" class="Bound">F</a> <a id="1213" href="WellFormed.Properties.html#1192" class="Bound">y</a>
+</pre>
+<p><strong>事实 2-1-4</strong> 如果 <span class="math inline">F</span> 保持 <span class="math inline">\lt</span>, 那么 <span class="math inline">F</span> 保持 <span class="math inline">\leq</span>.</p>
+<pre class="Agda"><a id="pres&lt;→pres≤"></a><a id="1277" href="WellFormed.Properties.html#1277" class="Function">pres&lt;→pres≤</a> <a id="1289" class="Symbol">:</a> <a id="1291" href="WellFormed.Properties.html#691" class="Generalizable">F</a> <a id="1293" href="WellFormed.Properties.html#1137" class="Function Operator">preserves</a> <a id="1303" href="WellFormed.Base.html#3093" class="Function Operator">_&lt;_</a> <a id="1307" class="Symbol">→</a> <a id="1309" href="WellFormed.Properties.html#691" class="Generalizable">F</a> <a id="1311" href="WellFormed.Properties.html#1137" class="Function Operator">preserves</a> <a id="1321" href="WellFormed.Base.html#11754" class="Function Operator">_≤_</a>
+<a id="1325" href="WellFormed.Properties.html#1277" class="Function">pres&lt;→pres≤</a> <a id="1337" href="WellFormed.Properties.html#1337" class="Bound">pres</a> <a id="1342" class="Symbol">(</a><a id="1343" href="Data.Sum.Base.html#675" class="InductiveConstructor">inl</a> <a id="1347" href="WellFormed.Properties.html#1347" class="Bound">p</a><a id="1348" class="Symbol">)</a>    <a id="1353" class="Symbol">=</a> <a id="1355" href="WellFormed.Base.html#11766" class="Function">&lt;→≤</a> <a id="1359" class="Symbol">(</a><a id="1360" href="WellFormed.Properties.html#1337" class="Bound">pres</a> <a id="1365" href="WellFormed.Properties.html#1347" class="Bound">p</a><a id="1366" class="Symbol">)</a>
+<a id="1368" href="WellFormed.Properties.html#1277" class="Function">pres&lt;→pres≤</a> <a id="1380" href="WellFormed.Properties.html#1380" class="Bound">pres</a> <a id="1385" class="Symbol">(</a><a id="1386" href="Data.Sum.Base.html#700" class="InductiveConstructor">inr</a> <a id="1390" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a><a id="1394" class="Symbol">)</a> <a id="1396" class="Symbol">=</a> <a id="1398" href="Data.Sum.Base.html#700" class="InductiveConstructor">inr</a> <a id="1402" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+</pre>
+<p><strong>定义 2-1-5</strong> 我们说一个序数函数 <span class="math inline">F</span> <strong>单射</strong>一个序数关系 <span class="math inline">\sim</span>, 当且仅当对任意序数 <span class="math inline">x, y</span> 都有 <span class="math inline">F(x) \sim F(y) \to x \sim y</span>.</p>
+<pre class="Agda"><a id="_injects_"></a><a id="1520" href="WellFormed.Properties.html#1520" class="Function Operator">_injects_</a> <a id="1530" class="Symbol">:</a> <a id="1532" href="WellFormed.Properties.html#653" class="Function">Func</a> <a id="1537" class="Symbol">→</a> <a id="1539" href="WellFormed.Properties.html#701" class="Function">Rel</a> <a id="1543" class="Symbol">→</a> <a id="1545" href="Agda.Primitive.html#388" class="Primitive">Type</a>
+<a id="1550" href="WellFormed.Properties.html#1550" class="Bound">F</a> <a id="1552" href="WellFormed.Properties.html#1520" class="Function Operator">injects</a> <a id="1560" href="WellFormed.Properties.html#1560" class="Bound Operator">_~_</a> <a id="1564" class="Symbol">=</a> <a id="1566" class="Symbol">∀</a> <a id="1568" class="Symbol">{</a><a id="1569" href="WellFormed.Properties.html#1569" class="Bound">x</a> <a id="1571" href="WellFormed.Properties.html#1571" class="Bound">y</a><a id="1572" class="Symbol">}</a> <a id="1574" class="Symbol">→</a> <a id="1576" href="WellFormed.Properties.html#1550" class="Bound">F</a> <a id="1578" href="WellFormed.Properties.html#1569" class="Bound">x</a> <a id="1580" href="WellFormed.Properties.html#1560" class="Bound Operator">~</a> <a id="1582" href="WellFormed.Properties.html#1550" class="Bound">F</a> <a id="1584" href="WellFormed.Properties.html#1571" class="Bound">y</a> <a id="1586" class="Symbol">→</a> <a id="1588" href="WellFormed.Properties.html#1569" class="Bound">x</a> <a id="1590" href="WellFormed.Properties.html#1560" class="Bound Operator">~</a> <a id="1592" href="WellFormed.Properties.html#1571" class="Bound">y</a>
+</pre>
+<p><strong>事实 2-1-6</strong> 如果 <span class="math inline">F</span> 单射 <span class="math inline">\lt</span>, 那么 <span class="math inline">F</span> 单射 <span class="math inline">\leq</span>.</p>
+<pre class="Agda"><a id="inj&lt;→inj≤"></a><a id="1656" href="WellFormed.Properties.html#1656" class="Function">inj&lt;→inj≤</a> <a id="1666" class="Symbol">:</a> <a id="1668" href="WellFormed.Properties.html#691" class="Generalizable">F</a> <a id="1670" href="WellFormed.Properties.html#1520" class="Function Operator">injects</a> <a id="1678" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">_≡_</a> <a id="1682" class="Symbol">→</a> <a id="1684" href="WellFormed.Properties.html#691" class="Generalizable">F</a> <a id="1686" href="WellFormed.Properties.html#1520" class="Function Operator">injects</a> <a id="1694" href="WellFormed.Base.html#3093" class="Function Operator">_&lt;_</a> <a id="1698" class="Symbol">→</a> <a id="1700" href="WellFormed.Properties.html#691" class="Generalizable">F</a> <a id="1702" href="WellFormed.Properties.html#1520" class="Function Operator">injects</a> <a id="1710" href="WellFormed.Base.html#11754" class="Function Operator">_≤_</a>
+<a id="1714" href="WellFormed.Properties.html#1656" class="Function">inj&lt;→inj≤</a> <a id="1724" href="WellFormed.Properties.html#1724" class="Bound">inj</a> <a id="1728" href="WellFormed.Properties.html#1728" class="Bound">inj&lt;</a> <a id="1733" class="Symbol">(</a><a id="1734" href="Data.Sum.Base.html#675" class="InductiveConstructor">inl</a> <a id="1738" href="WellFormed.Properties.html#1738" class="Bound">p</a><a id="1739" class="Symbol">)</a> <a id="1741" class="Symbol">=</a> <a id="1743" href="Data.Sum.Base.html#675" class="InductiveConstructor">inl</a> <a id="1747" class="Symbol">(</a><a id="1748" href="WellFormed.Properties.html#1728" class="Bound">inj&lt;</a> <a id="1753" href="WellFormed.Properties.html#1738" class="Bound">p</a><a id="1754" class="Symbol">)</a>
+<a id="1756" href="WellFormed.Properties.html#1656" class="Function">inj&lt;→inj≤</a> <a id="1766" href="WellFormed.Properties.html#1766" class="Bound">inj</a> <a id="1770" href="WellFormed.Properties.html#1770" class="Bound">inj&lt;</a> <a id="1775" class="Symbol">(</a><a id="1776" href="Data.Sum.Base.html#700" class="InductiveConstructor">inr</a> <a id="1780" href="WellFormed.Properties.html#1780" class="Bound">p</a><a id="1781" class="Symbol">)</a> <a id="1783" class="Symbol">=</a> <a id="1785" href="Data.Sum.Base.html#700" class="InductiveConstructor">inr</a> <a id="1789" class="Symbol">(</a><a id="1790" href="WellFormed.Properties.html#1766" class="Bound">inj</a> <a id="1794" href="WellFormed.Properties.html#1780" class="Bound">p</a><a id="1795" class="Symbol">)</a>
+</pre>
+<p><strong>定义 2-1-7</strong> 我们说一个保持 <span class="math inline">\lt</span> 的序数函数 <span class="math inline">F</span> 是<strong>连续</strong>的, 当且仅当对任意良构序列 <span class="math inline">f</span> 都有 <span class="math inline">F(\lim f) = \lim (F \circ f)</span>.</p>
+<pre class="Agda"><a id="continuous"></a><a id="1909" href="WellFormed.Properties.html#1909" class="Function">continuous</a> <a id="1920" class="Symbol">:</a> <a id="1922" href="WellFormed.Properties.html#691" class="Generalizable">F</a> <a id="1924" href="WellFormed.Properties.html#1137" class="Function Operator">preserves</a> <a id="1934" href="WellFormed.Base.html#3093" class="Function Operator">_&lt;_</a> <a id="1938" class="Symbol">→</a> <a id="1940" href="Agda.Primitive.html#388" class="Primitive">Type</a>
+<a id="1945" href="WellFormed.Properties.html#1909" class="Function">continuous</a> <a id="1956" class="Symbol">{</a><a id="1957" href="WellFormed.Properties.html#1957" class="Bound">F</a><a id="1958" class="Symbol">}</a> <a id="1960" href="WellFormed.Properties.html#1960" class="Bound">pres</a> <a id="1965" class="Symbol">=</a> <a id="1967" class="Symbol">∀</a> <a id="1969" class="Symbol">{</a><a id="1970" href="WellFormed.Properties.html#1970" class="Bound">f</a><a id="1971" class="Symbol">}</a> <a id="1973" class="Symbol">⦃</a> <a id="1975" href="WellFormed.Properties.html#1975" class="Bound">_</a> <a id="1977" class="Symbol">:</a> <a id="1979" href="WellFormed.Base.html#3523" class="Function">wf</a> <a id="1982" href="WellFormed.Properties.html#1970" class="Bound">f</a> <a id="1984" class="Symbol">⦄</a> <a id="1986" class="Symbol">→</a> <a id="1988" href="WellFormed.Properties.html#1957" class="Bound">F</a> <a id="1990" class="Symbol">(</a><a id="1991" href="WellFormed.Base.html#4120" class="InductiveConstructor">lim</a> <a id="1995" href="WellFormed.Properties.html#1970" class="Bound">f</a><a id="1996" class="Symbol">)</a> <a id="1998" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="2000" href="WellFormed.Base.html#4120" class="InductiveConstructor">lim</a> <a id="2004" class="Symbol">(</a><a id="2005" href="WellFormed.Properties.html#1957" class="Bound">F</a> <a id="2007" href="Function.Base.html#1115" class="Function Operator">∘</a> <a id="2009" href="WellFormed.Properties.html#1970" class="Bound">f</a><a id="2010" class="Symbol">)</a> <a id="2012" class="Symbol">⦃</a> <a id="2014" href="WellFormed.Properties.html#1960" class="Bound">pres</a> <a id="2019" href="Function.Base.html#4736" class="Function">it</a> <a id="2022" class="Symbol">⦄</a>
+</pre>
+<p><strong>注意 2-1-8</strong> 在传统定义中「保持 <span class="math inline">\lt</span>」与「连续」分开的, 但在我们这套定义中只有保持 <span class="math inline">\lt</span> 的函数才可以谈论是否连续, 因为受良构条件约束.</p>
+<p><strong>定义 2-1-9</strong> 我们说一个序数函数 <span class="math inline">F</span> 是<strong>正规</strong>的, 当且仅当它保持 <span class="math inline">\lt</span> 且连续.</p>
+<pre class="Agda"><a id="2179" class="Keyword">record</a> <a id="Normal"></a><a id="2186" href="WellFormed.Properties.html#2186" class="Record">Normal</a> <a id="2193" class="Symbol">:</a> <a id="2195" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="2200" class="Keyword">where</a>
+  <a id="2208" class="Keyword">constructor</a> <a id="normal"></a><a id="2220" href="WellFormed.Properties.html#2220" class="InductiveConstructor">normal</a>
+  <a id="2229" class="Keyword">field</a>
+    <a id="Normal._[_]"></a><a id="2239" href="WellFormed.Properties.html#2239" class="Field Operator">_[_]</a> <a id="2244" class="Symbol">:</a> <a id="2246" href="WellFormed.Properties.html#653" class="Function">Func</a>
+    <a id="Normal.pres&lt;"></a><a id="2255" href="WellFormed.Properties.html#2255" class="Field">pres&lt;</a> <a id="2261" class="Symbol">:</a> <a id="2263" href="WellFormed.Properties.html#2239" class="Field Operator">_[_]</a> <a id="2268" href="WellFormed.Properties.html#1137" class="Function Operator">preserves</a> <a id="2278" href="WellFormed.Base.html#3093" class="Function Operator">_&lt;_</a>
+    <a id="Normal.conti"></a><a id="2286" href="WellFormed.Properties.html#2286" class="Field">conti</a> <a id="2292" class="Symbol">:</a> <a id="2294" href="WellFormed.Properties.html#1909" class="Function">continuous</a> <a id="2305" href="WellFormed.Properties.html#2255" class="Field">pres&lt;</a>
+</pre>
+<h2 id="一些约定">一些约定</h2>
+<p><strong>定义</strong> 自然数到序数的嵌入 <span class="math inline">\text{fin} : ℕ → \text{Ord}</span></p>
+<p><span class="math display">
+\text{fin}~n := \text{suc}^n~0
+</span></p>
+<p>其中后继函数的上标 <span class="math inline">n</span> 表示迭代 <span class="math inline">n</span> 次.</p>
+<pre class="Agda"><a id="2446" class="Keyword">open</a> <a id="2451" class="Keyword">import</a> <a id="2458" href="Lower.html" class="Module">Lower</a> <a id="2464" class="Keyword">public</a> <a id="2471" class="Keyword">using</a> <a id="2477" class="Symbol">(</a><a id="2478" href="Lower.html#1118" class="Function Operator">_∘ⁿ_</a><a id="2482" class="Symbol">)</a>
+<a id="fin"></a><a id="2484" href="WellFormed.Properties.html#2484" class="Function">fin</a> <a id="2488" class="Symbol">:</a> <a id="2490" href="WellFormed.Base.html#3349" class="Function">Seq</a>
+<a id="2494" href="WellFormed.Properties.html#2484" class="Function">fin</a> <a id="2498" href="WellFormed.Properties.html#2498" class="Bound">n</a> <a id="2500" class="Symbol">=</a> <a id="2502" class="Symbol">(</a><a id="2503" href="WellFormed.Base.html#4101" class="InductiveConstructor">suc</a> <a id="2507" href="Lower.html#1118" class="Function Operator">∘ⁿ</a> <a id="2510" href="WellFormed.Properties.html#2498" class="Bound">n</a><a id="2511" class="Symbol">)</a> <a id="2513" href="WellFormed.Base.html#4088" class="InductiveConstructor">zero</a>
+</pre>
+<p><strong>约定</strong> 数字字面量既可以表示自然数, 也可以表示序数. Agda 使用<a href="https://agda.readthedocs.io/en/v2.6.4.3-r1/language/literal-overloading.html">字面量重载</a>功能实现该约定.</p>
+<pre class="Agda"><a id="2664" class="Keyword">open</a> <a id="2669" class="Keyword">import</a> <a id="2676" href="Agda.Builtin.FromNat.html" class="Module">Agda.Builtin.FromNat</a> <a id="2697" class="Keyword">public</a>
+<a id="2704" class="Keyword">instance</a>
+  <a id="nNat"></a><a id="2715" href="WellFormed.Properties.html#2715" class="Function">nNat</a> <a id="2720" class="Symbol">=</a> <a id="2722" href="Agda.Builtin.FromNat.html#196" class="Record">Number</a> <a id="2729" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a>   <a id="2733" href="Function.Base.html#4486" class="Function Operator">∋</a> <a id="2735" class="Keyword">record</a> <a id="2742" class="Symbol">{</a> <a id="2744" href="Agda.Builtin.FromNat.html#252" class="Field">Constraint</a> <a id="2755" class="Symbol">=</a> <a id="2757" class="Symbol">λ</a> <a id="2759" href="WellFormed.Properties.html#2759" class="Bound">_</a> <a id="2761" class="Symbol">→</a> <a id="2763" href="Cubical.Data.Unit.Base.html#172" class="Record">⊤</a> <a id="2765" class="Symbol">;</a> <a id="2767" href="Agda.Builtin.FromNat.html#281" class="Field">fromNat</a> <a id="2775" class="Symbol">=</a> <a id="2777" class="Symbol">λ</a> <a id="2779" href="WellFormed.Properties.html#2779" class="Bound">n</a> <a id="2781" class="Symbol">→</a> <a id="2783" href="WellFormed.Properties.html#2779" class="Bound">n</a> <a id="2785" class="Symbol">}</a>
+  <a id="nOrd"></a><a id="2789" href="WellFormed.Properties.html#2789" class="Function">nOrd</a> <a id="2794" class="Symbol">=</a> <a id="2796" href="Agda.Builtin.FromNat.html#196" class="Record">Number</a> <a id="2803" href="WellFormed.Base.html#2896" class="Datatype">Ord</a> <a id="2807" href="Function.Base.html#4486" class="Function Operator">∋</a> <a id="2809" class="Keyword">record</a> <a id="2816" class="Symbol">{</a> <a id="2818" href="Agda.Builtin.FromNat.html#252" class="Field">Constraint</a> <a id="2829" class="Symbol">=</a> <a id="2831" class="Symbol">λ</a> <a id="2833" href="WellFormed.Properties.html#2833" class="Bound">_</a> <a id="2835" class="Symbol">→</a> <a id="2837" href="Cubical.Data.Unit.Base.html#172" class="Record">⊤</a> <a id="2839" class="Symbol">;</a> <a id="2841" href="Agda.Builtin.FromNat.html#281" class="Field">fromNat</a> <a id="2849" class="Symbol">=</a> <a id="2851" class="Symbol">λ</a> <a id="2853" href="WellFormed.Properties.html#2853" class="Bound">n</a> <a id="2855" class="Symbol">→</a> <a id="2857" href="WellFormed.Properties.html#2484" class="Function">fin</a> <a id="2861" href="WellFormed.Properties.html#2853" class="Bound">n</a> <a id="2863" class="Symbol">}</a>
+</pre>
+<p><strong>约定</strong> 我们将 <span class="math inline">\text{suc}(\text{suc}(a))</span> 记作 <span class="math inline">a^{++}</span>.</p>
+<pre class="Agda"><a id="2931" class="Keyword">pattern</a> <a id="2+"></a><a id="2939" href="WellFormed.Properties.html#2939" class="InductiveConstructor">2+</a> <a id="2942" href="WellFormed.Properties.html#2955" class="Bound">a</a> <a id="2944" class="Symbol">=</a> <a id="2946" class="InductiveConstructor">suc</a> <a id="2950" class="Symbol">(</a><a id="2951" class="InductiveConstructor">suc</a> <a id="2955" href="WellFormed.Properties.html#2955" class="Bound">a</a><a id="2956" class="Symbol">)</a>
+</pre>
+<p><strong>约定</strong> 非零序数指不等于零的序数.</p>
+<pre class="Agda"><a id="not0"></a><a id="2993" href="WellFormed.Properties.html#2993" class="Function">not0</a> <a id="2998" class="Symbol">:</a> <a id="3000" href="WellFormed.Base.html#2896" class="Datatype">Ord</a> <a id="3004" class="Symbol">→</a> <a id="3006" href="Agda.Primitive.html#388" class="Primitive">Type</a>
+<a id="3011" href="WellFormed.Properties.html#2993" class="Function">not0</a> <a id="3016" href="WellFormed.Base.html#4088" class="InductiveConstructor">zero</a> <a id="3021" class="Symbol">=</a> <a id="3023" href="Data.Empty.html#895" class="Function">⊥</a>
+<a id="3025" href="WellFormed.Properties.html#2993" class="CatchallClause Function">not0</a><a id="3029" class="CatchallClause"> </a><a id="3030" class="CatchallClause Symbol">_</a> <a id="3032" class="Symbol">=</a> <a id="3034" href="Cubical.Data.Unit.Base.html#172" class="Record">⊤</a>
+
+<a id="3037" class="Keyword">record</a> <a id="NonZero"></a><a id="3044" href="WellFormed.Properties.html#3044" class="Record">NonZero</a> <a id="3052" class="Symbol">(</a><a id="3053" href="WellFormed.Properties.html#3053" class="Bound">a</a> <a id="3055" class="Symbol">:</a> <a id="3057" href="WellFormed.Base.html#2896" class="Datatype">Ord</a><a id="3060" class="Symbol">)</a> <a id="3062" class="Symbol">:</a> <a id="3064" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="3069" class="Keyword">where</a>
+  <a id="3077" class="Keyword">field</a> <a id="NonZero.nonZero"></a><a id="3083" href="WellFormed.Properties.html#3083" class="Field">nonZero</a> <a id="3091" class="Symbol">:</a> <a id="3093" href="WellFormed.Properties.html#2993" class="Function">not0</a> <a id="3098" href="WellFormed.Properties.html#3053" class="Bound">a</a>
+
+<a id="nz-intro-rd"></a><a id="3101" href="WellFormed.Properties.html#3101" class="Function">nz-intro-rd</a> <a id="3113" class="Symbol">:</a> <a id="3115" href="WellFormed.Base.html#2912" class="Datatype">Road</a> <a id="3120" class="Number">0</a> <a id="3122" href="WellFormed.Base.html#3679" class="Generalizable">a</a> <a id="3124" class="Symbol">→</a> <a id="3126" href="WellFormed.Properties.html#3044" class="Record">NonZero</a> <a id="3134" href="WellFormed.Base.html#3679" class="Generalizable">a</a>
+<a id="3136" href="WellFormed.Properties.html#3101" class="Function">nz-intro-rd</a> <a id="3148" class="Symbol">{</a><a id="3149" href="WellFormed.Base.html#4101" class="InductiveConstructor">suc</a> <a id="3153" class="Symbol">_}</a> <a id="3156" class="Symbol">_</a> <a id="3158" class="Symbol">=</a> <a id="3160" class="Symbol">_</a>
+<a id="3162" href="WellFormed.Properties.html#3101" class="Function">nz-intro-rd</a> <a id="3174" class="Symbol">{</a><a id="3175" href="WellFormed.Base.html#4120" class="InductiveConstructor">lim</a> <a id="3179" class="Symbol">_}</a> <a id="3182" class="Symbol">_</a> <a id="3184" class="Symbol">=</a> <a id="3186" class="Symbol">_</a>
+
+<a id="nz-intro"></a><a id="3189" href="WellFormed.Properties.html#3189" class="Function">nz-intro</a> <a id="3198" class="Symbol">:</a> <a id="3200" class="Number">0</a> <a id="3202" href="WellFormed.Base.html#3093" class="Function Operator">&lt;</a> <a id="3204" href="WellFormed.Base.html#3679" class="Generalizable">a</a> <a id="3206" class="Symbol">→</a> <a id="3208" href="WellFormed.Properties.html#3044" class="Record">NonZero</a> <a id="3216" href="WellFormed.Base.html#3679" class="Generalizable">a</a>
+<a id="3218" href="WellFormed.Properties.html#3189" class="Function">nz-intro</a> <a id="3227" class="Symbol">=</a> <a id="3229" href="WellFormed.Properties.html#3101" class="Function">nz-intro-rd</a> <a id="3241" href="Function.Base.html#1115" class="Function Operator">∘</a> <a id="3243" href="WellFormed.Base.html#25537" class="Function">set</a>
+</pre>
+<p><strong>约定</strong> 非平凡序数指不等于零或一的序数.</p>
+<pre class="Agda"><a id="not01"></a><a id="3285" href="WellFormed.Properties.html#3285" class="Function">not01</a> <a id="3291" class="Symbol">:</a> <a id="3293" href="WellFormed.Base.html#2896" class="Datatype">Ord</a> <a id="3297" class="Symbol">→</a> <a id="3299" href="Agda.Primitive.html#388" class="Primitive">Type</a>
+<a id="3304" href="WellFormed.Properties.html#3285" class="Function">not01</a> <a id="3310" href="WellFormed.Base.html#4088" class="InductiveConstructor">zero</a>       <a id="3321" class="Symbol">=</a> <a id="3323" href="Data.Empty.html#895" class="Function">⊥</a>
+<a id="3325" href="WellFormed.Properties.html#3285" class="Function">not01</a> <a id="3331" class="Symbol">(</a><a id="3332" href="WellFormed.Base.html#4101" class="InductiveConstructor">suc</a> <a id="3336" href="WellFormed.Base.html#4088" class="InductiveConstructor">zero</a><a id="3340" class="Symbol">)</a> <a id="3342" class="Symbol">=</a> <a id="3344" href="Data.Empty.html#895" class="Function">⊥</a>
+<a id="3346" href="WellFormed.Properties.html#3285" class="CatchallClause Function">not01</a><a id="3351" class="CatchallClause"> </a><a id="3352" class="CatchallClause Symbol">_</a>          <a id="3363" class="Symbol">=</a> <a id="3365" href="Cubical.Data.Unit.Base.html#172" class="Record">⊤</a>
+
+<a id="3368" class="Keyword">record</a> <a id="NonTrivial"></a><a id="3375" href="WellFormed.Properties.html#3375" class="Record">NonTrivial</a> <a id="3386" class="Symbol">(</a><a id="3387" href="WellFormed.Properties.html#3387" class="Bound">a</a> <a id="3389" class="Symbol">:</a> <a id="3391" href="WellFormed.Base.html#2896" class="Datatype">Ord</a><a id="3394" class="Symbol">)</a> <a id="3396" class="Symbol">:</a> <a id="3398" href="Agda.Primitive.html#388" class="Primitive">Type</a> <a id="3403" class="Keyword">where</a>
+  <a id="3411" class="Keyword">field</a> <a id="NonTrivial.nonTrivial"></a><a id="3417" href="WellFormed.Properties.html#3417" class="Field">nonTrivial</a> <a id="3428" class="Symbol">:</a> <a id="3430" href="WellFormed.Properties.html#3285" class="Function">not01</a> <a id="3436" href="WellFormed.Properties.html#3387" class="Bound">a</a>
+
+<a id="nt-intro-rd"></a><a id="3439" href="WellFormed.Properties.html#3439" class="Function">nt-intro-rd</a> <a id="3451" class="Symbol">:</a> <a id="3453" href="WellFormed.Base.html#2912" class="Datatype">Road</a> <a id="3458" class="Number">1</a> <a id="3460" href="WellFormed.Base.html#3679" class="Generalizable">a</a> <a id="3462" class="Symbol">→</a> <a id="3464" href="WellFormed.Properties.html#3375" class="Record">NonTrivial</a> <a id="3475" href="WellFormed.Base.html#3679" class="Generalizable">a</a>
+<a id="3477" href="WellFormed.Properties.html#3439" class="Function">nt-intro-rd</a> <a id="3489" class="Symbol">{</a><a id="3490" href="WellFormed.Base.html#4101" class="InductiveConstructor">suc</a> <a id="3494" href="WellFormed.Base.html#4088" class="InductiveConstructor">zero</a><a id="3498" class="Symbol">}</a> <a id="3500" class="Symbol">(</a><a id="3501" href="WellFormed.Base.html#4591" class="InductiveConstructor">suc</a> <a id="3505" class="Symbol">())</a>
+<a id="3509" href="WellFormed.Properties.html#3439" class="Function">nt-intro-rd</a> <a id="3521" class="Symbol">{</a><a id="3522" href="WellFormed.Properties.html#2939" class="InductiveConstructor">2+</a> <a id="3525" href="WellFormed.Properties.html#3525" class="Bound">a</a><a id="3526" class="Symbol">}</a>         <a id="3536" class="Symbol">_</a> <a id="3538" class="Symbol">=</a> <a id="3540" class="Symbol">_</a>
+<a id="3542" href="WellFormed.Properties.html#3439" class="Function">nt-intro-rd</a> <a id="3554" class="Symbol">{</a><a id="3555" href="WellFormed.Base.html#4101" class="InductiveConstructor">suc</a> <a id="3559" class="Symbol">(</a><a id="3560" href="WellFormed.Base.html#4120" class="InductiveConstructor">lim</a> <a id="3564" class="Symbol">_)}</a>  <a id="3569" class="Symbol">_</a> <a id="3571" class="Symbol">=</a> <a id="3573" class="Symbol">_</a>
+<a id="3575" href="WellFormed.Properties.html#3439" class="Function">nt-intro-rd</a> <a id="3587" class="Symbol">{</a><a id="3588" href="WellFormed.Base.html#4120" class="InductiveConstructor">lim</a> <a id="3592" class="Symbol">_}</a>        <a id="3602" class="Symbol">_</a> <a id="3604" class="Symbol">=</a> <a id="3606" class="Symbol">_</a>
+
+<a id="nt-intro"></a><a id="3609" href="WellFormed.Properties.html#3609" class="Function">nt-intro</a> <a id="3618" class="Symbol">:</a> <a id="3620" class="Number">1</a> <a id="3622" href="WellFormed.Base.html#3093" class="Function Operator">&lt;</a> <a id="3624" href="WellFormed.Base.html#3679" class="Generalizable">a</a> <a id="3626" class="Symbol">→</a> <a id="3628" href="WellFormed.Properties.html#3375" class="Record">NonTrivial</a> <a id="3639" href="WellFormed.Base.html#3679" class="Generalizable">a</a>
+<a id="3641" href="WellFormed.Properties.html#3609" class="Function">nt-intro</a> <a id="3650" class="Symbol">=</a> <a id="3652" href="WellFormed.Properties.html#3439" class="Function">nt-intro-rd</a> <a id="3664" href="Function.Base.html#1115" class="Function Operator">∘</a> <a id="3666" href="WellFormed.Base.html#25537" class="Function">set</a>
+</pre>
+</main>
+
+<script>
+;(function() {
+  // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+  var selector = '.task-list > li > input[type="checkbox"]';
+  var checkboxes = document.querySelectorAll(selector);
+  Array.from(checkboxes).forEach((checkbox) => {
+    var wasChecked = checkbox.checked;
+    checkbox.disabled = false;
+    checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+</body>
+</html>
